@@ -46,7 +46,7 @@ export function filterCatalog(items,params) {
   const max=params.get('max')?Number(params.get('max')):null;
   const beds=params.get('beds')?Number(params.get('beds')):null;
   const query=(params.get('query')??'').toLocaleLowerCase('pt-BR');
-  return items.filter(p=>(!params.get('region')||p.region===params.get('region'))&&(!query||`${p.title} ${p.reference} ${p.region}`.toLocaleLowerCase('pt-BR').includes(query))&&(!beds||p.bedrooms!==null&&p.bedrooms>=beds)&&p.offers.some(o=>(!operation||o.operation===operation)&&(max===null||o.price!==null&&o.price<=max)));
+  return items.filter(p=>(!params.get('type')||p.type===params.get('type'))&&(!params.get('region')||p.region===params.get('region'))&&(!query||`${p.title} ${p.reference} ${p.region}`.toLocaleLowerCase('pt-BR').includes(query))&&(!beds||p.bedrooms!==null&&p.bedrooms>=beds)&&p.offers.some(o=>(!operation||o.operation===operation)&&(max===null||o.price!==null&&o.price<=max)));
 }
 export function decodeImage(data) {
   if(typeof data!=='string'||data.length>8_000_000||!/^[A-Za-z0-9+/]*={0,2}$/.test(data))fail(422,'Imagem inválida ou maior que 5 MB.');

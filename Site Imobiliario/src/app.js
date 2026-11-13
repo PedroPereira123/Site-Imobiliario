@@ -2,7 +2,7 @@ import {readRegistration,revealErrors,openAncestors} from './registration-form.j
 import {phoneRow,emailRow,captorRow} from './registration-editor.js';
 import {typesByUse,uses} from './registration-schema.js';
 import {api,mutate,escapeHTML as e,toggleFavorite,favorites} from './catalog.js';
-import {home,search,propertyPage,savedPage,privacy} from './public.js';
+import {home,search,institutionalPage,propertyPage,savedPage,privacy} from './public.js';
 import {login,listPage,editorPage,settingsPage,rows} from './manager.js';
 import {header,footer,empty,toast,image,icon} from './ui.js';
 const root=document.querySelector('#app'),modal=document.querySelector('#modal');
@@ -19,6 +19,7 @@ async function render(){const version=++renderVersion;modal.close();const [path,
       else if(parts[1]==='configuracoes')html=settingsPage(user,await api('/api/admin/settings'));
       else{const loadedItems=(await api('/api/admin/properties')).items;if(version!==renderVersion)return;adminItems=loadedItems;html=listPage(user,adminItems);}
     }else if(parts[0]==='imovel'||parts[0]==='signature')html=propertyPage(await api('/api/properties/'+encodeURIComponent(parts[1]??'')),settings,params.get('operation'),parts[0]==='signature');
+    else if(['sobre','contato','blog','termos'].includes(parts[0]))html=institutionalPage(parts[0],settings);
     else if(parts[0]==='privacidade')html=privacy(settings);
     else {const all=(await api('/api/catalog')).items;
       if(parts[0]==='busca')html=search((await api('/api/catalog?'+params)).items,all,params,settings);
@@ -59,6 +60,17 @@ document.addEventListener('click',event=>{const el=event.target.closest('button,
   if(el.dataset.action==='suggest-title'){const f=document.querySelector('#property-form');const beds=Number(f.elements.bedrooms.value);f.elements['reg.web.portalTitle'].value=`${f.elements.type.value}${beds>0?' com '+beds+' dormitório'+(beds===1?'':'s'):''} em ${f.elements.region.value}`.slice(0,150);toast('Sugestão gerada. Revise antes de publicar.');}
   if(el.dataset.action==='search-street')guarded(document.querySelector('#property-form'),async()=>{const input=document.querySelector('[name="reg.street"]');const query=input.value.trim().toLocaleLowerCase('pt-BR');const matches=(await api('/api/admin/properties')).items.map(p=>p.registration?.street).filter(Boolean).filter(street=>street.toLocaleLowerCase('pt-BR').includes(query));const unique=[...new Set(matches)].slice(0,20);document.querySelector('#street-suggestions').innerHTML=unique.map(street=>`<option value="${e(street)}">`).join('');document.querySelector('#street-result').textContent=unique.length?unique.length+' logradouros encontrados. Selecione uma sugestão ou preencha manualmente.':'Nenhum logradouro encontrado no cadastro local. Preencha manualmente.';});
   if(el.classList.contains('skip')){event.preventDefault();document.querySelector('main')?.focus();return;}
+  if(el.dataset.action==='toggle-home-search'){
+    const form=el.closest('form');const fields=form.querySelector('#home-search-fields');
+    const opening=el.getAttribute('aria-expanded')!=='true';
+    el.setAttribute('aria-expanded',String(opening));
+    el.hidden=opening;
+    fields.hidden=!opening;form.classList.toggle('is-collapsed',!opening);
+    if(opening){
+      fields.querySelector('select').focus({preventScroll:true});
+      form.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+    }
+  }
   if(el.dataset.action==='menu'){const header=document.querySelector('.site-header');header.classList.toggle('menu-open');el.setAttribute('aria-expanded',header.classList.contains('menu-open'));}
   if(el.dataset.action==='retry')render();
   if(el.dataset.action==='logout')guarded(null,async()=>{await mutate('/api/logout','POST',{});current=null;await render();});

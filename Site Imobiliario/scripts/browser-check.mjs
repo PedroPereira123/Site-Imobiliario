@@ -23,10 +23,48 @@ try {
   browser=await pw.chromium.launch({headless:true,...(executablePath?{executablePath}:{})});
   const context=await browser.newContext({viewport:{width:1440,height:1000}});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(base);await page.waitForSelector('.home-hero');
+  await page.goto(base);await page.waitForSelector('.institutional-hero');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  const hero=await page.evaluate(()=>({text:document.querySelector('.hero-copy p').getBoundingClientRect().bottom,form:document.querySelector('.hero-search').getBoundingClientRect().top}));
+  const hero=await page.evaluate(()=>({text:document.querySelector('.institutional-title p').getBoundingClientRect().bottom,form:document.querySelector('.property-search-dock').getBoundingClientRect().top}));
   assert.ok(hero.text<hero.form,'Texto da apresentação não pode ficar atrás da busca.');checks.push('home desktop sem sobreposição');
+  for(const size of [{width:1440,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:740}]){
+    await page.setViewportSize(size);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,JSON.stringify(await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1).map(e=>({tag:e.tagName,cls:e.className,right:e.getBoundingClientRect().right})))));
+    const bottom=await page.locator('#home-search .dock-toggle').evaluate(el=>el.getBoundingClientRect().bottom);
+    assert.ok(bottom<=size.height,'Pesquisa básica deve caber na primeira tela: '+JSON.stringify(size));
+    await page.screenshot({path:path.join(output,'homepage-'+size.width+'.png'),fullPage:false});
+  }
+  const toggle=page.locator('.dock-toggle');
+  assert.equal(await page.locator('#home-search-fields').isVisible(),false);
+  await toggle.focus();await page.keyboard.press('Enter');
+  await page.waitForFunction(()=>scrollY>0);
+  assert.equal(await toggle.getAttribute('aria-expanded'),'true');
+  assert.equal(await page.locator('#home-search [name=operation]').evaluate(el=>el===document.activeElement),true);
+  await page.locator('#home-search [name=query]').fill('Penha');
+  assert.equal(await toggle.isVisible(),false);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('#home-search [name=query]').inputValue(),'Penha');
+  await page.locator('#home-search [name=query]').fill('');
+  for(const width of [1440,768,390,320]){
+    await page.setViewportSize({width,height:900});
+    await page.locator('#home-search').scrollIntoViewIfNeeded();
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    await page.screenshot({path:path.join(output,'dock-expanded-'+width+'.png')});
+  }
+  checks.push('dock compacta, expansão por teclado, rolagem e valores preservados');
+  const advanced=page.locator('.advanced-search');
+  assert.equal(await advanced.getAttribute('open'),null);
+  await advanced.locator('summary').focus();await page.keyboard.press('Enter');
+  assert.equal(await advanced.locator('select').isVisible(),true);
+  await page.keyboard.press('Tab');
+  assert.equal(await page.locator('[name=beds]').evaluate(el=>el===document.activeElement),true);
+  assert.notEqual(await page.locator('[name=beds]').evaluate(el=>getComputedStyle(el).outlineStyle),'none');
+  await advanced.locator('summary').focus();await page.keyboard.press('Enter');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  assert.equal(await page.locator('#home-search .dock-toggle').evaluate(el=>getComputedStyle(el).transitionDuration),'0s');
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  checks.push('filtros por teclado, foco visível e movimento reduzido');
+  await page.setViewportSize({width:1440,height:1000});
   await page.screenshot({path:path.join(output,'home-desktop.png'),fullPage:true});
   await page.goto(base+'/#/admin');await page.getByLabel('Usuário',{exact:true}).fill('qa-manager');await page.getByLabel('Senha',{exact:true}).fill('SenhaDeTeste!2026');await page.getByRole('button',{name:'Entrar',exact:true}).click();await page.waitForSelector('.manager-table');
   await page.getByRole('link',{name:'Cadastrar imóvel',exact:true}).first().click();await page.waitForSelector('#property-form');
@@ -74,7 +112,7 @@ try {
   await page.locator('[data-favorite]').click();await page.goto(base+'/#/favoritos');await page.waitForSelector('.property-card');assert.equal(await page.locator('.property-card').count(),1);checks.push('favoritos');
   await page.goto(base+'/#/imovel/'+id);await page.waitForSelector('.contact-card');
   for(const width of [390,768,1440]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`Página do imóvel sem overflow em ${width}px`);await page.screenshot({path:path.join(output,`imovel-${width}.png`),fullPage:true});}
-  await page.goto(base);await page.waitForSelector('.home-hero');await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.getByRole('button',{name:'Abrir menu',exact:true}).click();await page.getByRole('link',{name:'Alugar',exact:true}).first().click();await page.waitForSelector('#filters');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks.push('mobile e navegação');
+  await page.goto(base);await page.waitForSelector('.institutional-hero');await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.getByRole('button',{name:'Abrir menu',exact:true}).click();await page.getByRole('link',{name:'Contato',exact:true}).first().click();await page.waitForSelector('.prose');await page.goto(base+'/#/busca?operation=rent');await page.waitForSelector('#filters');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks.push('mobile e navegação');
   await page.goto(base+'/#/admin/editar/'+id);await page.waitForSelector('#property-form');await page.locator('[data-phases=expand]').click();await page.locator('[data-phase=commercial]').evaluate(d=>d.open=true);await page.getByLabel('Aluguel mensal (R$)',{exact:true}).fill('2600');await page.getByRole('button',{name:'Salvar cadastro',exact:true}).click();await page.waitForSelector('.history-panel');assert.equal((await (await fetch(base+'/api/properties/'+id)).json()).offers[1].price,2500);
   page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Publicar no site',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.editor-heading .status')?.textContent==='Publicado');assert.equal((await (await fetch(base+'/api/properties/'+id)).json()).offers[1].price,2600);
   page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Retirar do site',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.editor-heading .status')?.textContent==='Retirado');assert.equal((await fetch(base+'/api/properties/'+id)).status,404);checks.push('edição, republicação e retirada');
