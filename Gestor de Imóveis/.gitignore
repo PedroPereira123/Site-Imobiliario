@@ -1,0 +1,4 @@
+data/
+backups/
+.local/
+node_modules/

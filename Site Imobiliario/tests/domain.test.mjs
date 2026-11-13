@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {properties,filterProperties,getProperty,state,decide,toggleFavorite} from '../dist/data.js';
+import {search} from '../dist/public.js';
+import {propertyPage} from '../dist/property.js';
+test('parâmetro de preço escapa aspas e HTML',()=>{const html=search(new URLSearchParams({max:'"><img src=x onerror=alert(1)>'}));assert.ok(!html.includes('<img src=x'));assert.ok(html.includes('&lt;img'));});
+test('página do imóvel reflete favorito previamente salvo',()=>{state.favorites=['AP-11876'];const html=propertyPage('AP-11876');assert.ok(html.includes('aria-pressed="true"'));assert.ok(html.includes('Imóvel salvo'));state.favorites=[];});
+test('catálogo consistente: IDs únicos, sete bairros, preços e especificações positivos',()=>{assert.equal(new Set(properties.map(p=>p.id)).size,7);assert.equal(new Set(properties.map(p=>p.region)).size,7);for(const p of properties){assert.ok(p.price>0&&p.area>0&&p.beds>0);assert.strictEqual(getProperty(p.id),p);}});
+test('filtros combinados e zero resultados',()=>{assert.deepEqual(filterProperties(properties,{mode:'Alugar',region:'Penha',max:3000,beds:2}).map(p=>p.id),['AP-11876']);assert.equal(filterProperties(properties,{max:100}).length,0);assert.equal(filterProperties(properties,{mode:'Comprar'}).length,2);assert.equal(filterProperties(properties,{query:'ap-11873'})[0].region,'Vila Matilde');assert.equal(filterProperties(properties,{quiet:true}).length,3);});
+test('curtidas e rejeições são mutuamente exclusivas e sem duplicatas',()=>{decide('AP-11876',true);decide('AP-11876',true);assert.equal(state.likes.filter(x=>x==='AP-11876').length,1);decide('AP-11876',false);assert.equal(state.likes.includes('AP-11876'),false);assert.equal(state.rejected.includes('AP-11876'),true);decide('AP-11876',true);assert.equal(state.rejected.includes('AP-11876'),false);});
+test('favorito alterna corretamente',()=>{toggleFavorite('AP-11873');assert.ok(state.favorites.includes('AP-11873'));toggleFavorite('AP-11873');assert.ok(!state.favorites.includes('AP-11873'));});
+test('fichas contêm AcroForm, widgets e xref válido',()=>{for(const kind of ['locacao','proprietario','interessado']){const b=readFileSync(`dist/assets/ficha-${kind}.pdf`);const s=b.toString('latin1');assert.ok(s.startsWith('%PDF-1.4'));assert.ok(s.includes('/AcroForm 6 0 R'));assert.equal((s.match(/\/Subtype \/Widget/g)||[]).length,3);const start=Number(s.match(/startxref\n(\d+)/)[1]);assert.equal(b.subarray(start,start+4).toString(),'xref');}});

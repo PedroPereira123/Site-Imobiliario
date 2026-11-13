@@ -1,0 +1,67 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R /AcroForm 6 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R /Annots [7 0 R 8 0 R 9 0 R] >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1187 >>
+stream
+0.969 0.953 0.925 rg 0 0 595 842 re f
+0.145 0.141 0.133 rg
+0.91 0.71 0.12 rg 44 758 24 24 re f
+0.08 0.33 0.24 rg 44 731 24 24 re f
+0.145 0.141 0.133 rg
+BT /F1 23 Tf 82 758 Td (PROPERTY MATCH) Tj ET
+BT /F1 9 Tf 82 738 Td (ZONA LESTE / MODELO DEMONSTRATIVO) Tj ET
+BT /F1 25 Tf 44 675 Td (Ficha de locacao) Tj ET
+BT /F1 11 Tf 44 644 Td (PDF preenchivel - use somente informacoes ficticias.) Tj ET
+BT /F1 10 Tf 44 621 Td (Este modelo nao substitui uma ficha cadastral operacional.) Tj ET
+BT /F1 12 Tf 44 556 Td (Nome ficticio) Tj ET
+BT /F1 12 Tf 44 456 Td (Codigo do imovel) Tj ET
+BT /F1 12 Tf 44 356 Td (Preferencias / observacoes) Tj ET
+BT /F1 15 Tf 44 235 Td (Como preencher) Tj ET
+BT /F1 10 Tf 44 207 Td (1. Abra em um leitor de PDF com suporte a formularios.) Tj ET
+BT /F1 10 Tf 44 185 Td (2. Digite dados de exemplo nos campos e salve uma copia.) Tj ET
+BT /F1 10 Tf 44 163 Td (3. Nenhum arquivo ou dado e enviado a esta plataforma.) Tj ET
+BT /F1 10 Tf 44 120 Td (Envio por WhatsApp \(orientacao para um fluxo real\):) Tj ET
+BT /F1 10 Tf 44 100 Td (Confirme o contato do corretor antes de anexar documentos.) Tj ET
+BT /F1 9 Tf 44 53 Td (PROTOTIPO VISUAL / SEM VALIDADE CADASTRAL) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Fields [7 0 R 8 0 R 9 0 R] /NeedAppearances true /DR << /Font << /F1 4 0 R >> >> /DA (/F1 12 Tf 0 g) >>
+endobj
+7 0 obj
+<< /Type /Annot /Subtype /Widget /FT /Tx /T (locacao_0) /TU (Nome ficticio) /Rect [44 500 551 540] /P 3 0 R /F 4 /V () /DA (/F1 12 Tf 0 g) /MK << /BG [1 1 1] /BC [0.6 0.6 0.6] >> /BS << /W 1 /S /S >> >>
+endobj
+8 0 obj
+<< /Type /Annot /Subtype /Widget /FT /Tx /T (locacao_1) /TU (Codigo do imovel) /Rect [44 400 551 440] /P 3 0 R /F 4 /V () /DA (/F1 12 Tf 0 g) /MK << /BG [1 1 1] /BC [0.6 0.6 0.6] >> /BS << /W 1 /S /S >> >>
+endobj
+9 0 obj
+<< /Type /Annot /Subtype /Widget /FT /Tx /T (locacao_2) /TU (Preferencias / observacoes) /Rect [44 300 551 340] /P 3 0 R /F 4 /V () /DA (/F1 12 Tf 0 g) /MK << /BG [1 1 1] /BC [0.6 0.6 0.6] >> /BS << /W 1 /S /S >> >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000009 00000 n 
+0000000074 00000 n 
+0000000131 00000 n 
+0000000285 00000 n 
+0000000355 00000 n 
+0000001593 00000 n 
+0000001716 00000 n 
+0000001934 00000 n 
+0000002155 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+2386
+%%EOF
