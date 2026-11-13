@@ -1,0 +1,8 @@
+{
+  "name": "capital-sp-apresentacao",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node \"Site Imobiliario/scripts/build-demo.mjs\""
+  }
+}
