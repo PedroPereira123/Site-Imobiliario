@@ -14,7 +14,7 @@ export async function demoApi(url,options={}){
  if(route.startsWith('/api/admin/properties/')){const p=items.find(p=>p.id===decodeURIComponent(route.split('/').pop()));if(!p)fail(404,'Imóvel não encontrado.');return structuredClone(p);}
  if(route==='/api/catalog'){
  const params=parsed.searchParams;const operation=params.get('operation')??'';const max=params.get('max')?Number(params.get('max')):null;const beds=Number(params.get('beds')||0);const region=params.get('region');const query=(params.get('query')??'').toLocaleLowerCase('pt-BR');
- return {items:structuredClone(publicItems.filter(p=>(!region||p.region===region)&&(!beds||p.bedrooms>=beds)&&(!query||`${p.title} ${p.reference} ${p.region}`.toLocaleLowerCase('pt-BR').includes(query))&&p.offers.some(o=>(!operation||o.operation===operation)&&(max===null||o.price!==null&&o.price<=max))))};}
+ return {items:structuredClone(publicItems.filter(p=>(!params.get('type')||p.type===params.get('type'))&&(!region||p.region===region)&&(!beds||p.bedrooms>=beds)&&(!query||`${p.title} ${p.reference} ${p.region}`.toLocaleLowerCase('pt-BR').includes(query))&&p.offers.some(o=>(!operation||o.operation===operation)&&(max===null||o.price!==null&&o.price<=max))))};}
  if(route.startsWith('/api/properties/')){const p=publicItems.find(p=>p.id===decodeURIComponent(route.split('/').pop()));if(!p)fail(404,'Imóvel não encontrado.');return structuredClone(p);}
  fail(404,'Recurso indisponível na apresentação.');
 }

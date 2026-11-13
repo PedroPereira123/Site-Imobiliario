@@ -1,0 +1,154 @@
+/* Homepage institutional tokens are scoped to preserve the management UI. */
+.capital-home{--concrete:#b1a38a;--ivory:#e3d8c2;--ink:#292d29;--muted:#44483f;--line:#292d2938;--accent:#a64b36;--surface:#e3d8c2e6;background:var(--concrete);color:var(--ink)}
+.institutional-header{height:15svh;min-height:88px;max-height:140px;padding-inline:5%;background:var(--concrete);border-bottom:1px solid var(--line);gap:24px}
+.institutional-header .brand-mark i{background:var(--ink);border-radius:0}.institutional-header .brand-mark i:first-child{background:var(--accent)}
+.institutional-header nav{gap:clamp(24px,4vw,64px);font-size:13px;font-weight:500}.institutional-header .brand small{display:block;font-size:9px;letter-spacing:.25em;margin-top:7px}
+.institutional-hero{min-height:calc(100svh - clamp(88px,15svh,140px));display:grid;grid-template-rows:minmax(260px,1fr) auto;padding:0 5% 32px}
+.institutional-title{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 0 48px;gap:22px}
+.institutional-title h1{font-family:Impact,'Arial Narrow',sans-serif;font-size:clamp(80px,16.7vw,280px);font-weight:400;line-height:.9;letter-spacing:.015em;white-space:nowrap;margin:0}
+.institutional-title p{font-family:'Courier New',monospace;font-size:clamp(10px,1.1vw,15px);letter-spacing:.2em;font-weight:600}
+.property-search-dock{padding:28px 30px 20px;min-height:28svh;background:var(--surface);border:1px solid #f2ead787;position:relative;align-content:center}
+@supports(backdrop-filter:blur(12px)){.property-search-dock{background:#e3d8c2a8;backdrop-filter:blur(12px)}}
+.dock-heading{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:24px}.dock-heading>span:last-child{font:10px 'Courier New',monospace;letter-spacing:.12em}
+.dock-fields{display:grid;grid-template-columns:1.05fr 1fr 1.25fr 1fr auto;gap:0;align-items:end}.dock-fields label{padding:0 18px;border-left:1px solid var(--line);min-width:0;font-size:11px;font-weight:500}.dock-fields label:first-child{padding-left:0;border:0}
+.dock-fields input,.dock-fields select{border:0;border-bottom:1px solid transparent;border-radius:0;background:transparent;font-size:13px;min-height:44px;padding:8px 0;min-width:0;box-shadow:none}.dock-fields input::placeholder{color:var(--muted);opacity:1}
+.capital-home .btn{border-radius:0}.dock-fields .btn{min-height:56px;margin-left:18px;padding-inline:24px}.capital-home :focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.advanced-search{margin-top:22px;font-size:11px}.advanced-search summary{cursor:pointer;width:fit-content;padding:6px 0;text-underline-offset:4px}.advanced-search summary:hover{text-decoration:underline}.advanced-search>label{max-width:280px;margin-top:15px}.advanced-search select{border-radius:0;background:var(--ivory)}
+.architectural-reveal{position:relative;min-height:680px;display:flex;align-items:end;padding:100px 5% 70px;isolation:isolate;overflow:hidden;background:var(--concrete)}
+/* Set --architecture-image to a licensed local image when the asset is approved. */
+.architecture-surface{position:absolute;inset:0;z-index:-1;background-color:#a99d86;background-image:var(--architecture-image,none);background-size:cover;background-position:center;mask-image:linear-gradient(transparent,#000 42%,#000 65%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 42%,#000 65%,transparent)}
+.architecture-copy{max-width:640px}.architecture-copy h2{font-size:clamp(38px,5vw,76px);margin:20px 0}.architecture-copy p{max-width:370px;margin-bottom:28px}.architecture-copy .btn{border-color:var(--ink)}
+.capital-home .property-card,.capital-home .pill,.capital-home .neighborhood{border-radius:0}
+@media(min-width:801px) and (min-height:900px){.institutional-hero{padding-bottom:5svh}.property-search-dock{min-height:30svh}}
+@media(max-width:1100px){.dock-fields{grid-template-columns:1fr 1fr 1fr 1fr}.dock-fields .btn{grid-column:1/-1;margin:20px 0 0}.property-search-dock{padding:22px}.institutional-title{padding-block:40px}}
+@media(max-width:800px){.institutional-header{height:80px;min-height:80px}.institutional-header .menu-toggle{margin-left:auto;display:inline-flex}.institutional-header nav{display:none}.institutional-header.menu-open nav{display:flex;position:absolute;top:100%;left:0;right:0;background:var(--ivory);padding:18px 5%;flex-wrap:wrap;gap:24px;border-bottom:1px solid var(--line)}.institutional-hero{min-height:calc(100svh - 80px);padding-bottom:20px;grid-template-rows:minmax(190px,1fr) auto}.institutional-title h1{font-size:17vw}.dock-fields{grid-template-columns:1fr 1fr;gap:18px}.dock-fields label{padding:0;border:0}.dock-fields .btn{margin:0}.dock-heading>span:last-child{display:none}.property-search-dock{min-height:0}.architectural-reveal{min-height:520px}.institutional-title p{letter-spacing:.12em}}
+@media(max-width:400px){.institutional-hero{padding-inline:16px}.property-search-dock{padding:18px 14px}.dock-fields{gap:12px}.dock-fields input,.dock-fields select{font-size:12px}.institutional-title{gap:18px;padding-block:30px}.institutional-title p{font-size:9px}.dock-heading{margin-bottom:18px}}
+@media(prefers-reduced-motion:reduce){.capital-home *{scroll-behavior:auto;transition:none;animation:none}}
+
+@media(max-width:520px){.capital-home .section-heading{align-items:start;flex-direction:column}.capital-home .section-heading .btn{max-width:100%}}
+
+
+
+/* Reference translation: concrete first fold, compact sand search dock. */
+.institutional-header,
+.institutional-hero{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23292d29' opacity='.075' filter='url(%23n)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+}
+.institutional-header{height:112px;min-height:88px;max-height:none}
+.institutional-header .brand{font-family:Impact,'Arial Narrow',sans-serif;font-weight:400;font-size:32px;letter-spacing:.025em}
+.institutional-header .brand small{font-family:Arial,sans-serif;font-weight:700;letter-spacing:.4em}
+.institutional-header nav{font-size:18px;gap:clamp(28px,4vw,64px)}
+.institutional-header nav a{position:relative;padding-block:14px}
+.institutional-header nav a[aria-current=page]::after{content:'';position:absolute;bottom:3px;left:0;right:0;height:3px;background:var(--accent)}
+.institutional-hero{position:relative;isolation:isolate;min-height:calc(100svh - 112px);grid-template-rows:minmax(340px,1fr) auto;padding-bottom:clamp(40px,10svh,100px)}
+.institutional-hero::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(90deg,transparent calc(100% - 1px),var(--line) 100%),linear-gradient(transparent calc(100% - 1px),var(--line) 100%);background-size:33.333% 100%,100% 340px;opacity:.22}
+.institutional-hero::after{content:'';position:absolute;inset:35% 0 0;z-index:-1;pointer-events:none;background-image:var(--architecture-image,none);background-size:cover;background-position:center;mask-image:linear-gradient(transparent,#000 55%)}
+.institutional-title{padding:56px 0 72px;gap:32px}
+.institutional-title h1{font-size:clamp(80px,18.5vw,310px);letter-spacing:0;line-height:1}
+.institutional-title p{font-family:Arial,sans-serif;font-size:clamp(12px,1.35vw,20px);letter-spacing:.42em;margin:0;font-weight:700}
+.property-search-dock{min-height:0;padding:26px 28px 16px;border-radius:22px;border-color:var(--ivory);background:var(--surface);box-shadow:0 16px 28px #292d2926;backdrop-filter:blur(12px)}
+.dock-fields{align-items:center;grid-template-columns:1.05fr 1fr 1.25fr 1fr auto}
+.dock-fields label{font-size:12px;padding-inline:22px}
+.dock-fields input,.dock-fields select{font-size:16px;font-weight:600;color:var(--ink);width:100%}
+.dock-fields input::placeholder{color:var(--ink)}
+.dock-fields .btn{border-radius:6px;background:var(--ink);color:var(--ivory);font-size:16px;min-height:56px;white-space:nowrap}
+.advanced-search{margin-top:12px;font-size:13px}
+.advanced-search summary{min-height:44px;align-content:center;padding:10px 0}
+.advanced-search>label{font-size:13px;padding-bottom:8px}
+.advanced-search select{font-size:16px;min-height:44px}
+@media(max-width:1100px){
+  .dock-fields{grid-template-columns:1fr 1fr;gap:16px 24px}
+  .dock-fields label{padding:0;border:0}
+  .dock-fields .btn{margin:0;grid-column:1/-1}
+  .institutional-title{padding-block:48px}
+  .institutional-hero{padding-bottom:40px}
+}
+@media(max-width:800px){
+  .institutional-header{height:80px;min-height:80px}
+  .institutional-header .brand{font-size:26px}
+  .institutional-hero{min-height:calc(100svh - 80px);grid-template-rows:minmax(200px,1fr) auto;padding-bottom:24px}
+  .institutional-title{gap:24px;padding-block:36px}
+  .institutional-title h1{font-size:18vw}
+  .institutional-title p{font-size:11px;letter-spacing:.22em}
+  .property-search-dock{padding:20px 22px 12px;border-radius:18px}
+  .dock-fields{gap:16px}
+  .dock-fields input,.dock-fields select{font-size:16px}
+}
+@media(max-width:400px){
+  .institutional-title p{max-width:26ch;line-height:1.8;font-size:10px;letter-spacing:.18em}
+  .property-search-dock{padding:18px 14px 10px}
+  .dock-fields{grid-template-columns:minmax(0,1fr);gap:8px}
+  .dock-fields label{font-size:12px}
+  .dock-fields input,.dock-fields select{min-height:44px;padding-block:6px}
+  .institutional-hero{grid-template-rows:auto auto}
+  .institutional-title{padding-block:28px;gap:16px}
+}
+
+/* Compact entry point expands the existing form without losing entered values. */
+.property-search-dock{scroll-margin-top:24px;width:100%;justify-self:center}
+.property-search-dock.is-collapsed{align-self:end;width:auto;max-width:100%;padding:10px;border-radius:16px;min-height:0}
+.property-search-dock .dock-toggle{border-radius:8px;min-height:52px;background:var(--ink);color:var(--ivory);font-size:16px;padding:14px 28px}
+.property-search-dock:not(.is-collapsed)>.dock-toggle{display:flex;margin:0 0 24px auto;min-height:44px;padding:10px 16px;font-size:13px}
+#home-search-fields[hidden]{display:none}
+
+/* Left-aligned brand lockup requested in the homepage review. */
+.institutional-title{align-items:flex-start;justify-content:flex-start;text-align:left;padding-top:clamp(28px,4vw,64px)}
+.institutional-subtitle{display:block;font:inherit;line-height:1;letter-spacing:.12em;margin-top:8px}
+@media(max-width:800px){.institutional-title{padding-top:28px}.institutional-subtitle{margin-top:8px}}
+/* Two equally sized brand lines stay near the top and leave room for search. */
+.institutional-title{gap:20px;padding-bottom:28px}
+.institutional-title h1{font-size:clamp(72px,16vw,260px)}
+.institutional-hero{padding-bottom:32px}
+@media(max-width:800px){.institutional-title h1{font-size:18vw}.institutional-hero{padding-bottom:24px}}
+
+/* User-supplied concrete photograph, warmed for legible dark typography. */
+.institutional-header{background-image:linear-gradient(#b1a38acc,#b1a38acc),url('/assets/concreto-envelhecido.png');background-size:cover;background-position:center top}
+.institutional-hero{background-image:linear-gradient(to bottom,#b1a38ab8 0%,#b1a38ab8 65%,var(--concrete) 100%),url('/assets/concreto-envelhecido.png');background-size:cover;background-position:center}
+.institutional-hero::before{display:none}
+
+/* Smoked glass replaces the solid inner button in the compact dock. */
+.property-search-dock.is-collapsed{background:color-mix(in srgb,var(--ink) 62%,transparent);border-color:color-mix(in srgb,var(--ivory) 45%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.property-search-dock.is-collapsed .dock-toggle{background:transparent;border-color:transparent;box-shadow:none;color:var(--ivory)}
+.property-search-dock.is-collapsed .dock-toggle:hover{background:color-mix(in srgb,var(--ivory) 10%,transparent)}
+.property-search-dock.is-collapsed .dock-toggle:focus-visible{outline-color:var(--ivory);outline-offset:0}
+
+/* Expanded search shares the compact dock's smoked-glass treatment. */
+.property-search-dock:not(.is-collapsed){background:color-mix(in srgb,var(--ink) 62%,transparent);color:var(--ivory);border-color:color-mix(in srgb,var(--ivory) 45%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.property-search-dock:not(.is-collapsed) .dock-fields label{border-color:color-mix(in srgb,var(--ivory) 35%,transparent)}
+.property-search-dock:not(.is-collapsed) input,
+.property-search-dock:not(.is-collapsed) select,
+.property-search-dock:not(.is-collapsed) input::placeholder{color:var(--ivory)}
+.property-search-dock:not(.is-collapsed) select{color-scheme:dark;background-color:transparent}
+.property-search-dock:not(.is-collapsed) option{color:var(--ivory);background:var(--ink)}
+.property-search-dock:not(.is-collapsed) .btn{background:transparent;color:var(--ivory);border:1px solid color-mix(in srgb,var(--ivory) 45%,transparent);box-shadow:none}
+.property-search-dock:not(.is-collapsed) .btn:hover{background:color-mix(in srgb,var(--ivory) 10%,transparent)}
+.property-search-dock:not(.is-collapsed) :focus-visible{outline-color:var(--ivory)}
+
+/* Expanded dock: balanced fields and a stacked action column. */
+.property-search-dock:not(.is-collapsed){padding-block:28px}
+.property-search-dock>.dock-toggle[hidden]{display:none}
+.property-search-dock .advanced-search summary{display:flex;justify-content:center;align-items:center;width:100%;min-height:56px;border-radius:6px;font-size:16px;font-weight:600;padding:14px 20px;list-style:none;text-decoration:none}
+.property-search-dock .advanced-search summary::-webkit-details-marker{display:none}
+.property-search-dock .advanced-search summary::after{content:'+';margin-left:12px}
+.property-search-dock .advanced-search[open] summary::after{content:'−'}
+.property-search-dock .advanced-search>label{max-width:none}
+@media(min-width:1101px){
+  #home-search-fields{display:grid;grid-template-columns:1.05fr 1fr 1.25fr 1fr 228px;gap:12px 0;align-items:center}
+  #home-search-fields .dock-fields{display:contents}
+  #home-search-fields .dock-fields>label{grid-row:1 / 3}
+  #home-search-fields .dock-fields>.btn{grid-column:5;grid-row:1;margin:0 0 0 18px}
+  #home-search-fields .advanced-search{grid-column:5;grid-row:2;margin:0 0 0 18px}
+}
+
+/* Stock architecture with an asymmetric, softly feathered vignette. */
+.architecture-surface{background-image:url('/assets/arquitetura-stock.png');background-position:72% center;mask-image:radial-gradient(ellipse 57% 65% at 80% 49%,#000 22%,#0009 54%,transparent 85%);-webkit-mask-image:radial-gradient(ellipse 57% 65% at 80% 49%,#000 22%,#0009 54%,transparent 85%)}
+.architectural-reveal::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 22% 65%,var(--concrete) 15%,transparent 66%),radial-gradient(ellipse at 91% 8%,var(--concrete),transparent 42%),radial-gradient(ellipse at 65% 100%,var(--concrete),transparent 40%)}
+@media(max-width:800px){.architecture-surface{background-position:65% center;opacity:.65}.architecture-copy{position:relative;background:color-mix(in srgb,var(--concrete) 80%,transparent);padding:20px;border-radius:8px}}
+
+/* Architectural heading echoes the main brand at a secondary scale. */
+.architecture-copy h2{font-family:Impact,'Arial Narrow',sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(40px,6vw,88px);line-height:1.04;letter-spacing:.015em;margin:20px 0 24px}
+.architecture-copy>p{font-size:clamp(13px,1.1vw,16px);line-height:1.7;letter-spacing:.08em}
+@media(max-width:400px){.architecture-copy h2{font-size:36px;overflow-wrap:normal}}
+
+.home-category>h2{font-family:Impact,'Arial Narrow',sans-serif;font-size:clamp(36px,4vw,64px);font-weight:400;line-height:1.1;letter-spacing:.025em;margin:0 0 32px}
+.category-empty{color:var(--ink);font-size:15px;padding-block:24px;max-width:60ch}

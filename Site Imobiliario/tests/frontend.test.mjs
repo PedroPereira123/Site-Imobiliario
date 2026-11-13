@@ -18,3 +18,11 @@ test('preço oculto aparece sob consulta sem total que permita reconstruí-lo',(
   const html=propertyPage({...p,offers:[{operation:'rent',price:null}],condominium:400,tax:100,taxPeriod:'monthly'},settings,'rent');
   assert.ok(html.includes('Sob consulta'));assert.ok(!html.includes('Total mensal estimado'));
 });
+
+
+test('tipo combina com operação e preço sem aceitar outra categoria',async()=>{
+ const {filterCatalog}=await import('../../Gestor de Imóveis/domain.mjs');
+ const house={...p,id:'house',type:'Casa'};
+ assert.deepEqual(filterCatalog([p,house],new URLSearchParams({type:'Apartamento',operation:'rent',max:'2600'})).map(p=>p.id),['id-1']);
+ assert.equal(filterCatalog([p,house],new URLSearchParams({type:'Casa',operation:'rent',max:'2000'})).length,0);
+});
