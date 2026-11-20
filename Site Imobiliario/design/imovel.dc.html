@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;background:#C9BEA8;color:#292D29;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#292D29;text-decoration:none}
+a:hover{color:#A64B36}
+button,input{font-family:inherit;color:inherit}
+input::placeholder{color:rgba(41,45,41,.45)}
+:focus-visible{outline:2px solid #A64B36;outline-offset:2px}
+</style>
+</helmet>
+<div ref="{{ R.root }}" style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background-color:#C9BEA8;background-size:256px 256px,720px 720px">
+
+  <header ref="{{ R.header }}" style="position:fixed;top:0;left:0;right:0;z-index:50;height:{{ hdrH }};display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 clamp(24px,4vw,64px);color:{{ hdrColor }};background-color:{{ hdrBg }};backdrop-filter:{{ hdrBlur }};-webkit-backdrop-filter:{{ hdrBlur }};transition:color .4s,background-color .4s,height .5s cubic-bezier(.2,.7,0,1)">
+    <div style="display:flex;align-items:center;gap:24px;min-width:0">
+      <a href="Capital%20SP%20Home%20v3.dc.html" style="display:flex;align-items:center;gap:12px;color:inherit">
+        <span style="position:relative;display:block;flex:none;width:24px;height:24px;border:2px solid currentColor"><span style="position:absolute;right:-2px;bottom:-2px;width:11px;height:11px;background:#A64B36"></span></span>
+        <span style="display:flex;flex-direction:column;line-height:1">
+          <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;letter-spacing:.05em">CAPITAL SP</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.42em;margin-top:3px">IMÓVEIS</span>
+        </span>
+      </a>
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <span style="width:1px;height:24px;background:currentColor;opacity:.3"></span>
+        <a href="{{ backHref }}" style="display:flex;align-items:center;gap:8px;height:40px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:inherit">← RESULTADOS DA BUSCA</a>
+      </sc-if>
+    </div>
+    <sc-if value="{{ hdrCtx }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:24px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.7">{{ p.code }} · {{ p.bairroUp }}</span>
+        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:22px;line-height:1">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px">{{ p.per }}</span></span>
+        <button onClick="{{ openVisita }}" style="height:40px;padding:0 16px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:14px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ hdrDefault }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:24px">
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.75">REF. {{ p.code }}</span>
+          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;height:40px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:inherit">FALAR COM CORRETOR →</a>
+        </sc-if>
+        <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+          <a href="{{ backHref }}" style="display:flex;align-items:center;height:44px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:inherit">← BUSCA</a>
+        </sc-if>
+      </div>
+    </sc-if>
+    <span style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:0;height:1px;background:currentColor;opacity:.25"></span>
+  </header>
+
+  <sc-if value="{{ heroOverlay }}" hint-placeholder-val="{{ true }}">
+    <section ref="{{ R.hero }}" data-screen-label="01 Hero" style="position:relative;height:max(640px,100vh);overflow:hidden;background:#292D29;color:#EFE6D2">
+      <div ref="{{ R.heroBox }}" style="position:absolute;inset:0">
+        <div ref="{{ R.heroPhoto }}" style="position:absolute;inset:0">
+          <image-slot id="{{ p.slot0 }}" shape="rect" placeholder="{{ p.heroPh }}"></image-slot>
+        </div>
+      </div>
+      <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.55) 0%,rgba(22,22,19,0) 22%,rgba(41,45,41,0) 44%,rgba(41,45,41,.78) 80%,#292D29 100%)"></div>
+      <button onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);top:clamp(104px,15vh,136px);height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.62)">{{ p.photoCount }} — VER GALERIA</button>
+      <div ref="{{ rv }}" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:clamp(40px,7vh,72px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px;pointer-events:none">
+        <div style="min-width:0;flex:1 1 560px">
+          <div ref="{{ R.heroKick }}" style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em"><span style="width:8px;height:8px;background:#EFE6D2"></span>IMÓVEL EM DESTAQUE — {{ p.code }}</div>
+          <div style="overflow:hidden;margin-top:16px;padding-top:.04em">
+            <h1 ref="{{ R.heroTitle }}" style="margin:0;max-width:15ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,7.2vw,124px);line-height:.86;letter-spacing:.005em;text-wrap:balance">{{ p.titleUp }}</h1>
+          </div>
+          <div ref="{{ R.heroMeta }}" style="margin-top:24px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">
+            <span>{{ p.bairroUp }}</span><span style="opacity:.7">{{ p.tipoUp }}</span><span style="opacity:.7">{{ p.finUp }}</span>
+          </div>
+        </div>
+        <div ref="{{ R.heroCta }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:16px;pointer-events:auto">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.8">{{ p.priceLabel }}</span>
+            <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(40px,3.8vw,60px);line-height:.9">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:13px;letter-spacing:.06em">{{ p.per }}</span></span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ heroAdjacent }}" hint-placeholder-val="{{ false }}">
+    <section ref="{{ R.hero }}" data-screen-label="01 Hero" style="position:relative">
+      <div ref="{{ R.heroBox }}" style="position:relative;height:clamp(380px,66vh,780px);overflow:hidden;background:#292D29">
+        <div ref="{{ R.heroPhoto }}" style="position:absolute;inset:0">
+          <image-slot id="{{ p.slot0 }}" shape="rect" placeholder="{{ p.heroPh }}"></image-slot>
+        </div>
+        <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.55) 0%,rgba(22,22,19,0) 30%)"></div>
+        <button onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);bottom:16px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">{{ p.photoCount }} — VER GALERIA</button>
+      </div>
+      <div style="padding:clamp(32px,5vh,48px) clamp(24px,4vw,64px) clamp(16px,3vh,32px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px">
+        <div style="min-width:0;flex:1 1 520px">
+          <div ref="{{ R.heroKick }}" style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em"><span style="width:8px;height:8px;background:#292D29"></span>IMÓVEL EM DESTAQUE — {{ p.code }}</div>
+          <div style="overflow:hidden;margin-top:16px;padding-top:.04em">
+            <h1 ref="{{ R.heroTitle }}" style="margin:0;max-width:15ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(44px,6.4vw,112px);line-height:.86;letter-spacing:.005em;text-wrap:balance">{{ p.titleUp }}</h1>
+          </div>
+          <div ref="{{ R.heroMeta }}" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">
+            <span>{{ p.bairroUp }}</span><span style="opacity:.65">{{ p.tipoUp }}</span><span style="opacity:.65">{{ p.finUp }}</span>
+          </div>
+        </div>
+        <div ref="{{ R.heroCta }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ p.priceLabel }}</span>
+            <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(40px,3.8vw,60px);line-height:.9">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:13px;letter-spacing:.06em">{{ p.per }}</span></span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <section data-screen-label="02 Galeria" style="position:relative;background:{{ galBg }};color:#EFE6D2;padding:{{ galPadT }} 0 clamp(200px,28vh,280px)">
+    <div style="max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">01 — GALERIA</div>
+          <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,80px);line-height:.85">{{ galTitle }}</h2>
+        </div>
+        <sc-if value="{{ hasPlanta }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:4px;padding:4px;border-radius:10px;background:rgba(239,230,210,.08)">
+            <sc-for list="{{ galTabs }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.onClick }}" style="height:32px;padding:0 16px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px;font-weight:500;transition:background .2s,color .2s">{{ c.label }}</button></sc-for>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ galGrid }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:clamp(180px,17vw,300px);grid-auto-flow:dense;gap:16px;margin-top:40px">
+          <sc-for list="{{ gMosaic }}" as="t" hint-placeholder-count="6">
+            <div ref="{{ rv }}" style="position:relative;grid-column:{{ t.col }};grid-row:{{ t.row }};overflow:hidden;background:#3A3D39">
+              <image-slot id="{{ t.id }}" shape="rect" placeholder="{{ t.ph }}"></image-slot>
+              <span style="position:absolute;left:0;bottom:0;padding:8px 12px;background:#292D29;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">{{ t.n }}</span>
+              <button onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.65)">AMPLIAR</button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ galTrack }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:16px;margin:32px calc(-1 * clamp(24px,4vw,64px)) 0;padding:0 clamp(24px,4vw,64px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:clamp(24px,4vw,64px);scrollbar-width:none">
+          <sc-for list="{{ gAll }}" as="t" hint-placeholder-count="2">
+            <div style="position:relative;flex:0 0 calc(100vw - 80px);aspect-ratio:4/5;scroll-snap-align:start;overflow:hidden;background:#3A3D39">
+              <image-slot id="{{ t.id }}" shape="rect" placeholder="{{ t.ph }}"></image-slot>
+              <span style="position:absolute;left:0;bottom:0;padding:8px 12px;background:#292D29;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">{{ t.n }}</span>
+              <button onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:40px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ galPlanta }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative;height:clamp(360px,40vw,640px);margin-top:40px;overflow:hidden;background:#E3D8C2;color:#292D29">
+          <image-slot id="{{ planta.id }}" shape="rect" fit="contain" placeholder="{{ planta.ph }}"></image-slot>
+          <button onClick="{{ planta.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(41,45,41,.12);color:#292D29;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
+        <span style="opacity:.62">{{ galNote }}</span>
+        <button onClick="{{ openGallery }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font:inherit;letter-spacing:inherit;transition:background .2s" style-hover="background:rgba(239,230,210,.18)">VER EM TELA CHEIA →</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Identificação" style="padding:clamp(40px,6vh,64px) clamp(24px,4vw,64px) 0">
+    <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:stretch;border-top:2px solid #292D29;border-bottom:1px solid rgba(41,45,41,.25)">
+      <sc-for list="{{ cells }}" as="c" hint-placeholder-count="6">
+        <div style="flex:1 1 120px;min-width:0;padding:16px 24px 16px 0;display:flex;flex-direction:column;justify-content:space-between;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ c.l }}</span>
+          <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:700;font-size:{{ c.size }};line-height:1">{{ c.v }}</span>
+        </div>
+      </sc-for>
+      <div style="flex:2 1 260px;min-width:0;padding:16px 0;display:flex;flex-direction:column;justify-content:space-between;gap:8px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ p.priceLabel }} · {{ p.finUp }}</span>
+        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:40px;line-height:1">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px">{{ p.per }}</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section ref="{{ R.ed }}" data-screen-label="03 O imóvel" style="padding:clamp(88px,14vh,160px) clamp(24px,4vw,64px)">
+    <div style="max-width:1680px;margin:0 auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(16px,2vw,32px)">
+      <div ref="{{ rv }}" style="grid-column:{{ edTextCol }};min-width:0">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">02 — O IMÓVEL</div>
+        <h2 style="margin:16px 0 0;max-width:14ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(40px,4.8vw,80px);line-height:.88;text-wrap:balance">{{ p.secaoUp }}</h2>
+        <div style="margin-top:40px;display:flex;flex-direction:column;gap:16px;max-width:58ch">
+          <sc-for list="{{ p.paras }}" as="t" hint-placeholder-count="2">
+            <p style="margin:0;font-size:17px;line-height:1.65;text-wrap:pretty">{{ t }}</p>
+          </sc-for>
+        </div>
+        <div style="margin-top:32px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.62">REF. {{ p.code }} · {{ p.tipoUp }} · {{ p.bairroUp }}</div>
+      </div>
+      <sc-if value="{{ hasSidePhoto }}" hint-placeholder-val="{{ true }}">
+        <figure ref="{{ rv }}" style="grid-column:{{ edPhotoCol }};margin:{{ edPhotoMargin }};display:flex;flex-direction:column;gap:8px">
+          <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:#B9AE97">
+            <image-slot id="{{ side.id }}" shape="rect" placeholder="{{ side.ph }}"></image-slot>
+            <button onClick="{{ side.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
+          </div>
+          <figcaption style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;opacity:.62">FOTO {{ side.n }} / {{ p.nPad }}</figcaption>
+        </figure>
+      </sc-if>
+    </div>
+  </section>
+
+
+  <section data-screen-label="05 Características" style="background:linear-gradient(180deg,rgba(227,216,194,0) 0,rgba(227,216,194,.6) 200px,rgba(227,216,194,.6) calc(100% - 200px),rgba(227,216,194,0) 100%);padding:clamp(120px,16vh,200px) clamp(24px,4vw,64px)">
+    <div style="max-width:1680px;margin:0 auto">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">03 — CARACTERÍSTICAS</div>
+      <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,80px);line-height:.85">{{ featTitle }}</h2>
+      <sc-if value="{{ hasDest }}" hint-placeholder-val="{{ true }}">
+        <div ref="{{ rv }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:32px;margin-top:48px">
+          <sc-for list="{{ dest }}" as="d" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:16px;padding-top:16px;border-top:2px solid #292D29">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">{{ d.n }}</span>
+              <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:700;font-size:clamp(26px,2.4vw,36px);line-height:1;text-wrap:balance">{{ d.t }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasGroups }}" hint-placeholder-val="{{ true }}">
+        <div ref="{{ rv }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px 32px;margin-top:72px">
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62;padding-bottom:12px">{{ g.tUp }}</span>
+              <sc-for list="{{ g.i }}" as="it" hint-placeholder-count="3">
+                <span style="padding:12px 0;border-top:1px solid rgba(41,45,41,.16);font-size:15px;line-height:1.4">{{ it }}</span>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <section data-screen-label="06 Localização" style="padding:clamp(80px,12vh,144px) clamp(24px,4vw,64px)">
+    <div style="max-width:1680px;margin:0 auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:48px clamp(16px,2vw,32px)">
+      <div ref="{{ rv }}" style="grid-column:{{ locTextCol }};min-width:0;display:flex;flex-direction:column">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">04 — LOCALIZAÇÃO</div>
+        <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,6.4vw,112px);line-height:.84;text-wrap:balance">{{ p.bairroUp }}</h2>
+        <span style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.7">SÃO PAULO — SP</span>
+        <p style="margin:32px 0 0;max-width:52ch;font-size:16px;line-height:1.65;text-wrap:pretty">{{ locCtx }}</p>
+        <sc-if value="{{ hasPois }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:32px;display:flex;flex-direction:column">
+            <sc-for list="{{ pois }}" as="o" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid rgba(41,45,41,.16)">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;opacity:.62;padding-top:3px">{{ o.tUp }}</span>
+                <span style="font-size:15px;line-height:1.4">{{ o.n }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <div style="margin-top:24px;display:flex;align-items:flex-start;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;line-height:1.6">
+          <span style="flex:none;width:8px;height:8px;margin-top:5px;background:#294D63"></span>
+          <span>LOCALIZAÇÃO APROXIMADA. O ENDEREÇO EXATO É INFORMADO PELO CORRETOR NO AGENDAMENTO DA VISITA.</span>
+        </div>
+      </div>
+      <sc-if value="{{ hasMap }}" hint-placeholder-val="{{ true }}">
+        <div ref="{{ rv }}" style="grid-column:{{ locMapCol }};position:relative;height:clamp(380px,44vw,640px);overflow:hidden;background:#B9AE97">
+          <iframe src="{{ mapSrc }}" title="Mapa da localização aproximada" loading="lazy" style="display:block;width:100%;height:100%;border:0"></iframe>
+          <span style="position:absolute;left:12px;top:12px;padding:8px 12px;border-radius:8px;background:rgba(227,216,194,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;pointer-events:none">ÁREA APROXIMADA — RAIO DE {{ locR }} M</span>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <section ref="{{ R.fin }}" data-screen-label="07 Valores" style="padding:0 clamp(24px,4vw,64px) clamp(88px,14vh,160px)">
+    <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:40px clamp(16px,2vw,32px);padding-top:32px;border-top:2px solid #292D29">
+      <div style="grid-column:{{ finLeftCol }};min-width:0">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">05 — VALORES</div>
+        <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,80px);line-height:.85">{{ finTitle }}</h2>
+        <p style="margin:24px 0 0;max-width:40ch;font-size:15px;line-height:1.6;opacity:.8;text-wrap:pretty">{{ finNote }}</p>
+      </div>
+      <div style="grid-column:{{ finRightCol }};min-width:0;display:flex;flex-direction:column">
+        <sc-for list="{{ finRows }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px;padding:{{ r.pad }};border-bottom:1px solid rgba(41,45,41,.18)">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:15px;font-weight:600">{{ r.l }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;opacity:.6">{{ r.sub }}</span>
+            </div>
+            <span style="font-family:{{ r.font }};font-weight:{{ r.weight }};font-size:{{ r.size }};line-height:1;opacity:{{ r.op }}">{{ r.v }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.04em">{{ r.per }}</span></span>
+          </div>
+        </sc-for>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px">
+          <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ref="{{ R.closing }}" data-screen-label="08 Encerramento" style="position:relative;min-height:clamp(560px,88vh,960px);display:flex;align-items:flex-end;overflow:hidden;background:linear-gradient(180deg,rgba(41,45,41,0) 0,#292D29 40%);color:#EFE6D2">
+    <sc-if value="{{ hasClosingPhoto }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;inset:0;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 40%);mask-image:linear-gradient(180deg,transparent 0,#000 40%)">
+        <image-slot id="{{ closing.id }}" shape="rect" placeholder="{{ closing.ph }}"></image-slot>
+      </div>
+      <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.2) 0%,rgba(22,22,19,.1) 35%,rgba(22,22,19,.82) 100%)"></div>
+    </sc-if>
+    <div style="position:relative;width:100%;padding:clamp(96px,14vh,160px) clamp(24px,4vw,64px) clamp(48px,8vh,96px);pointer-events:none">
+      <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">06 — VISITA</div>
+        <h2 style="margin:16px 0 0;max-width:16ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,7vw,128px);line-height:.86;text-wrap:balance">{{ p.closingUp }}</h2>
+        <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">
+          <span>{{ p.tipoUp }}</span><span>{{ p.finUp }}</span><span>{{ p.priceFmt }}{{ p.per }}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;pointer-events:auto">
+          <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:56px;padding:0 28px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:16px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:16px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">Conversar pelo WhatsApp</a>
+        </div>
+        <p style="margin:16px 0 0;max-width:72ch;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.6;opacity:.8">MENSAGEM PRONTA: “{{ waMsg }}”</p>
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:48px;padding-top:16px;border-top:1px solid rgba(239,230,210,.3);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;pointer-events:auto">
+          <span>REF. {{ p.code }} · CAPITAL SP IMÓVEIS · CRECI 00000-J (EXEMPLO)</span>
+          <a href="{{ backHref }}" style="display:flex;align-items:center;height:40px;color:#EFE6D2">← VOLTAR AOS RESULTADOS</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ hasRec }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="09 Recomendações" style="background:linear-gradient(180deg,#292D29 0,rgba(41,45,41,0) 240px,rgba(41,45,41,0) calc(100% - 200px),#292D29 100%);padding:clamp(200px,26vh,260px) clamp(24px,4vw,64px) clamp(160px,22vh,220px)">
+      <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
+          <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(28px,3vw,44px);line-height:.9">{{ recTitle }}</h3>
+          <a href="{{ backHref }}" style="display:flex;align-items:center;height:40px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">TODOS OS RESULTADOS →</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:16px;margin-top:24px">
+          <sc-for list="{{ rec }}" as="r" hint-placeholder-count="3">
+            <a href="{{ r.href }}" style="position:relative;display:block;height:220px;overflow:hidden;background:#292D29;color:#EFE6D2">
+              <span style="position:absolute;inset:0;pointer-events:none"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></span>
+              <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,22,19,0) 30%,rgba(22,22,19,.84) 100%)"></span>
+              <span style="position:absolute;left:16px;right:16px;bottom:16px;display:flex;flex-direction:column;gap:4px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;opacity:.8">{{ r.code }} · {{ r.tipoUp }}</span>
+                <span style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;line-height:1"><span>{{ r.bairroUp }}</span><span style="white-space:nowrap">{{ r.priceFmt }}</span></span>
+              </span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <footer style="background:#292D29;color:#DCD1BA;padding:48px clamp(24px,4vw,64px) {{ footPadB }}">
+    <div style="max-width:1680px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="position:relative;display:block;width:24px;height:24px;border:2px solid currentColor"><span style="position:absolute;right:-2px;bottom:-2px;width:11px;height:11px;background:#A64B36"></span></span>
+        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;letter-spacing:.05em">CAPITAL SP IMÓVEIS</span>
+      </div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;opacity:.6">IMÓVEIS E DADOS DEMONSTRATIVOS — © 2026 SÃO PAULO, SP</span>
+    </div>
+  </footer>
+
+  <div style="position:fixed;left:50%;bottom:{{ dockBottom }};z-index:60;width:{{ dockW }};max-width:calc(100vw - 16px);transform:translate(-50%,{{ dockY }});opacity:{{ dockOp }};pointer-events:{{ dockPE }};transition:transform .45s cubic-bezier(.2,.7,0,1),opacity .3s">
+    <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:16px;background:rgba(236,228,210,.74);backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);border:1px solid rgba(255,252,242,.6);box-shadow:0 1px 2px rgba(41,45,41,.06),0 24px 56px -28px rgba(30,32,28,.45)">
+      <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:4px;padding:0 16px 0 8px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;opacity:.62;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.code }} · {{ p.bairroUp }}</span>
+        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:24px;line-height:1;white-space:nowrap">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px">{{ p.per }}</span></span>
+      </div>
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ toggleFav }}" aria-label="{{ favLabel }}" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:transparent;cursor:pointer;transition:background .2s" style-hover="background:rgba(41,45,41,.07)">
+          <span style="position:relative;display:block;width:12px;height:16px;background:{{ favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .2s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#E9E1CD;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ favInner }};transition:opacity .2s"></span></span>
+        </button>
+        <button onClick="{{ share }}" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;cursor:pointer;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.07)">Compartilhar</button>
+      </sc-if>
+      <a href="{{ waHref }}" target="_blank" rel="noopener" style="flex:none;display:flex;align-items:center;height:48px;padding:0 16px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+      <button onClick="{{ openVisita }}" style="flex:none;display:flex;align-items:center;gap:12px;height:48px;padding:0 20px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap;transition:background .2s" style-hover="background:#8F3F2D">{{ dockCta }}</button>
+    </div>
+  </div>
+
+  <div style="position:fixed;left:50%;top:88px;z-index:110;transform:translate(-50%,{{ toastY }});opacity:{{ toastOp }};pointer-events:none;transition:transform .3s cubic-bezier(.2,.7,0,1),opacity .2s">
+    <span style="display:block;padding:12px 16px;border-radius:10px;background:#292D29;color:#EFE6D2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em">{{ toast }}</span>
+  </div>
+
+  <div style="position:fixed;inset:0;z-index:95;pointer-events:{{ vPE }}">
+    <div onClick="{{ closeVisita }}" style="position:absolute;inset:0;background:rgba(26,25,22,.5);opacity:{{ vOp }};transition:opacity .35s"></div>
+    <div role="dialog" aria-label="Agendar visita" style="position:absolute;left:{{ vL }};right:{{ vR }};bottom:{{ vB }};width:{{ vW }};max-height:calc(100vh - 32px);overflow:auto;padding:24px;border-radius:{{ vRad }};background:#E3D8C2;box-shadow:0 40px 120px -40px rgba(26,25,22,.6);transform:translateY({{ vY }});opacity:{{ vOp }};transition:transform .45s cubic-bezier(.2,.7,0,1),opacity .3s">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+        <div>
+          <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:32px;line-height:.95">AGENDAR VISITA</h3>
+          <span style="display:block;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;opacity:.7">{{ p.code }} · {{ p.tipoUp }} · {{ p.bairroUp }}</span>
+        </div>
+        <button onClick="{{ closeVisita }}" style="height:40px;padding:0;border:0;background:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">FECHAR ×</button>
+      </div>
+      <sc-if value="{{ vNotSent }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:24px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">DIA</span>
+          <div style="display:flex;gap:4px;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none;border-radius:10px;background:rgba(41,45,41,.06)">
+            <sc-for list="{{ daySegs }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="flex:1 0 auto;height:40px;padding:0 10px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;white-space:nowrap;transition:background .2s,color .2s">{{ c.label }}</button></sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">PERÍODO</span>
+          <div style="display:flex;gap:4px;padding:4px;border-radius:10px;background:rgba(41,45,41,.06)">
+            <sc-for list="{{ periodSegs }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.onClick }}" style="flex:1;height:40px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:14px;font-weight:500;transition:background .2s,color .2s">{{ c.label }}</button></sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+          <input value="{{ vName }}" onChange="{{ onVName }}" placeholder="Nome" autocomplete="name" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .2s,box-shadow .2s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
+          <input value="{{ vPhone }}" onChange="{{ onVPhone }}" placeholder="Telefone com DDD" inputmode="tel" autocomplete="tel" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .2s,box-shadow .2s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
+        </div>
+        <button onClick="{{ sendVisita }}" style="width:100%;height:52px;margin-top:16px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:{{ vCursor }};opacity:{{ vReadyOp }};font-size:15px;font-weight:600;transition:opacity .2s,background .2s" style-hover="background:#8F3F2D">Solicitar visita</button>
+        <a href="{{ vWaHref }}" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;height:44px;margin-top:8px;font-size:14px;font-weight:500;text-decoration:underline;text-underline-offset:4px">Prefiro combinar pelo WhatsApp</a>
+      </sc-if>
+      <sc-if value="{{ vSent }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-top:24px;padding:16px;border-radius:10px;background:rgba(41,45,41,.07);font-size:15px;line-height:1.5">
+          <span style="flex:none;width:12px;height:7px;margin-top:6px;border-left:1.5px solid #292D29;border-bottom:1.5px solid #292D29;transform:rotate(-45deg)"></span>
+          <span>{{ vSentLine }}</span>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+    <div ref="{{ R.lbBox }}" role="dialog" aria-label="Galeria ampliada" style="position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;background:#1C1E1C;color:#EFE6D2">
+      <div style="flex:none;display:flex;justify-content:space-between;align-items:center;gap:16px;height:64px;padding:0 clamp(24px,4vw,64px);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
+        <span style="display:flex;gap:24px;min-width:0"><span style="font-weight:500">{{ lbCounter }}</span><span style="opacity:.62;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ lbCaption }}</span></span>
+        <button onClick="{{ closeLb }}" style="flex:none;height:40px;padding:0;border:0;background:none;color:inherit;cursor:pointer;font:inherit;letter-spacing:inherit">FECHAR ×</button>
+      </div>
+      <div style="position:relative;flex:1;min-height:0;padding:0 clamp(16px,7vw,112px)">
+        <div ref="{{ R.lbFrame }}" style="position:relative;width:100%;height:100%">
+          <sc-for list="{{ lbSlides }}" as="sl" hint-placeholder-count="0">
+            <div style="position:absolute;inset:0;opacity:{{ sl.op }};pointer-events:{{ sl.pe }};transition:opacity .35s cubic-bezier(.2,.7,0,1)">
+              <image-slot id="{{ sl.id }}" shape="rect" fit="contain" placeholder="{{ sl.ph }}"></image-slot>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ lbPrev }}" aria-label="Foto anterior" style="position:absolute;left:clamp(8px,2vw,32px);top:50%;width:48px;height:48px;margin-top:-24px;border:0;border-radius:50%;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .2s" style-hover="background:rgba(239,230,210,.2)">←</button>
+        <button onClick="{{ lbNext }}" aria-label="Próxima foto" style="position:absolute;right:clamp(8px,2vw,32px);top:50%;width:48px;height:48px;margin-top:-24px;border:0;border-radius:50%;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .2s" style-hover="background:rgba(239,230,210,.2)">→</button>
+      </div>
+      <div style="flex:none;display:flex;justify-content:safe center;gap:8px;padding:16px clamp(24px,4vw,64px);overflow-x:auto;scrollbar-width:none">
+        <sc-for list="{{ lbThumbs }}" as="t" hint-placeholder-count="0">
+          <button onClick="{{ t.onClick }}" aria-label="{{ t.aria }}" style="position:relative;flex:none;width:72px;height:52px;padding:0;border:0;overflow:hidden;background:#3A3D39;cursor:pointer;box-shadow:inset 0 0 0 2px {{ t.bd }};opacity:{{ t.op }};transition:opacity .2s,box-shadow .2s">
+            <span style="position:absolute;inset:0;pointer-events:none"><image-slot id="{{ t.id }}" shape="rect" placeholder=""></image-slot></span>
+            <span style="position:absolute;left:0;bottom:0;padding:2px 6px;background:#1C1E1C;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;pointer-events:none">{{ t.n }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;imovel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;CSP-0321 · Apartamento · Pinheiros&quot;,&quot;CSP-0335 · Comercial · Jardim Paulista&quot;,&quot;CSP-0315 · Sobrado · Pompeia&quot;,&quot;CSP-0301 · Casa térrea · Alto de Pinheiros&quot;,&quot;CSP-0327 · Apartamento · República&quot;,&quot;CSP-0338 · Comercial · Lapa&quot;],&quot;default&quot;:&quot;CSP-0321 · Apartamento · Pinheiros&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Conteúdo&quot;},&quot;heroLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Texto sobre a foto&quot;,&quot;Superfície adjacente&quot;],&quot;default&quot;:&quot;Texto sobre a foto&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Composição&quot;},&quot;dockMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Dock inferior&quot;,&quot;Faixa no cabeçalho&quot;],&quot;default&quot;:&quot;Dock inferior&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Composição&quot;}}">
+class Component extends DCLogic {
+  FOTOS = {"csp-institucional":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Copan_Looking_UP.jpg/1920px-Copan_Looking_UP.jpg","c":"Foto: Boaventuravinicius · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Copan_Looking_UP.jpg"},"csp-v2-csp-0301":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Casa_de_Vidro%2C_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg/1920px-Casa_de_Vidro%2C_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg","c":"Foto: JessNantes · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_de_Vidro,_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg"},"csp-v2-csp-0301-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG/1920px-Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG","c":"Foto: Arthurit · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG"},"csp-v2-csp-0301-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0301-4":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg/1920px-Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0301-5":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54209407507.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54209407507.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54209407507.jpg"},"csp-v2-csp-0301-6":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Casa_Modernista_-_Rua_Bahia_03.jpg/1920px-Casa_Modernista_-_Rua_Bahia_03.jpg","c":"Foto: Marina Marini Balbino · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_-_Rua_Bahia_03.jpg"},"csp-v2-csp-0301-7":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg/1920px-Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg"},"csp-v2-csp-0302":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg/1920px-Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0302-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54209407507.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54209407507.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54209407507.jpg"},"csp-v2-csp-0302-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Casa_Modernista_-_Rua_Bahia_03.jpg/1920px-Casa_Modernista_-_Rua_Bahia_03.jpg","c":"Foto: Marina Marini Balbino · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_-_Rua_Bahia_03.jpg"},"csp-v2-csp-0303":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg/1920px-Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg"},"csp-v2-csp-0303-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg/1920px-Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg","c":"Foto: AlexDS05 · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg"},"csp-v2-csp-0303-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg/1920px-Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg"},"csp-v2-csp-0304":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg/1920px-Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg"},"csp-v2-csp-0304-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Casa_de_Vidro%2C_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg/1920px-Casa_de_Vidro%2C_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg","c":"Foto: JessNantes · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_de_Vidro,_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg"},"csp-v2-csp-0304-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG/1920px-Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG","c":"Foto: Arthurit · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG"},"csp-v2-csp-0305":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0305-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg/1920px-Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0305-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54209407507.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54209407507.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54209407507.jpg"},"csp-v2-csp-0306":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Casa_Modernista_-_Rua_Bahia_03.jpg/1920px-Casa_Modernista_-_Rua_Bahia_03.jpg","c":"Foto: Marina Marini Balbino · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_-_Rua_Bahia_03.jpg"},"csp-v2-csp-0306-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg/1920px-Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg"},"csp-v2-csp-0306-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg/1920px-Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg","c":"Foto: AlexDS05 · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg"},"csp-v2-csp-0307":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg/1920px-Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg"},"csp-v2-csp-0307-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg/1920px-Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg"},"csp-v2-csp-0307-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Casa_de_Vidro%2C_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg/1920px-Casa_de_Vidro%2C_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg","c":"Foto: JessNantes · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_de_Vidro,_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg"},"csp-v2-csp-0308":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG/1920px-Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG","c":"Foto: Arthurit · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG"},"csp-v2-csp-0308-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0308-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg/1920px-Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0311":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/Parque_Residencial_Sav%C3%B3ia_3.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_3.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_3.jpg"},"csp-v2-csp-0311-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/John_R_Street%2C_Brush_Park%2C_Midtown%2C_Detroit%2C_MI_-_53013871196.jpg/1920px-John_R_Street%2C_Brush_Park%2C_Midtown%2C_Detroit%2C_MI_-_53013871196.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:John_R_Street,_Brush_Park,_Midtown,_Detroit,_MI_-_53013871196.jpg"},"csp-v2-csp-0311-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Parque_Residencial_Sav%C3%B3ia_2.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_2.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_2.jpg"},"csp-v2-csp-0312":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/2916-2924_N_Street_NW.jpg/1920px-2916-2924_N_Street_NW.jpg","c":"Foto: APK · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:2916-2924_N_Street_NW.jpg"},"csp-v2-csp-0312-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Interior_staircase_railing_-_Mukhi_Mahal.jpg/1920px-Interior_staircase_railing_-_Mukhi_Mahal.jpg","c":"Foto: Sara Yaqoob Siddiqui (s.Y.s) · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_staircase_railing_-_Mukhi_Mahal.jpg"},"csp-v2-csp-0312-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Parque_Residencial_Sav%C3%B3ia_5.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_5.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_5.jpg"},"csp-v2-csp-0313":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Colorful_row_of_houses.jpg/1920px-Colorful_row_of_houses.jpg","c":"Foto: Wonderlane from Seattle, USA · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Colorful_row_of_houses.jpg"},"csp-v2-csp-0313-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Rainbow_Row%2C_East_Bay_Street%2C_South_of_Broad%2C_Charleston%2C_SC.jpg/1920px-Rainbow_Row%2C_East_Bay_Street%2C_South_of_Broad%2C_Charleston%2C_SC.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Rainbow_Row,_East_Bay_Street,_South_of_Broad,_Charleston,_SC.jpg"},"csp-v2-csp-0313-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Parque_Residencial_Sav%C3%B3ia_7.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_7.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_7.jpg"},"csp-v2-csp-0314":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/Parque_Residencial_Sav%C3%B3ia_3.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_3.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_3.jpg"},"csp-v2-csp-0314-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/John_R_Street%2C_Brush_Park%2C_Midtown%2C_Detroit%2C_MI_-_53013871196.jpg/1920px-John_R_Street%2C_Brush_Park%2C_Midtown%2C_Detroit%2C_MI_-_53013871196.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:John_R_Street,_Brush_Park,_Midtown,_Detroit,_MI_-_53013871196.jpg"},"csp-v2-csp-0314-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Parque_Residencial_Sav%C3%B3ia_2.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_2.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_2.jpg"},"csp-v2-csp-0315":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/2916-2924_N_Street_NW.jpg/1920px-2916-2924_N_Street_NW.jpg","c":"Foto: APK · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:2916-2924_N_Street_NW.jpg"},"csp-v2-csp-0315-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Interior_staircase_railing_-_Mukhi_Mahal.jpg/1920px-Interior_staircase_railing_-_Mukhi_Mahal.jpg","c":"Foto: Sara Yaqoob Siddiqui (s.Y.s) · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_staircase_railing_-_Mukhi_Mahal.jpg"},"csp-v2-csp-0315-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Parque_Residencial_Sav%C3%B3ia_5.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_5.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_5.jpg"},"csp-v2-csp-0315-4":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Colorful_row_of_houses.jpg/1920px-Colorful_row_of_houses.jpg","c":"Foto: Wonderlane from Seattle, USA · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Colorful_row_of_houses.jpg"},"csp-v2-csp-0316":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Colorful_row_of_houses.jpg/1920px-Colorful_row_of_houses.jpg","c":"Foto: Wonderlane from Seattle, USA · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Colorful_row_of_houses.jpg"},"csp-v2-csp-0316-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Rainbow_Row%2C_East_Bay_Street%2C_South_of_Broad%2C_Charleston%2C_SC.jpg/1920px-Rainbow_Row%2C_East_Bay_Street%2C_South_of_Broad%2C_Charleston%2C_SC.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Rainbow_Row,_East_Bay_Street,_South_of_Broad,_Charleston,_SC.jpg"},"csp-v2-csp-0316-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Parque_Residencial_Sav%C3%B3ia_7.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_7.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_7.jpg"},"csp-v2-csp-0317":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/Parque_Residencial_Sav%C3%B3ia_3.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_3.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_3.jpg"},"csp-v2-csp-0317-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/John_R_Street%2C_Brush_Park%2C_Midtown%2C_Detroit%2C_MI_-_53013871196.jpg/1920px-John_R_Street%2C_Brush_Park%2C_Midtown%2C_Detroit%2C_MI_-_53013871196.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:John_R_Street,_Brush_Park,_Midtown,_Detroit,_MI_-_53013871196.jpg"},"csp-v2-csp-0317-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Parque_Residencial_Sav%C3%B3ia_2.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_2.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_2.jpg"},"csp-v2-csp-0318":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/2916-2924_N_Street_NW.jpg/1920px-2916-2924_N_Street_NW.jpg","c":"Foto: APK · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:2916-2924_N_Street_NW.jpg"},"csp-v2-csp-0318-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Interior_staircase_railing_-_Mukhi_Mahal.jpg/1920px-Interior_staircase_railing_-_Mukhi_Mahal.jpg","c":"Foto: Sara Yaqoob Siddiqui (s.Y.s) · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_staircase_railing_-_Mukhi_Mahal.jpg"},"csp-v2-csp-0318-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Parque_Residencial_Sav%C3%B3ia_5.jpg/1920px-Parque_Residencial_Sav%C3%B3ia_5.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_5.jpg"},"csp-v2-csp-0321":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Modern_luxury_living_room_with_kitchen_interior.jpg/1920px-Modern_luxury_living_room_with_kitchen_interior.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0321-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg/1920px-Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg"},"csp-v2-csp-0321-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Modern_luxury_living_room_with_kitchen_interior.jpg/1920px-Modern_luxury_living_room_with_kitchen_interior.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0321-4":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg/1920px-Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0321-5":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg/1920px-Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg"},"csp-v2-csp-0321-6":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg/1920px-Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg"},"csp-v2-csp-0321-7":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/This_cozy_kitchen_showcases_modern_design_elements.jpg/1920px-This_cozy_kitchen_showcases_modern_design_elements.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:This_cozy_kitchen_showcases_modern_design_elements.jpg"},"csp-v2-csp-0321-8":{"s":"https://upload.wikimedia.org/wikipedia/commons/f/f5/Atlanta_24-27_Feb_2010_%284399677164%29.jpg","c":"Foto: David from Colorado Springs, United  · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Atlanta_24-27_Feb_2010_(4399677164).jpg"},"csp-v2-csp-0322":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg/1920px-Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0322-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg/1920px-Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg"},"csp-v2-csp-0322-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg/1920px-Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg"},"csp-v2-csp-0323":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/This_cozy_kitchen_showcases_modern_design_elements.jpg/1920px-This_cozy_kitchen_showcases_modern_design_elements.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:This_cozy_kitchen_showcases_modern_design_elements.jpg"},"csp-v2-csp-0323-2":{"s":"https://upload.wikimedia.org/wikipedia/commons/f/f5/Atlanta_24-27_Feb_2010_%284399677164%29.jpg","c":"Foto: David from Colorado Springs, United  · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Atlanta_24-27_Feb_2010_(4399677164).jpg"},"csp-v2-csp-0323-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0324":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54210548534.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54210548534.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54210548534.jpg"},"csp-v2-csp-0324-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Modern_luxury_living_room_with_kitchen_interior.jpg/1920px-Modern_luxury_living_room_with_kitchen_interior.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0324-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg/1920px-Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg"},"csp-v2-csp-0325":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Modern_luxury_living_room_with_kitchen_interior.jpg/1920px-Modern_luxury_living_room_with_kitchen_interior.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0325-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg/1920px-Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0325-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg/1920px-Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg"},"csp-v2-csp-0326":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg/1920px-Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg"},"csp-v2-csp-0326-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/This_cozy_kitchen_showcases_modern_design_elements.jpg/1920px-This_cozy_kitchen_showcases_modern_design_elements.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:This_cozy_kitchen_showcases_modern_design_elements.jpg"},"csp-v2-csp-0326-3":{"s":"https://upload.wikimedia.org/wikipedia/commons/f/f5/Atlanta_24-27_Feb_2010_%284399677164%29.jpg","c":"Foto: David from Colorado Springs, United  · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Atlanta_24-27_Feb_2010_(4399677164).jpg"},"csp-v2-csp-0327":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0327-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54210548534.jpg/1920px-Living_Room%2C_Paul_Schweiker_House_and_Studio%2C_Meacham_Road%2C_Schaumburg%2C_IL_-_54210548534.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54210548534.jpg"},"csp-v2-csp-0327-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Modern_luxury_living_room_with_kitchen_interior.jpg/1920px-Modern_luxury_living_room_with_kitchen_interior.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0328":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg/1920px-Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg"},"csp-v2-csp-0328-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Modern_luxury_living_room_with_kitchen_interior.jpg/1920px-Modern_luxury_living_room_with_kitchen_interior.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0328-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg/1920px-Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0331":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Conjunto_Nacional_em_31_de_julho_de_2025.jpg/1920px-Conjunto_Nacional_em_31_de_julho_de_2025.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Conjunto_Nacional_em_31_de_julho_de_2025.jpg"},"csp-v2-csp-0331-2":{"s":"https://upload.wikimedia.org/wikipedia/commons/c/c2/Escrit%C3%B3rio_Virtual.jpg","c":"Foto: Cascais Virtual Office · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escrit%C3%B3rio_Virtual.jpg"},"csp-v2-csp-0331-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/C4DI_interior_coworking_space_2025.jpg/1920px-C4DI_interior_coworking_space_2025.jpg","c":"Foto: Influence Media · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:C4DI_interior_coworking_space_2025.jpg"},"csp-v2-csp-0332":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1%2C_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg/1920px-Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1%2C_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg","c":"Foto: Apesito.nomas · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1,_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg"},"csp-v2-csp-0332-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Winplace-coworking-space.jpg/1920px-Winplace-coworking-space.jpg","c":"Foto: Nguyendinhtruong2020 · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Winplace-coworking-space.jpg"},"csp-v2-csp-0332-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Openspace_wao_coworking.jpg/1920px-Openspace_wao_coworking.jpg","c":"Foto: WAO Coworking · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Openspace_wao_coworking.jpg"},"csp-v2-csp-0333":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre%2C_Chatham%2C_Kent%2C_England_-_13_October_2025.jpg/1920px-Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre%2C_Chatham%2C_Kent%2C_England_-_13_October_2025.jpg","c":"Foto: OathOn · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre,_Chatham,_Kent,_England_-_13_October_2025.jpg"},"csp-v2-csp-0333-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Work_%26_Wall%2C_espace_de_coworking_%C3%A0_Neyron_%28juillet_2021%29.jpg/1920px-Work_%26_Wall%2C_espace_de_coworking_%C3%A0_Neyron_%28juillet_2021%29.jpg","c":"Foto: Benoît Prieur · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Work_%26_Wall,_espace_de_coworking_%C3%A0_Neyron_(juillet_2021).jpg"},"csp-v2-csp-0333-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg/1920px-Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg"},"csp-v2-csp-0334":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Communal_Coworking_interior_%28Unsplash%29.jpg/1920px-Communal_Coworking_interior_%28Unsplash%29.jpg","c":"Foto: Dan Gold danielcgold · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Communal_Coworking_interior_(Unsplash).jpg"},"csp-v2-csp-0334-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Tsohue_coworking_1F.jpg/1920px-Tsohue_coworking_1F.jpg","c":"Foto: Rubiyj · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Tsohue_coworking_1F.jpg"},"csp-v2-csp-0334-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Conjunto_Nacional_em_31_de_julho_de_2025.jpg/1920px-Conjunto_Nacional_em_31_de_julho_de_2025.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Conjunto_Nacional_em_31_de_julho_de_2025.jpg"},"csp-v2-csp-0335":{"s":"https://upload.wikimedia.org/wikipedia/commons/c/c2/Escrit%C3%B3rio_Virtual.jpg","c":"Foto: Cascais Virtual Office · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escrit%C3%B3rio_Virtual.jpg"},"csp-v2-csp-0335-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/C4DI_interior_coworking_space_2025.jpg/1920px-C4DI_interior_coworking_space_2025.jpg","c":"Foto: Influence Media · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:C4DI_interior_coworking_space_2025.jpg"},"csp-v2-csp-0335-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1%2C_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg/1920px-Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1%2C_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg","c":"Foto: Apesito.nomas · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1,_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg"},"csp-v2-csp-0335-4":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Winplace-coworking-space.jpg/1920px-Winplace-coworking-space.jpg","c":"Foto: Nguyendinhtruong2020 · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Winplace-coworking-space.jpg"},"csp-v2-csp-0335-5":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Openspace_wao_coworking.jpg/1920px-Openspace_wao_coworking.jpg","c":"Foto: WAO Coworking · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Openspace_wao_coworking.jpg"},"csp-v2-csp-0336":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Winplace-coworking-space.jpg/1920px-Winplace-coworking-space.jpg","c":"Foto: Nguyendinhtruong2020 · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Winplace-coworking-space.jpg"},"csp-v2-csp-0336-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Openspace_wao_coworking.jpg/1920px-Openspace_wao_coworking.jpg","c":"Foto: WAO Coworking · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Openspace_wao_coworking.jpg"},"csp-v2-csp-0336-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre%2C_Chatham%2C_Kent%2C_England_-_13_October_2025.jpg/1920px-Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre%2C_Chatham%2C_Kent%2C_England_-_13_October_2025.jpg","c":"Foto: OathOn · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre,_Chatham,_Kent,_England_-_13_October_2025.jpg"},"csp-v2-csp-0337":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Work_%26_Wall%2C_espace_de_coworking_%C3%A0_Neyron_%28juillet_2021%29.jpg/1920px-Work_%26_Wall%2C_espace_de_coworking_%C3%A0_Neyron_%28juillet_2021%29.jpg","c":"Foto: Benoît Prieur · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Work_%26_Wall,_espace_de_coworking_%C3%A0_Neyron_(juillet_2021).jpg"},"csp-v2-csp-0337-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg/1920px-Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg"},"csp-v2-csp-0337-3":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Communal_Coworking_interior_%28Unsplash%29.jpg/1920px-Communal_Coworking_interior_%28Unsplash%29.jpg","c":"Foto: Dan Gold danielcgold · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Communal_Coworking_interior_(Unsplash).jpg"},"csp-v2-csp-0338":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Tsohue_coworking_1F.jpg/1920px-Tsohue_coworking_1F.jpg","c":"Foto: Rubiyj · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Tsohue_coworking_1F.jpg"},"csp-v2-csp-0338-2":{"s":"https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Conjunto_Nacional_em_31_de_julho_de_2025.jpg/1920px-Conjunto_Nacional_em_31_de_julho_de_2025.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Conjunto_Nacional_em_31_de_julho_de_2025.jpg"},"csp-v2-csp-0338-3":{"s":"https://upload.wikimedia.org/wikipedia/commons/c/c2/Escrit%C3%B3rio_Virtual.jpg","c":"Foto: Cascais Virtual Office · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escrit%C3%B3rio_Virtual.jpg"}};
+  RAW = [
+      ['CSP-0301','comprar','Casa térrea','Alto de Pinheiros','Av. Prof. Fonseca Rodrigues',320,4,4,4850000,0,'Quintal|Vista livre','Casa térrea modernista em lote de esquina, com estrutura em concreto aparente e caixilhos de piso a teto voltados para o jardim. Quatro suítes, living integrado com pé-direito duplo e edícula independente nos fundos.'],
+      ['CSP-0302','comprar','Casa térrea','Vila Mariana','R. Joaquim Távora',180,3,2,1890000,0,'Quintal|Perto do metrô|Pet friendly','Térrea reformada em rua arborizada, a poucos minutos do metrô. Planta linear com sala de jantar aberta para o quintal, três dormitórios sendo uma suíte e cozinha com bancada em granito polido.'],
+      ['CSP-0303','comprar','Casa térrea','Butantã','R. Corinto',210,3,3,1450000,450,'Quintal|Portaria 24h','Casa em vila residencial fechada, com laje plana e cobertura aproveitável. Ambientes amplos, iluminação zenital no corredor central e garagem coberta para três carros.'],
+      ['CSP-0304','comprar','Casa térrea','Planalto Paulista','Al. dos Anapurus',260,4,3,2700000,0,'Quintal|Pet friendly','Projeto dos anos 1970 preservado, com brises de concreto na fachada e pátio interno. Quatro dormitórios, escritório independente e área gourmet coberta voltada para o jardim.'],
+      ['CSP-0305','alugar','Casa térrea','Brooklin','R. Princesa Isabel',200,3,2,9500,0,'Quintal|Pet friendly','Térrea em rua residencial tranquila, com recuo frontal ajardinado. Três dormitórios, sala em dois ambientes e quintal pavimentado nos fundos com churrasqueira.'],
+      ['CSP-0306','alugar','Casa térrea','Vila Madalena','R. Fradique Coutinho',150,2,1,7800,0,'Quintal|Perto do metrô','Casa térrea compacta com estrutura aparente e piso de cimento queimado. Dois dormitórios, cozinha aberta para a sala e pequeno pátio com jardim vertical.'],
+      ['CSP-0307','alugar','Casa térrea','Pacaembu','R. Itápolis',380,4,4,22000,0,'Quintal|Vista livre|Pet friendly','Residência térrea em terreno amplo, com grandes panos de vidro e beirais profundos. Quatro suítes, biblioteca e garagem para quatro carros. Contrato com garantia flexível.'],
+      ['CSP-0308','alugar','Casa térrea','Saúde','R. Luís Góis',170,3,2,6400,0,'Quintal|Perto do metrô','Térrea bem conservada próxima à estação Saúde do metrô. Três dormitórios, sala ampla com acesso ao quintal e garagem coberta para dois carros.'],
+      ['CSP-0311','comprar','Sobrado','Perdizes','R. Ministro Godói',240,4,3,3250000,0,'Varanda|Vista livre|Pet friendly','Sobrado em rua de declive suave, com volume superior em concreto e térreo envidraçado. Quatro dormitórios, sendo duas suítes, terraço com vista para o bairro e garagem para três carros.'],
+      ['CSP-0312','comprar','Sobrado','Vila Romana','R. Coriolano',165,3,2,1590000,0,'Quintal|Pet friendly','Sobrado geminado totalmente reformado, com escada metálica e iluminação natural em todos os ambientes. Três dormitórios, home office no mezanino e quintal com deck de madeira.'],
+      ['CSP-0313','comprar','Sobrado','Moema','Al. dos Nhambiquaras',230,3,3,2980000,0,'Varanda|Quintal','Sobrado de linhas retas a quatro quadras do Parque Ibirapuera. Três suítes, living com lareira e terraço superior com jardim. Acabamentos em madeira e pedra natural.'],
+      ['CSP-0314','comprar','Sobrado','Ipiranga','R. Bom Pastor',190,3,2,1120000,0,'Quintal','Sobrado amplo próximo ao Museu do Ipiranga, com fachada restaurada e esquadrias originais. Três dormitórios, sala de jantar independente e edícula com lavanderia.'],
+      ['CSP-0315','alugar','Sobrado','Pompeia','R. Tavares Bastos',180,3,2,8200,0,'Varanda|Pet friendly','Sobrado com fachada em tijolo aparente em rua residencial da Pompeia. Três dormitórios, sala com pé-direito alto e terraço coberto nos fundos.'],
+      ['CSP-0316','alugar','Sobrado','Tatuapé','R. Itapura',200,3,3,6900,850,'Portaria 24h|Varanda','Sobrado moderno em condomínio de quatro casas, com portaria e segurança. Três suítes, área gourmet integrada e garagem para três carros.'],
+      ['CSP-0317','alugar','Sobrado','Aclimação','R. Pires da Mota',210,4,2,9900,0,'Quintal|Pet friendly','Sobrado clássico a poucos passos do Parque da Aclimação. Quatro dormitórios, escritório no térreo e quintal sombreado. Ideal para família ou uso misto.'],
+      ['CSP-0318','alugar','Sobrado','Vila Clementino','R. Botucatu',160,3,2,7400,0,'Perto do metrô|Vista livre','Sobrado bem iluminado próximo ao metrô Santa Cruz e aos hospitais da região. Três dormitórios, sala em L e terraço com vista desobstruída.'],
+      ['CSP-0321','comprar','Apartamento','Pinheiros','R. dos Pinheiros',92,2,1,1380000,1150,'Varanda|Perto do metrô','Apartamento em edifício contemporâneo de fachada em concreto e vidro, a duas quadras do metrô Fradique Coutinho. Planta integrada, varanda com fechamento em vidro e duas suítes.'],
+      ['CSP-0322','comprar','Apartamento','Higienópolis','Av. Higienópolis',210,3,3,3900000,3800,'Vista livre|Varanda|Portaria 24h','Cobertura em edifício modernista dos anos 1950, com pilotis e jardins. Três suítes, salão com piso de taco original e terraço com vista livre para a cidade.'],
+      ['CSP-0323','comprar','Apartamento','Consolação','R. Augusta',58,1,1,720000,650,'Academia|Perto do metrô','Unidade compacta em edifício recente, com academia e lavanderia coletiva. Dormitório com armários planejados, cozinha americana e janelas amplas voltadas para o leste.'],
+      ['CSP-0324','comprar','Apartamento','Brooklin','R. Barão do Triunfo',116,3,2,1720000,1400,'Academia|Varanda|Portaria 24h','Apartamento em andar alto com três dormitórios, sendo uma suíte, e varanda gourmet. Condomínio com academia, salão de festas e portaria 24 horas.'],
+      ['CSP-0325','alugar','Apartamento','Bela Vista','R. Treze de Maio',64,2,1,4300,780,'Pet friendly|Perto do metrô','Apartamento em edifício de 1960 com elevadores reformados, no coração do Bixiga. Dois dormitórios, sala com janela de canto e piso de tacos restaurado.'],
+      ['CSP-0326','alugar','Apartamento','Pinheiros','R. Cardeal Arcoverde',88,2,1,7200,1100,'Varanda|Pet friendly','Apartamento em prédio boutique com apenas duas unidades por andar. Duas suítes, varanda integrada à sala e vaga coberta. Aceita animais de estimação.'],
+      ['CSP-0327','alugar','Apartamento','República','Av. Ipiranga',34,1,0,3200,620,'Mobiliado|Perto do metrô|Vista livre','Studio mobiliado em edifício icônico do centro, com vista para o skyline. Cozinha equipada, armários sob medida e acesso direto a duas linhas de metrô.'],
+      ['CSP-0328','alugar','Apartamento','Vila Mariana','R. Domingos de Morais',148,3,2,14500,2100,'Vista livre|Academia|Varanda','Cobertura duplex com terraço, deck e vista livre para o Ibirapuera ao longe. Três dormitórios, academia no condomínio e duas vagas cobertas.'],
+      ['CSP-0331','comprar','Comercial','Itaim Bibi','R. Joaquim Floriano',120,0,3,2650000,2900,'Portaria 24h|Perto do metrô','Conjunto comercial em edifício corporativo certificado, com planta livre e piso elevado. Três vagas, recepção 24 horas e acesso rápido à Av. Brigadeiro Faria Lima.'],
+      ['CSP-0332','comprar','Comercial','Barra Funda','R. Barra Funda',640,0,6,4200000,0,'Perto do metrô','Galpão de estrutura metálica com pé-direito de nove metros e cobertura em sheds. Mezanino administrativo, docas de carga e ótima conexão com as marginais.'],
+      ['CSP-0333','comprar','Comercial','Vila Olímpia','R. Funchal',380,0,8,6900000,6200,'Vista livre|Portaria 24h','Laje corporativa inteira com fachada em pele de vidro e vista para o Rio Pinheiros. Ar-condicionado central, gerador e oito vagas privativas.'],
+      ['CSP-0334','comprar','Comercial','República','R. Barão de Itapetininga',95,0,0,890000,450,'Perto do metrô','Loja de rua em galeria histórica do centro, com vitrine dupla e mezanino. Alto fluxo de pedestres e proximidade com o Theatro Municipal.'],
+      ['CSP-0335','alugar','Comercial','Jardim Paulista','Al. Santos',85,0,1,9800,1900,'Portaria 24h|Perto do metrô','Sala comercial a uma quadra da Avenida Paulista, pronta para uso. Duas salas privativas, copa e banheiro. Edifício com controle de acesso e portaria 24 horas.'],
+      ['CSP-0336','alugar','Comercial','Pinheiros','Av. Brig. Faria Lima',210,0,4,28000,5400,'Portaria 24h|Vista livre','Conjunto corporativo em edifício de alto padrão na Faria Lima, entregue com forro e iluminação. Quatro vagas, auditório compartilhado e heliponto.'],
+      ['CSP-0337','alugar','Comercial','Santa Cecília','R. Jaguaribe',140,0,0,12500,0,'Perto do metrô','Loja térrea com fachada em vidro e pé-direito duplo, em esquina movimentada. Ideal para café, galeria ou showroom. Sem condomínio.'],
+      ['CSP-0338','alugar','Comercial','Lapa','R. Guaicurus',900,0,4,38000,0,'','Galpão logístico com piso de alta resistência, docas niveladoras e pátio de manobras. Escritórios no mezanino e acesso imediato à Marginal Tietê.']
+    ];
+  RICH = {
+    'CSP-0321': {
+      titulo: 'Duas suítes a duas quadras da Fradique Coutinho', secao: 'Planta integrada, luz da manhã.',
+      paras: [
+        'Apartamento de 92 m² úteis em edifício contemporâneo de fachada em concreto e vidro, no trecho residencial da Rua dos Pinheiros. A unidade fica no 8º andar, com face leste e vista desobstruída sobre os telhados do bairro.',
+        'Sala de estar e jantar em um único ambiente, aberta para a varanda com fechamento em vidro. A cozinha é integrada por bancada e tem área de serviço separada. As duas suítes ficam na ala oposta, com armários planejados; há ainda um lavabo social.',
+        'Edifício entregue em 2019, com portaria 24 horas, academia e rooftop com churrasqueira. Unidade desocupada e disponível para visita.'
+      ],
+      areaTotal: 118, suites: 2, banh: 3, andar: '8º', iptu: { v: 3960, per: 'ano' }, photos: 8, planta: true,
+      dest: ['Varanda integrada com fechamento em vidro', 'Duas suítes com armários planejados', 'Duas quadras da estação Fradique Coutinho'],
+      grupos: [
+        { t: 'Ambientes', i: ['Sala de estar e jantar integradas', 'Varanda com fechamento em vidro', 'Cozinha americana', 'Área de serviço', '2 suítes', 'Lavabo'] },
+        { t: 'Infraestrutura', i: ['2 elevadores', 'Bicicletário', 'Gerador para áreas comuns'] },
+        { t: 'Lazer', i: ['Academia', 'Rooftop com churrasqueira'] },
+        { t: 'Segurança', i: ['Portaria 24 horas', 'Controle de acesso por biometria'] }
+      ],
+      loc: { lat: -23.5668, lng: -46.6852, r: 400, ctx: 'Pinheiros reúne ruas residenciais arborizadas e o comércio das ruas dos Pinheiros e Teodoro Sampaio, com bares, restaurantes, galerias e serviços de bairro.', pois: [{ t: 'Transporte', n: 'Estação Fradique Coutinho — Linha 4-Amarela' }, { t: 'Transporte', n: 'Estação Faria Lima — Linha 4-Amarela' }, { t: 'Comércio', n: 'Rua dos Pinheiros e Rua Teodoro Sampaio' }, { t: 'Lazer', n: 'Largo da Batata' }] }
+    },
+    'CSP-0335': {
+      titulo: 'Sala pronta a uma quadra da Avenida Paulista', secao: 'Escritório pronto, sem obra.',
+      paras: [
+        'Conjunto comercial de 85 m² privativos no 14º andar de um edifício corporativo da Alameda Santos, a uma quadra da Avenida Paulista.',
+        'A planta é dividida em recepção, duas salas privativas com divisórias de vidro, copa e banheiro. Piso elevado, forro modular e ar-condicionado em todas as salas permitem ocupar o espaço sem obra.',
+        'O edifício tem controle de acesso, portaria 24 horas e duas linhas de elevadores. Uma vaga de garagem privativa.'
+      ],
+      areaTotal: 112, banh: 1, config: '2 salas + copa', andar: '14º', iptu: { v: 420, per: 'mês' }, photos: 5,
+      dest: ['Uma quadra da Avenida Paulista', 'Ar-condicionado em todas as salas', 'Piso elevado e forro modular'],
+      grupos: [
+        { t: 'Ambientes', i: ['Recepção', '2 salas privativas', 'Copa', 'Banheiro'] },
+        { t: 'Infraestrutura', i: ['Piso elevado', 'Forro modular', 'Ar-condicionado', '2 linhas de elevadores', '1 vaga privativa'] },
+        { t: 'Segurança', i: ['Portaria 24 horas', 'Controle de acesso'] }
+      ],
+      loc: { lat: -23.5655, lng: -46.6548, r: 400, ctx: 'O trecho da Alameda Santos próximo à Avenida Paulista concentra escritórios, bancos, hotéis e serviços, com acesso a pé ao eixo da Paulista e ao Parque Trianon.', pois: [{ t: 'Transporte', n: 'Estação Trianon-Masp — Linha 2-Verde' }, { t: 'Transporte', n: 'Estação Consolação — Linha 2-Verde' }, { t: 'Cultura', n: 'MASP' }, { t: 'Lazer', n: 'Parque Trianon' }] }
+    },
+    'CSP-0315': {
+      titulo: 'Sobrado de tijolo aparente na Pompeia', secao: 'Três dormitórios e um terraço nos fundos.',
+      paras: [
+        'Sobrado com fachada em tijolo aparente em rua residencial da Pompeia, com 180 m² úteis em terreno de 200 m².',
+        'No térreo ficam a sala, com pé-direito alto, a cozinha e a lavanderia. No pavimento superior, três dormitórios, sendo uma suíte, e um banheiro social. O terraço coberto nos fundos é acessado pela cozinha.'
+      ],
+      areaTotal: 200, areaTotalLabel: 'TERRENO', suites: 1, banh: 3, photos: 4,
+      dest: ['Pé-direito alto na sala', 'Terraço coberto nos fundos', 'Aceita animais de estimação'],
+      grupos: [
+        { t: 'Ambientes', i: ['Sala com pé-direito alto', 'Cozinha', '3 dormitórios, sendo 1 suíte', 'Terraço coberto', 'Lavanderia'] },
+        { t: 'Infraestrutura', i: ['Garagem para 2 carros', 'Aquecimento a gás'] }
+      ],
+      loc: { lat: -23.5285, lng: -46.6862, r: 450, ctx: 'Rua residencial da Pompeia, próxima ao comércio da Rua Pompeia e ao Sesc Pompeia, centro cultural projetado por Lina Bo Bardi em uma antiga fábrica.', pois: [{ t: 'Cultura', n: 'Sesc Pompeia' }, { t: 'Comércio', n: 'Rua Pompeia' }] }
+    },
+    'CSP-0301': {
+      titulo: 'Térrea modernista em lote de esquina', secao: 'Concreto aparente, vidro e jardim.',
+      paras: [
+        'Casa térrea modernista em lote de esquina, com estrutura em concreto aparente e caixilhos de piso a teto voltados para o jardim.',
+        'O living ocupa a ala central, com pé-direito duplo e caixilhos que abrem integralmente para o jardim. As quatro suítes estão reunidas na ala íntima, separadas da área social por um corredor com iluminação zenital.',
+        'A edícula nos fundos tem acesso independente pela rua lateral e pode funcionar como escritório ou ateliê. Garagem coberta para quatro carros.'
+      ],
+      areaTotal: 600, areaTotalLabel: 'TERRENO', suites: 4, banh: 6, iptu: { v: 18400, per: 'ano' }, photos: 7, planta: true,
+      dest: ['Living com pé-direito duplo', 'Caixilhos de piso a teto para o jardim', 'Edícula com acesso independente'],
+      grupos: [
+        { t: 'Ambientes', i: ['Living com pé-direito duplo', 'Sala de jantar', 'Cozinha', '4 suítes', 'Escritório', 'Edícula'] },
+        { t: 'Infraestrutura', i: ['Garagem coberta para 4 carros', 'Aquecimento solar'] },
+        { t: 'Lazer', i: ['Jardim', 'Área gourmet coberta'] }
+      ],
+      loc: { lat: -23.5530, lng: -46.7120, r: 450, ctx: 'Alto de Pinheiros é um bairro predominantemente residencial, de ruas largas e arborizadas, entre a Praça Panamericana e o Parque Villa-Lobos.', pois: [{ t: 'Lazer', n: 'Parque Villa-Lobos' }, { t: 'Lazer', n: 'Praça Panamericana' }, { t: 'Transporte', n: 'Estação Villa-Lobos–Jaguaré — Linha 9-Esmeralda' }] }
+    }
+  };
+  el = {};
+  revealEls = new Set();
+  rv = el => { if (el) this.revealEls.add(el); };
+  R = Object.fromEntries(['root', 'header', 'hero', 'heroBox', 'heroPhoto', 'heroKick', 'heroTitle', 'heroMeta', 'heroCta', 'ed', 'fin', 'closing', 'lbBox', 'lbFrame'].map(k => [k, el => { this.el[k] = el; }]));
+  days = (() => { const out = [], d0 = new Date(); for (let k = 1; out.length < 6 && k < 12; k++) { const d = new Date(d0); d.setDate(d0.getDate() + k); if (d.getDay() !== 0) out.push(d); } return out; })();
+  state = {
+    vw: typeof window !== 'undefined' ? window.innerWidth : 1440,
+    scrolled: false, dockShow: false, lb: null, galTab: 'fotos',
+    visita: false, day: null, period: null, vName: '', vPhone: '', vSent: false,
+    favs: (() => { try { return JSON.parse(localStorage.getItem('csp-favs')) || []; } catch (e) { return []; } })(),
+    toast: '', toastOn: false
+  };
+
+  prop() {
+    const q = new URLSearchParams(location.search).get('id');
+    const pp = (this.props && this.props.imovel) || '';
+    const code = (q || pp.slice(0, 8) || 'CSP-0321').toUpperCase();
+    const r = this.RAW.find(x => x[0] === code) || this.RAW.find(x => x[0] === 'CSP-0321');
+    const b = { code: r[0], mode: r[1], tipo: r[2], bairro: r[3], rua: r[4], area: r[5], dorms: r[6], vagas: r[7], price: r[8], condo: r[9], feats: r[10] ? r[10].split('|') : [], desc: r[11] };
+    return Object.assign(b, this.RICH[b.code] || {});
+  }
+
+  applyFotos() {
+    document.querySelectorAll('image-slot').forEach(el => {
+      const f = this.FOTOS[el.id];
+      if (f) {
+        if (el.getAttribute('src') !== f.s) {
+          el.setAttribute('src', f.s); el.dataset.auto = '1';
+          if (el.closest('button')) { el.removeAttribute('credit'); el.removeAttribute('credit-href'); }
+          else { el.setAttribute('credit', f.c); el.setAttribute('credit-href', f.h); }
+        }
+      } else if (el.dataset.auto) { el.removeAttribute('src'); el.removeAttribute('credit'); el.removeAttribute('credit-href'); delete el.dataset.auto; }
+    });
+  }
+  componentDidMount() {
+    setTimeout(() => this.applyFotos(), 0);
+    this._prev = Object.assign({}, this.state);
+    this.reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (this.el.root) this.el.root.style.backgroundImage = this.texture();
+    this.onScroll = () => { if (!this.raf) this.raf = requestAnimationFrame(() => { this.raf = 0; this.tick(); }); };
+    this.onResize = () => this.setState({ vw: innerWidth });
+    this.onKey = e => {
+      const s = this.state;
+      if (s.lb != null) {
+        if (e.key === 'Escape') this.closeLb();
+        if (e.key === 'ArrowRight') this.stepLb(1);
+        if (e.key === 'ArrowLeft') this.stepLb(-1);
+      } else if (s.visita && e.key === 'Escape') this.setState({ visita: false });
+    };
+    addEventListener('scroll', this.onScroll, { passive: true });
+    addEventListener('resize', this.onResize);
+    addEventListener('keydown', this.onKey);
+    const st = new URLSearchParams(location.search).get('state');
+    if (!st && !this.reduce) this.entrance();
+    if (!this.reduce) this.setupReveal();
+    if (st) setTimeout(() => this.applyState(st), 400);
+    this.tick();
+  }
+  componentWillUnmount() {
+    removeEventListener('scroll', this.onScroll);
+    removeEventListener('resize', this.onResize);
+    removeEventListener('keydown', this.onKey);
+    document.body.style.overflow = '';
+  }
+  componentDidUpdate() {
+    this.applyFotos();
+    const ps = this._prev || this.state, s = this.state;
+    this._prev = Object.assign({}, s);
+    const lock = s.lb != null || s.visita;
+    if (lock !== (ps.lb != null || ps.visita)) document.body.style.overflow = lock ? 'hidden' : '';
+    if (ps.favs !== s.favs) { try { localStorage.setItem('csp-favs', JSON.stringify(s.favs)); } catch (e) {} }
+    if (ps.lb == null && s.lb != null && !this.reduce) {
+      const box = this.el.lbBox, f = this.el.lbFrame, o = this.lbOrigin;
+      if (box && box.animate) box.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'cubic-bezier(.2,.7,0,1)' });
+      if (f && f.animate && o) {
+        const r = f.getBoundingClientRect(), sc = o.width / r.width;
+        const tx = o.left - r.left, ty = (o.top + o.height / 2) - (r.top + r.height * sc / 2);
+        f.animate([{ transformOrigin: '0 0', transform: `translate(${tx}px, ${ty}px) scale(${sc})` }, { transformOrigin: '0 0', transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.2,.7,0,1)' });
+      }
+    }
+    if (ps.vw !== s.vw) this.tick();
+  }
+
+  texture() {
+    const a = document.createElement('canvas'); a.width = a.height = 256;
+    const x = a.getContext('2d'), img = x.createImageData(256, 256), d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = Math.random(); let v, al;
+      if (r < 0.005) { v = 70; al = 150; } else if (r < 0.011) { v = 252; al = 120; } else { v = 105 + Math.random() * 70; al = Math.random() * 30; }
+      d[i] = v; d[i + 1] = v * 0.97; d[i + 2] = v * 0.88; d[i + 3] = al;
+    }
+    x.putImageData(img, 0, 0);
+    const b = document.createElement('canvas'); b.width = b.height = 720;
+    const y = b.getContext('2d');
+    for (let n = 0; n < 90; n++) {
+      const cx = Math.random() * 720, cy = Math.random() * 720, rad = 30 + Math.random() * 140, dark = Math.random() < 0.55;
+      for (const ox of [-720, 0, 720]) for (const oy of [-720, 0, 720]) {
+        const g = y.createRadialGradient(cx + ox, cy + oy, 0, cx + ox, cy + oy, rad);
+        g.addColorStop(0, dark ? 'rgba(96,84,62,.07)' : 'rgba(255,248,228,.09)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+        y.fillStyle = g; y.fillRect(cx + ox - rad, cy + oy - rad, rad * 2, rad * 2);
+      }
+    }
+    return `url(${a.toDataURL()}), url(${b.toDataURL()})`;
+  }
+
+  entrance() {
+    const E = 'cubic-bezier(.2,.7,0,1)';
+    const a = (el, k, o) => el && el.animate && el.animate(k, Object.assign({ easing: E, fill: 'backwards' }, o));
+    a(this.el.header, [{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], { duration: 500 });
+    a(this.el.heroPhoto, [{ clipPath: 'inset(100% 0 0 0)', transform: 'scale(1.08)' }, { clipPath: 'inset(0 0 0 0)', transform: 'scale(1)' }], { duration: 1300 });
+    a(this.el.heroKick, [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: 300 });
+    a(this.el.heroTitle, [{ transform: 'translateY(105%)' }, { transform: 'translateY(0)' }], { duration: 1000, delay: 380 });
+    a(this.el.heroMeta, [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: 700 });
+    a(this.el.heroCta, [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: 820 });
+  }
+  setupReveal() { this.fadeOn = true; this.runReveal(); }
+  runReveal() {
+    if (!this.fadeOn) return;
+    const vh = innerHeight, cl = v => Math.max(0, Math.min(1, v)), sm = v => v * v * (3 - 2 * v);
+    this.revealEls.forEach(el => {
+      if (!el.isConnected) { this.revealEls.delete(el); return; }
+      const r = el.getBoundingClientRect();
+      const inP = sm(cl((vh - r.top) / (vh * 0.24)));
+      const outP = sm(cl((r.bottom - vh * 0.06) / (vh * 0.26)));
+      const o = Math.min(inP, outP);
+      el.style.opacity = o.toFixed(3);
+      el.style.transform = `translateY(${((1 - inP) * 28 - (1 - outP) * 16).toFixed(1)}px)`;
+    });
+  }
+  applyState(st) {
+    const top = el => el ? el.getBoundingClientRect().top + scrollY : 0;
+    if (st === 'gallery') { this.lbOrigin = null; this.setState({ lb: 1 }); }
+    if (st === 'dock') scrollTo(0, top(this.el.ed) - 120);
+    if (st === 'visita') { scrollTo(0, top(this.el.ed) - 120); this.setState({ visita: true, day: 1, period: 'Manhã' }); }
+    if (st === 'fin') scrollTo(0, top(this.el.fin) - 120);
+    if (st === 'closing') scrollTo(0, top(this.el.closing));
+    this.tick();
+  }
+
+  tick() {
+    this.runReveal();
+    const hero = this.el.hero, box = this.el.heroBox; if (!hero || !box) return;
+    const vh = innerHeight;
+    const scrolled = box.getBoundingClientRect().bottom < 72;
+    const hb = hero.getBoundingClientRect().bottom;
+    const c = this.el.closing ? this.el.closing.getBoundingClientRect() : { top: 1e9, bottom: 1e9 };
+    const dockShow = hb < vh * 0.3 && !(c.top < vh * 0.6 && c.bottom > 0);
+    if (scrolled !== this.state.scrolled || dockShow !== this.state.dockShow) this.setState({ scrolled, dockShow });
+  }
+  openLb(i, e) {
+    const t = e && e.currentTarget && e.currentTarget.parentElement;
+    this.lbOrigin = t && t.getBoundingClientRect ? t.getBoundingClientRect() : null;
+    this.setState({ lb: i });
+  }
+  stepLb(d) { const N = this.N || 1; this.setState(s => ({ lb: ((s.lb || 0) + d + N) % N })); }
+  closeLb() {
+    const box = this.el.lbBox;
+    if (box && box.animate && !this.reduce) { const an = box.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }); an.onfinish = () => this.setState({ lb: null }); }
+    else this.setState({ lb: null });
+  }
+  showToast(t) { clearTimeout(this.tt); this.setState({ toast: t, toastOn: true }); this.tt = setTimeout(() => this.setState({ toastOn: false }), 2200); }
+
+  renderVals() {
+    const s = this.state, p = this.prop(), w = s.vw, mob = w < 760, tab = w < 1100;
+    const pr = this.props || {};
+    const fmt = n => n.toLocaleString('pt-BR');
+    const pad2 = n => String(n).padStart(2, '0');
+    const buy = p.mode === 'comprar';
+    const N = p.planta ? (p.photos || 3) : (p.photos || 3);
+    this.N = N;
+    const sid = i => 'csp-v2-' + p.code.toLowerCase() + (i ? '-' + (i + 1) : '');
+    const phName = i => i === 0 ? `Foto principal — ${p.tipo}, ${p.bairro}. Fachada ou ambiente mais representativo.` : `Foto ${pad2(i + 1)} de ${pad2(N)} — ${p.tipo}, ${p.bairro}`;
+    const priceFmt = 'R$ ' + fmt(p.price), per = buy ? '' : ' /mês';
+    const fin = buy ? 'Venda' : 'Locação';
+    const title = p.titulo || `${p.tipo} em ${p.bairro}`;
+    const waMsg = `Olá! Tenho interesse no imóvel ${p.code} — ${p.tipo} em ${p.bairro} (${fin}, ${priceFmt}${buy ? '' : '/mês'}). Gostaria de mais informações.`;
+    const wa = m => 'https://wa.me/?text=' + encodeURIComponent(m);
+    const seg = (label, active, onClick, dark) => ({ label, onClick, bg: active ? (dark ? '#EFE6D2' : '#292D29') : 'rgba(0,0,0,0)', fg: active ? (dark ? '#292D29' : '#EFE6D2') : (dark ? '#EFE6D2' : '#292D29') });
+
+    const isCom = p.tipo === 'Comercial';
+    const cells = [{ l: isCom ? 'ÁREA PRIVATIVA' : 'ÁREA ÚTIL', v: p.area + ' m²' }];
+    if (p.areaTotal) cells.push({ l: p.areaTotalLabel || 'ÁREA TOTAL', v: p.areaTotal + ' m²' });
+    if (p.dorms) cells.push({ l: 'DORMITÓRIOS', v: String(p.dorms) });
+    if (p.suites) cells.push({ l: 'SUÍTES', v: String(p.suites) });
+    if (p.banh) cells.push({ l: 'BANHEIROS', v: String(p.banh) });
+    cells.push({ l: 'VAGAS', v: p.vagas ? String(p.vagas) : 'Sem vaga' });
+    if (p.config) cells.push({ l: 'CONFIGURAÇÃO', v: p.config });
+    if (p.andar) cells.push({ l: 'ANDAR', v: p.andar });
+    cells.forEach(c => { c.size = c.v.length > 8 ? '22px' : '30px'; });
+
+    const tile = i => ({ id: sid(i), ph: phName(i), n: pad2(i + 1), open: e => this.openLb(i, e) });
+    const sideIdx = N >= 2 ? 1 : null;
+    const sideList = [1, 2].filter(i => i < N);
+    const gSide = sideList.map((i, k) => Object.assign(tile(i), { row: sideList.length === 1 ? '1 / span 2' : String(k + 1) }));
+    const gMore = Array.from({ length: Math.max(0, N - 3) }, (_, k) => tile(k + 3));
+    const closingIdx = N >= 4 ? N - 1 : null;
+    const pat = [['span 7', 'span 2'], ['span 5', 'span 1'], ['span 5', 'span 1'], ['span 4', 'span 1'], ['span 4', 'span 1'], ['span 4', 'span 1'], ['span 6', 'span 2'], ['span 6', 'span 1'], ['span 6', 'span 1']];
+    const mIdx = N > 1 ? Array.from({ length: N - 1 }, (_, k) => k + 1) : [0];
+    const gMosaic = mIdx.map((i, k) => {
+      let [col, row] = pat[k % pat.length];
+      if (mIdx.length === 1) { col = 'span 12'; row = 'span 2'; }
+      else if (mIdx.length === 2) { col = 'span 6'; row = 'span 2'; }
+      else if (k === mIdx.length - 1 && mIdx.length % 3 === 1 && k > 2) { col = 'span 12'; row = 'span 2'; }
+      return Object.assign(tile(i), { col, row });
+    });
+
+    const iptuK = !!p.iptu;
+    const pacote = !buy && iptuK && p.iptu.per === 'mês' ? p.price + (p.condo || 0) + p.iptu.v : null;
+    const finRows = [
+      { l: buy ? 'Valor de venda' : 'Aluguel', sub: buy ? 'PREÇO PEDIDO' : 'MENSAL', v: priceFmt, per: buy ? '' : ' /mês', primary: buy || !pacote },
+      { l: 'Condomínio', sub: p.condo ? 'MENSAL' : 'NÃO HÁ COBRANÇA', v: p.condo ? 'R$ ' + fmt(p.condo) : 'Sem condomínio', per: p.condo ? ' /mês' : '' },
+      { l: 'IPTU', sub: iptuK ? (p.iptu.per === 'ano' ? 'ANUAL' : 'MENSAL') : 'AGUARDANDO PROPRIETÁRIO', v: iptuK ? 'R$ ' + fmt(p.iptu.v) : 'Não informado', per: iptuK ? (p.iptu.per === 'ano' ? ' /ano' : ' /mês') : '', muted: !iptuK }
+    ];
+    if (pacote) finRows.push({ l: 'Pacote mensal', sub: 'ALUGUEL + CONDOMÍNIO + IPTU', v: 'R$ ' + fmt(pacote), per: ' /mês', primary: true });
+    finRows.forEach(r => {
+      r.size = r.primary ? 'clamp(36px,3.6vw,56px)' : r.muted ? '17px' : '26px';
+      r.font = r.muted ? 'Archivo,sans-serif' : "'Big Shoulders Display','Big Shoulders',sans-serif";
+      r.weight = r.muted ? '400' : '800'; r.op = r.muted ? 0.6 : 1; r.pad = r.primary ? '24px 0' : '16px 0';
+    });
+    const finNote = buy
+      ? 'Condomínio cobrado mensalmente e IPTU anual, conforme informado pelo proprietário. Valores sujeitos a confirmação na proposta.'
+      : pacote ? 'Pacote calculado com os encargos informados. Não inclui consumo de água, luz e gás.'
+        : 'Pacote mensal indisponível: o IPTU deste imóvel ainda não foi informado pelo proprietário.';
+
+    const poisSrc = (p.loc && p.loc.pois) || [];
+    const rec0 = this.RAW.filter(r => r[0] !== p.code && r[1] === p.mode && r[2] === p.tipo);
+    const recRaw = rec0.length >= 3 ? rec0.slice(0, 3) : rec0.concat(this.RAW.filter(r => r[0] !== p.code && r[1] === p.mode && r[2] !== p.tipo)).slice(0, 3);
+    const tipoPl = { 'Casa térrea': 'CASAS TÉRREAS', 'Sobrado': 'SOBRADOS', 'Apartamento': 'APARTAMENTOS', 'Comercial': 'IMÓVEIS COMERCIAIS' }[p.tipo] || 'IMÓVEIS';
+    const isFav = s.favs.includes(p.code);
+    const useHdr = !mob && (pr.dockMode ?? 'Dock inferior') === 'Faixa no cabeçalho';
+    const dockOn = s.dockShow && !useHdr && s.lb == null && !s.visita;
+    const adjacent = mob || (pr.heroLayout ?? 'Texto sobre a foto') === 'Superfície adjacente';
+    const dayLabel = d => d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '').toUpperCase() + ' ' + d.getDate();
+    const vReady = s.day != null && !!s.period && s.vPhone.replace(/\D/g, '').length >= 10;
+    const vMsg = waMsg + (s.day != null && s.period ? ` Gostaria de visitar ${dayLabel(this.days[s.day]).toLowerCase()}, no período da ${s.period.toLowerCase()}.` : ' Gostaria de agendar uma visita.');
+    const backHref = 'Capital%20SP%20Home%20v3.dc.html?state=catalog';
+
+    return {
+      R: this.R, rv: this.rv, isMobile: mob, isDesktop: !mob,
+      p: {
+        code: p.code, slot0: sid(0), heroPh: phName(0),
+        titleUp: title.toUpperCase(), secaoUp: (p.secao || 'Sobre o imóvel').toUpperCase(),
+        closingUp: `Visite o ${p.code} em ${p.bairro}.`.toUpperCase(),
+        bairroUp: p.bairro.toUpperCase(), tipoUp: p.tipo.toUpperCase(), finUp: fin.toUpperCase(),
+        priceFmt, per, priceLabel: buy ? 'VALOR DE VENDA' : 'ALUGUEL MENSAL',
+        photoCount: `${pad2(N)} ${N === 1 ? 'FOTO' : 'FOTOS'}`, nPad: pad2(N),
+        paras: p.paras || [p.desc]
+      },
+      backHref, waHref: wa(waMsg), waMsg,
+      hdrColor: s.scrolled ? '#292D29' : (adjacent && !s.scrolled ? '#EFE6D2' : '#EFE6D2'),
+      hdrBg: s.scrolled ? 'rgba(220,209,186,.86)' : 'rgba(220,209,186,0)', hdrBlur: s.scrolled ? 'blur(14px)' : 'none',
+      hdrH: s.scrolled ? '64px' : (mob ? '72px' : '88px'),
+      hdrCtx: useHdr && s.dockShow, hdrDefault: !(useHdr && s.dockShow),
+      heroOverlay: !adjacent, heroAdjacent: adjacent,
+      galBg: adjacent ? 'linear-gradient(180deg,rgba(41,45,41,0) 0,#292D29 220px,#292D29 calc(100% - 280px),rgba(41,45,41,0) 100%)' : 'linear-gradient(180deg,#292D29 0,#292D29 calc(100% - 280px),rgba(41,45,41,0) 100%)',
+      galPadT: adjacent ? 'clamp(200px,26vh,260px)' : 'clamp(48px,8vh,96px)',
+      openGallery: e => this.openLb(0, null), openVisita: () => this.setState({ visita: true, vSent: false }),
+      cells,
+      edTextCol: mob ? '1 / -1' : sideIdx != null ? (tab ? '1 / span 7' : '1 / span 6') : (tab ? '1 / -1' : '3 / span 8'),
+      edPhotoCol: mob ? '1 / -1' : (tab ? '8 / span 5' : '8 / span 5'), edPhotoMargin: mob ? '48px 0 0' : '128px 0 0',
+      hasSidePhoto: sideIdx != null, side: sideIdx != null ? tile(sideIdx) : {},
+      galTitle: `${pad2(N)} ${N === 1 ? 'FOTO' : 'FOTOS'}${p.planta ? ' + PLANTA' : ''}`,
+      hasPlanta: !!p.planta,
+      galTabs: [['fotos', 'Fotos'], ['planta', 'Planta']].map(([k, l]) => seg(l, s.galTab === k, () => this.setState({ galTab: k }), true)),
+      galGrid: !mob && s.galTab === 'fotos', galTrack: mob && s.galTab === 'fotos', galPlanta: s.galTab === 'planta',
+      gMosaic,
+      gAll: Array.from({ length: N }, (_, i) => tile(i)),
+      planta: { id: sid(0) + '-planta', ph: `Planta baixa — ${p.tipo}, ${p.bairro}`, open: () => this.showToast('PLANTA EM TELA CHEIA NA PRÓXIMA ETAPA') },
+      galNote: `${pad2(N)} ${N === 1 ? 'FOTO' : 'FOTOS'} DO IMÓVEL${p.planta ? ' · PLANTA DISPONÍVEL' : ''} · SEM VÍDEO OU TOUR`,
+      featTitle: (p.dest && p.dest.length) ? 'DIFERENCIAIS' : 'CARACTERÍSTICAS',
+      hasDest: !!(p.dest && p.dest.length), dest: (p.dest || []).map((t, i) => ({ t, n: pad2(i + 1) })),
+      groups: (p.grupos || (p.feats.length ? [{ t: 'Características', i: p.feats }] : [])).map(g => ({ tUp: g.t.toUpperCase(), i: g.i })),
+      hasGroups: !!(p.grupos || p.feats.length),
+      locTextCol: mob || tab || !p.loc ? '1 / -1' : '1 / span 5', locMapCol: mob || tab ? '1 / -1' : '7 / span 6',
+      locCtx: p.loc ? p.loc.ctx : `${p.tipo} localizado em ${p.bairro}, São Paulo. O corretor detalha o entorno e o endereço no agendamento da visita.`,
+      hasPois: poisSrc.length > 0, pois: poisSrc.map(o => ({ tUp: o.t.toUpperCase(), n: o.n })),
+      hasMap: !!p.loc, mapSrc: p.loc ? `mapa.html?lat=${p.loc.lat}&lng=${p.loc.lng}&r=${p.loc.r}` : '', locR: p.loc ? p.loc.r : '',
+      finLeftCol: mob || tab ? '1 / -1' : '1 / span 4', finRightCol: mob || tab ? '1 / -1' : '6 / span 7',
+      finTitle: buy ? 'VENDA E ENCARGOS' : 'LOCAÇÃO E ENCARGOS', finRows, finNote,
+      hasClosingPhoto: closingIdx != null, closing: closingIdx != null ? { id: sid(closingIdx), ph: phName(closingIdx) } : {},
+      hasRec: recRaw.length > 0, recTitle: `OUTROS ${tipoPl} PARA ${buy ? 'COMPRAR' : 'ALUGAR'}`.replace('OUTROS IMÓVEIS COMERCIAIS', 'OUTROS IMÓVEIS COMERCIAIS'),
+      rec: recRaw.map(r => ({ href: 'Capital%20SP%20Imovel.dc.html?id=' + r[0], slotId: 'csp-v2-' + r[0].toLowerCase(), ph: `Foto — ${r[2]}, ${r[3]}`, code: r[0], tipoUp: r[2].toUpperCase(), bairroUp: r[3].toUpperCase(), priceFmt: 'R$ ' + fmt(r[8]) + (r[1] === 'alugar' ? '/mês' : '') })),
+      footPadB: mob ? '120px' : '40px',
+      dockBottom: mob ? '8px' : '24px', dockW: mob ? 'calc(100vw - 16px)' : 'auto',
+      dockY: dockOn ? '0px' : '140%', dockOp: dockOn ? 1 : 0, dockPE: dockOn ? 'auto' : 'none',
+      dockCta: mob ? 'Agendar' : 'Agendar visita',
+      toggleFav: e => { const t = e && e.currentTarget; if (t && t.animate && !this.reduce) t.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 220 }); this.setState(st => ({ favs: st.favs.includes(p.code) ? st.favs.filter(x => x !== p.code) : [...st.favs, p.code] })); this.showToast(isFav ? 'REMOVIDO DOS SALVOS' : 'SALVO — APARECE NA BUSCA'); },
+      favFill: isFav ? '#A64B36' : '#292D29', favInner: isFav ? 0 : 1, favLabel: isFav ? 'Remover dos salvos' : 'Salvar imóvel',
+      share: async () => { const url = location.href; try { if (navigator.share) { await navigator.share({ title: `${p.code} — ${title}`, url }); return; } } catch (e) { return; } try { await navigator.clipboard.writeText(url); this.showToast('LINK COPIADO'); } catch (e) { this.showToast('NÃO FOI POSSÍVEL COPIAR O LINK'); } },
+      toast: s.toast, toastOp: s.toastOn ? 1 : 0, toastY: s.toastOn ? '0px' : '-12px',
+      vPE: s.visita ? 'auto' : 'none', vOp: s.visita ? 1 : 0, vY: s.visita ? '0px' : '24px',
+      vL: mob ? '0px' : 'auto', vR: mob ? '0px' : '24px', vB: mob ? '0px' : '24px', vW: mob ? 'auto' : '440px', vRad: mob ? '16px 16px 0 0' : '16px',
+      closeVisita: () => this.setState({ visita: false }),
+      daySegs: this.days.map((d, i) => seg(dayLabel(d), s.day === i, () => this.setState({ day: i }))),
+      periodSegs: ['Manhã', 'Tarde'].map(l => seg(l, s.period === l, () => this.setState({ period: l }))),
+      vName: s.vName, vPhone: s.vPhone,
+      onVName: e => this.setState({ vName: e.target.value }), onVPhone: e => this.setState({ vPhone: e.target.value }),
+      vReadyOp: vReady ? 1 : 0.45, vCursor: vReady ? 'pointer' : 'not-allowed',
+      sendVisita: () => { if (vReady) this.setState({ vSent: true }); else this.showToast('ESCOLHA DIA, PERÍODO E TELEFONE'); },
+      vWaHref: wa(vMsg), vSent: s.vSent, vNotSent: !s.vSent,
+      vSentLine: s.day != null ? `Pedido enviado ao corretor responsável pelo ${p.code}: ${dayLabel(this.days[s.day]).toLowerCase()}, período da ${String(s.period).toLowerCase()}. A confirmação chega no telefone ${s.vPhone}.` : '',
+      lbOpen: s.lb != null,
+      lbCounter: s.lb != null ? `${pad2(s.lb + 1)} / ${pad2(N)}` : '', lbCaption: s.lb != null ? phName(s.lb).toUpperCase() : '',
+      lbSlides: Array.from({ length: N }, (_, i) => ({ id: sid(i), ph: phName(i), op: i === s.lb ? 1 : 0, pe: i === s.lb ? 'auto' : 'none' })),
+      lbThumbs: Array.from({ length: N }, (_, i) => ({ id: sid(i), n: pad2(i + 1), aria: `Foto ${i + 1}`, bd: i === s.lb ? '#EFE6D2' : 'rgba(239,230,210,0)', op: i === s.lb ? 1 : 0.55, onClick: () => this.setState({ lb: i }) })),
+      closeLb: () => this.closeLb(), lbPrev: () => this.stepLb(-1), lbNext: () => this.stepLb(1)
+    };
+  }
+}
+</script>
+</body>
+</html>
