@@ -1,4 +1,4 @@
-import {mkdir,readFile,writeFile,copyFile,rm} from 'node:fs/promises';
+import {mkdir,readFile,writeFile,copyFile,rm,cp} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 const root=fileURLToPath(new URL('../../',import.meta.url));
@@ -18,5 +18,6 @@ for(const [input,target] of [['home.dc.html','index.html'],['imovel.dc.html','im
   await writeFile(path.join(output,target),html);
 }
 for(const f of ['support.js','image-slot.js','react.production.min.js','react-dom.production.min.js']) await copyFile(path.join(source,f),path.join(output,f));
+await cp(path.join(source,'fotos'),path.join(output,'fotos'),{recursive:true});
 await writeFile(path.join(output,'mapa.html'),'<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Localização</title><body style="font:16px/1.5 sans-serif;background:#dcd1ba;color:#292d29;padding:24px"><p>Mapa não incluído no protótipo.</p><p>Consulte a descrição da região na página do imóvel.</p></body></html>');
 console.log('Capital SP: index.html e imovel.html gerados em presentation-dist.');
