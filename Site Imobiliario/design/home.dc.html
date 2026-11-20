@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;background:#C9BEA8;color:#292D29;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#292D29;text-decoration:none}
+a:hover{color:#A64B36}
+button,select,textarea,input{font-family:inherit;color:inherit}
+input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
+@keyframes hbarIn{from{opacity:0;transform:scale(.55,.8)}to{opacity:1;transform:none}}
+.hbar{transform-origin:50% 50%;animation:hbarIn .55s cubic-bezier(.2,.7,0,1)}
+@media (prefers-reduced-motion:reduce){.hbar{animation:none}}
+</style>
+</helmet>
+<div style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background:#C9BEA8">
+
+  <header ref="{{ R.header }}" style="position:fixed;top:0;left:0;right:0;z-index:50;height:clamp(68px,14vh,124px);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(24px,4vw,64px);color:#292D29;transition:color .6s,height .6s cubic-bezier(.2,.7,0,1),background-color .6s">
+    <a href="#" onClick="{{ goTop }}" style="display:flex;align-items:center;gap:12px;color:inherit">
+      <span style="position:relative;display:block;width:26px;height:26px;border:2px solid currentColor">
+        <span style="position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;background:#A64B36"></span>
+      </span>
+      <span style="display:flex;flex-direction:column;line-height:1">
+        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:21px;letter-spacing:.05em">CAPITAL SP</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.42em;margin-top:3px">IMÓVEIS</span>
+      </span>
+    </a>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;gap:clamp(20px,2.6vw,44px);opacity:{{ navOp }};pointer-events:{{ navPE }};transition:opacity .3s">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+          <a href="#" onClick="{{ item.onClick }}" onMouseEnter="{{ item.onEnter }}" onMouseLeave="{{ item.onLeave }}" style="position:relative;display:flex;gap:8px;padding:8px 0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:inherit">
+            <span style="opacity:.5">{{ item.n }}</span>
+            <span>{{ item.label }}</span>
+            <span style="position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;transform-origin:left;transform:scaleX({{ item.ul }});transition:transform .5s cubic-bezier(.2,.7,0,1)"></span>
+          </a>
+        </sc-for>
+      </nav>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ openMenu }}" style="display:flex;align-items:center;gap:10px;height:44px;padding:0;border:0;background:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:inherit">
+        <span>MENU</span>
+        <span style="display:flex;flex-direction:column;gap:5px;width:20px"><span style="height:1.5px;background:currentColor"></span><span style="height:1.5px;background:currentColor;width:60%"></span></span>
+      </button>
+    </sc-if>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;left:50%;top:0;height:100%;display:flex;align-items:center;transform:translateX(-50%);opacity:{{ hOp }};pointer-events:{{ hPE }};transition:opacity .45s" onKeyDown="{{ hKey }}">
+        <sc-if value="{{ hPillOn }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ hOpenBar }}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 20px;border:0;border-radius:20px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#3B403B">
+            <span style="position:relative;display:block;flex:none;width:16px;height:15px">
+              <span style="position:absolute;left:2.5px;top:1.5px;width:11px;height:11px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span>
+              <span style="position:absolute;left:3px;top:7px;width:10px;height:8px;border:1.5px solid currentColor;border-top:0"></span>
+              <span style="position:absolute;left:6.5px;top:10.5px;width:3px;height:4.5px;background:currentColor"></span>
+            </span>
+            <span>Buscar imóveis</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ hBarOn }}" hint-placeholder-val="{{ false }}">
+          <span onClick="{{ hClose }}" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:-1"></span>
+          <div class="hbar" style="position:relative;display:flex;align-items:stretch;width:min(780px,calc(100vw - 500px));min-width:540px;height:52px;padding:6px;border-radius:12px;background:rgba(238,230,212,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,252,242,.7);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 44px -20px rgba(30,32,28,.4)">
+            <div style="display:flex;align-items:center;padding:0 8px 0 0">
+              <div style="position:relative;display:flex;height:38px;padding:3px;border-radius:9px;background:rgba(41,45,41,.07);box-shadow:inset 0 1px 2px rgba(41,45,41,.1)">
+                <span style="position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:7px;background:#F1E9D7;box-shadow:0 1px 2px rgba(41,45,41,.14);transform:translateX({{ thumbX }});transition:transform .5s cubic-bezier(.2,.7,0,1)"></span>
+                <button onClick="{{ setComprar }}" style="position:relative;width:68px;border:0;background:none;cursor:pointer;font-size:12.5px;font-weight:600;opacity:{{ comprarOp }};transition:opacity .3s">Comprar</button>
+                <button onClick="{{ setAlugar }}" style="position:relative;width:68px;border:0;background:none;cursor:pointer;font-size:12.5px;font-weight:600;opacity:{{ alugarOp }};transition:opacity .3s">Alugar</button>
+              </div>
+            </div>
+            <span style="align-self:center;width:1px;height:26px;background:rgba(41,45,41,.12)"></span>
+            <label style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0 12px;border-radius:8px;transition:background .3s" style-hover="background:rgba(255,252,242,.4)">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;opacity:.7">TIPO</span>
+              <select value="{{ tipo }}" onChange="{{ onTipoSelect }}" style="width:100%;padding:0;border:0;outline:none;background:transparent;font-size:13.5px;font-weight:500;color:#292D29;cursor:pointer">
+                <sc-for list="{{ tipoOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+              </select>
+            </label>
+            <span style="align-self:center;width:1px;height:26px;background:rgba(41,45,41,.12)"></span>
+            <label style="flex:1.3 1 0;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0 12px;border-radius:8px;cursor:text;transition:background .3s" style-hover="background:rgba(255,252,242,.4)">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;opacity:.7">LOCALIZAÇÃO</span>
+              <input id="h-local" value="{{ local }}" onChange="{{ onLocal }}" onKeyDown="{{ onLocalKey }}" placeholder="Bairro, rua ou código" style="width:100%;padding:0;border:0;outline:none;background:transparent;font-family:Archivo,sans-serif;font-size:13.5px;font-weight:500;color:#292D29">
+            </label>
+            <span style="align-self:center;width:1px;height:26px;background:rgba(41,45,41,.12)"></span>
+            <label style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0 12px;border-radius:8px;transition:background .3s" style-hover="background:rgba(255,252,242,.4)">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;opacity:.7">PREÇO</span>
+              <select value="{{ preco }}" onChange="{{ onPrecoSelect }}" style="width:100%;padding:0;border:0;outline:none;background:transparent;font-size:13.5px;font-weight:500;color:#292D29;cursor:pointer">
+                <sc-for list="{{ precoOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+              </select>
+            </label>
+            <button onClick="{{ hBuscar }}" style="display:flex;align-items:center;gap:12px;margin-left:4px;padding:0 18px 0 20px;border:0;border-radius:8px;background:#C8102E;color:#FFFFFF;cursor:pointer;font-size:13.5px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#A80D26"><span>Buscar</span><span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            <button onClick="{{ hClose }}" aria-label="Fechar busca" style="width:38px;margin-left:2px;border:0;border-radius:8px;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .3s" style-hover="background:rgba(41,45,41,.07)">×</button>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+    <span ref="{{ R.headerLine }}" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:0;height:1px;background:currentColor;opacity:.32;transform-origin:left"></span>
+    <span style="position:absolute;left:clamp(24px,4vw,64px);bottom:-1px;width:44px;height:3px;background:#A64B36"></span>
+  </header>
+
+  <section ref="{{ R.stage }}" data-screen-label="01 Capa → Busca" style="position:relative;height:300vh">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden">
+
+      <div ref="{{ R.photo }}" style="position:absolute;inset:0;background:#4A463D;transform:scale(1.14);filter:blur(8px) grayscale(.9)">
+        <image-slot id="csp-institucional" shape="rect" placeholder="Fotografia institucional — edifício em concreto aparente, São Paulo. Vista de baixo para cima, luz quente, sombras marcadas."></image-slot>
+      </div>
+      <div ref="{{ R.scrim }}" style="position:absolute;inset:0;pointer-events:none;opacity:0;background:linear-gradient(180deg,rgba(26,25,22,.66) 0%,rgba(26,25,22,.12) 36%,rgba(26,25,22,0) 56%,rgba(26,25,22,.5) 100%)"></div>
+
+      <div ref="{{ R.concrete }}" style="position:absolute;inset:0;pointer-events:none;background-color:#C9BEA8">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 16% 20%,rgba(240,231,208,.6),rgba(240,231,208,0) 70%),radial-gradient(ellipse 60% 50% at 86% 78%,rgba(112,98,74,.18),rgba(112,98,74,0) 70%),radial-gradient(ellipse 40% 30% at 62% 8%,rgba(255,247,226,.35),rgba(255,247,226,0) 70%)"></div>
+        <div ref="{{ R.noiseA }}" style="position:absolute;inset:0;opacity:.75;background-size:256px 256px,720px 720px"></div>
+        <div style="position:absolute;inset:0;background-image:linear-gradient(to bottom,rgba(41,45,41,.07) 1px,rgba(41,45,41,0) 1px),linear-gradient(to right,rgba(41,45,41,.05) 1px,rgba(41,45,41,0) 1px);background-size:100% 33.334vh,25vw 100%"></div>
+        <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(58,52,42,.34) 0,rgba(58,52,42,.34) 1.7px,rgba(255,248,230,.5) 2.3px,rgba(255,248,230,.5) 2.9px,rgba(255,248,230,0) 3.4px);background-size:12.5vw 16.667vh;background-position:6.25vw 8.333vh"></div>
+      </div>
+
+      <div ref="{{ R.titleWrap }}" style="position:absolute;left:0;right:0;top:15vh;height:50vh;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(24px,4vw,64px);pointer-events:none">
+        <h1 ref="{{ R.title }}" aria-label="Capital SP" style="margin:0;display:flex;flex-direction:column;align-items:flex-start;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:19vw;line-height:.8;color:#292D29;white-space:nowrap">
+          <sc-for list="{{ titleLines }}" as="line" hint-placeholder-count="1">
+            <span data-line="1" style="display:flex;width:max-content">
+              <sc-for list="{{ line.letters }}" as="l" hint-placeholder-count="0">
+                <span style="display:block;overflow:hidden;padding-top:.05em;width:{{ l.w }}"><span ref="{{ l.ref }}" style="display:block">{{ l.ch }}</span></span>
+              </sc-for>
+            </span>
+          </sc-for>
+        </h1>
+        <div ref="{{ R.sub }}" style="margin-top:clamp(18px,3vh,36px);display:flex;justify-content:space-between;align-items:center;gap:24px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span ref="{{ R.subRule }}" style="display:block;width:30px;height:2px;background:#A64B36;transform-origin:left"></span>
+            <span ref="{{ R.subText }}" style="font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,14px);letter-spacing:.34em">ENCONTRE SEU PRÓXIMO ESPAÇO.</span>
+          </div>
+          <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;opacity:.7">IMOBILIÁRIA URBANA — SÃO PAULO, BR</span>
+          </sc-if>
+        </div>
+      </div>
+
+      <div ref="{{ R.heroMeta }}" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:2.6vh;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;opacity:.75;pointer-events:none">
+        <span>↓ ROLE PARA REVELAR</span>
+        <span>23°33′S — 46°38′W</span>
+      </div>
+
+      <div ref="{{ R.searchCopy }}" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);top:clamp(92px,17vh,170px);display:flex;justify-content:space-between;align-items:flex-end;gap:32px;color:#EDE4D0;opacity:0;pointer-events:none">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#EDE4D0"></span>02 — EXPLORAÇÃO</div>
+          <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(44px,7vw,116px);line-height:.86;letter-spacing:.005em">A CIDADE,<br>IMÓVEL POR IMÓVEL.</h2>
+        </div>
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+          <p style="margin:0 0 8px;max-width:270px;font-size:14px;line-height:1.55;text-wrap:pretty">{{ totalLine }}</p>
+        </sc-if>
+      </div>
+
+      <div ref="{{ R.searchFoot }}" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:2.6vh;display:flex;justify-content:space-between;align-items:center;gap:20px;color:#EDE4D0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;opacity:0;pointer-events:none">
+        <button onClick="{{ goCatalog }}" style="display:flex;align-items:center;gap:10px;padding:8px 0;border:0;background:none;cursor:pointer;color:inherit;font:inherit;letter-spacing:inherit">↓ IMÓVEIS EM DESTAQUE</button>
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}"><span>FOTO INSTITUCIONAL — ARQUITETURA PAULISTANA</span></sc-if>
+      </div>
+
+      <div ref="{{ R.endFade }}" style="position:absolute;left:0;right:0;bottom:0;height:60vh;opacity:0;pointer-events:none;background:linear-gradient(180deg,rgba(220,209,186,0) 0%,rgba(220,209,186,.85) 70%,#DCD1BA 100%)"></div>
+
+      <div ref="{{ R.dock }}" style="position:absolute;left:50%;top:0;z-index:20;width:252px;transform-origin:50% 0;transform:translate(-50%,80vh)">
+        <div ref="{{ R.dockIn }}">
+          <div ref="{{ R.glass }}" style="position:relative;border-radius:{{ glassRadius }};background:linear-gradient(180deg,rgba(243,236,220,.56),rgba(216,206,184,.36));backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);border:1px solid rgba(255,252,242,.62);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(41,45,41,.08),0 1px 2px rgba(41,45,41,.06),0 24px 56px -28px rgba(30,32,28,.38);transition:border-radius .8s cubic-bezier(.2,.7,0,1)">
+            <div style="position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(100deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 14%,rgba(255,255,255,0) 86%,rgba(255,255,255,.16) 100%)"></div>
+
+            <div style="position:relative;height:{{ rowH }};overflow:{{ rowOverflow }};border-radius:inherit;transition:height .8s cubic-bezier(.2,.7,0,1)">
+
+              <div style="position:absolute;inset:0;padding:8px;opacity:{{ pillOp }};pointer-events:{{ pillPE }};transition:opacity .3s">
+                <button onClick="{{ openDock }}" onMouseEnter="{{ pillIn }}" onMouseLeave="{{ pillOut }}" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:14px;padding:0 24px;border:0;border-radius:24px;background:{{ pillBg }};color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;white-space:nowrap;transition:background .3s">
+                  <span style="position:relative;display:block;flex:none;width:18px;height:17px;transform:translateY({{ houseY }});transition:transform .45s cubic-bezier(.2,.7,0,1)">
+                    <span style="position:absolute;left:3px;top:2px;width:12px;height:12px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span>
+                    <span style="position:absolute;left:3.5px;top:8px;width:11px;height:9px;border:1.5px solid currentColor;border-top:0"></span>
+                    <span style="position:absolute;left:7.5px;top:12px;width:3px;height:5px;background:currentColor"></span>
+                  </span>
+                  <span>Buscar imóveis</span>
+                </button>
+              </div>
+
+              <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);opacity:{{ barOp }};pointer-events:{{ barPE }};transition:opacity .45s {{ barDelay }}">
+                <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+                  <div ref="{{ R.bar }}" style="position:relative;display:flex;align-items:stretch;width:1080px;height:80px;padding:8px">
+                    <div style="display:flex;align-items:center;padding:0 10px 0 2px">
+                      <div style="position:relative;display:flex;height:44px;padding:3px;border-radius:11px;background:rgba(41,45,41,.07);box-shadow:inset 0 1px 2px rgba(41,45,41,.1)">
+                        <span style="position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:8px;background:#F1E9D7;box-shadow:0 1px 2px rgba(41,45,41,.14);transform:translateX({{ thumbX }});transition:transform .5s cubic-bezier(.2,.7,0,1)"></span>
+                        <button onClick="{{ setComprar }}" style="position:relative;width:84px;border:0;background:none;cursor:pointer;font-size:13.5px;font-weight:600;opacity:{{ comprarOp }};transition:opacity .3s">Comprar</button>
+                        <button onClick="{{ setAlugar }}" style="position:relative;width:84px;border:0;background:none;cursor:pointer;font-size:13.5px;font-weight:600;opacity:{{ alugarOp }};transition:opacity .3s">Alugar</button>
+                      </div>
+                    </div>
+                    <span style="align-self:center;width:1px;height:34px;background:rgba(41,45,41,.1)"></span>
+                    <div style="position:relative;flex:1 1 0;min-width:0">
+                      <button onClick="{{ toggleTipo }}" style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 18px;border:0;border-radius:10px;background:transparent;cursor:pointer;text-align:left;transition:background .3s" style-hover="background:rgba(255,252,242,.4)">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">TIPO</span>
+                        <span style="display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;font-weight:500;white-space:nowrap"><span style="overflow:hidden;text-overflow:ellipsis">{{ tipoLabel }}</span><span style="flex:none;width:7px;height:7px;margin-top:-3px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:{{ tipoCaret }};transition:transform .4s cubic-bezier(.2,.7,0,1)"></span></span>
+                      </button>
+                      <sc-if value="{{ menuTipo }}" hint-placeholder-val="{{ false }}">
+                        <div style="position:absolute;left:0;bottom:calc(100% + 16px);z-index:5;min-width:230px;padding:6px;border-radius:12px;background:rgba(238,230,212,.96);backdrop-filter:blur(18px);border:1px solid rgba(255,252,242,.7);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 44px -20px rgba(30,32,28,.4)">
+                          <sc-for list="{{ tipoOptions }}" as="o" hint-placeholder-count="0">
+                            <button onClick="{{ o.onClick }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 12px;border:0;border-radius:8px;background:transparent;cursor:pointer;font-size:14px;text-align:left" style-hover="background:rgba(41,45,41,.07)"><span>{{ o.label }}</span><span style="width:7px;height:7px;background:#A64B36;opacity:{{ o.mark }}"></span></button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                    <span style="align-self:center;width:1px;height:34px;background:rgba(41,45,41,.1)"></span>
+                    <label style="flex:1.45 1 0;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 18px;border-radius:10px;cursor:text;transition:background .3s" style-hover="background:rgba(255,252,242,.4)">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">LOCALIZAÇÃO</span>
+                      <input value="{{ local }}" onChange="{{ onLocal }}" onKeyDown="{{ onLocalKey }}" placeholder="Bairro, rua ou código" style="width:100%;padding:0;border:0;outline:none;background:transparent;font-family:Archivo,sans-serif;font-size:15px;font-weight:500;color:#292D29">
+                    </label>
+                    <span style="align-self:center;width:1px;height:34px;background:rgba(41,45,41,.1)"></span>
+                    <div style="position:relative;flex:1 1 0;min-width:0">
+                      <button onClick="{{ togglePreco }}" style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 18px;border:0;border-radius:10px;background:transparent;cursor:pointer;text-align:left;transition:background .3s" style-hover="background:rgba(255,252,242,.4)">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62;white-space:nowrap">PREÇO</span>
+                        <span style="display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;font-weight:500;white-space:nowrap"><span style="overflow:hidden;text-overflow:ellipsis">{{ precoLabel }}</span><span style="flex:none;width:7px;height:7px;margin-top:-3px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:{{ precoCaret }};transition:transform .4s cubic-bezier(.2,.7,0,1)"></span></span>
+                      </button>
+                      <sc-if value="{{ menuPreco }}" hint-placeholder-val="{{ false }}">
+                        <div style="position:absolute;left:0;bottom:calc(100% + 16px);z-index:5;min-width:230px;padding:6px;border-radius:12px;background:rgba(238,230,212,.96);backdrop-filter:blur(18px);border:1px solid rgba(255,252,242,.7);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 44px -20px rgba(30,32,28,.4)">
+                          <sc-for list="{{ precoOptions }}" as="o" hint-placeholder-count="0">
+                            <button onClick="{{ o.onClick }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 12px;border:0;border-radius:8px;background:transparent;cursor:pointer;font-size:14px;text-align:left" style-hover="background:rgba(41,45,41,.07)"><span>{{ o.label }}</span><span style="width:7px;height:7px;background:#A64B36;opacity:{{ o.mark }}"></span></button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                    <span style="align-self:center;width:1px;height:34px;background:rgba(41,45,41,.1)"></span>
+                    <button onClick="{{ onFiltros }}" style="display:flex;align-items:center;gap:11px;margin:0 4px;padding:0 16px;border:0;border-radius:10px;background:{{ filtrosBg }};cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:rgba(255,252,242,.4)">
+                      <span style="display:flex;flex-direction:column;gap:5px;width:17px">
+                        <span style="position:relative;height:1.5px;background:currentColor"><span style="position:absolute;top:-2.5px;left:{{ k1 }};width:6px;height:6px;background:#EFE6D2;border:1.5px solid #292D29;transition:left .45s cubic-bezier(.2,.7,0,1)"></span></span>
+                        <span style="position:relative;height:1.5px;background:currentColor"><span style="position:absolute;top:-2.5px;left:{{ k2 }};width:6px;height:6px;background:#EFE6D2;border:1.5px solid #292D29;transition:left .45s cubic-bezier(.2,.7,0,1)"></span></span>
+                        <span style="position:relative;height:1.5px;background:currentColor"><span style="position:absolute;top:-2.5px;left:{{ k3 }};width:6px;height:6px;background:#EFE6D2;border:1.5px solid #292D29;transition:left .45s cubic-bezier(.2,.7,0,1)"></span></span>
+                      </span>
+                      <span>Filtros</span>
+                      <sc-if value="{{ hasExtra }}" hint-placeholder-val="{{ false }}"><span style="min-width:18px;height:18px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:#A64B36;color:#F1E9D7;font-family:'IBM Plex Mono',monospace;font-size:10px">{{ extraCount }}</span></sc-if>
+                    </button>
+                    <button onClick="{{ onBuscar }}" onMouseEnter="{{ btnIn }}" onMouseLeave="{{ btnOut }}" style="display:flex;align-items:center;gap:16px;padding:0 22px 0 26px;border:0;border-radius:11px;background:{{ btnBg }};color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;white-space:nowrap;transition:background .3s">
+                      <span>{{ buscarLabel }}</span>
+                      <span style="font-family:'IBM Plex Mono',monospace;transform:translateX({{ btnArrowX }});transition:transform .4s cubic-bezier(.2,.7,0,1)">→</span>
+                    </button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+                  <div ref="{{ R.bar }}" style="position:relative;width:358px;padding:8px">
+                    <div style="display:flex;align-items:center;gap:8px;height:48px">
+                      <div style="position:relative;display:flex;height:44px;padding:3px;border-radius:11px;background:rgba(41,45,41,.07)">
+                        <span style="position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:8px;background:#F1E9D7;box-shadow:0 1px 2px rgba(41,45,41,.14);transform:translateX({{ thumbX }});transition:transform .5s cubic-bezier(.2,.7,0,1)"></span>
+                        <button onClick="{{ setComprar }}" style="position:relative;width:78px;border:0;background:none;cursor:pointer;font-size:13px;font-weight:600;opacity:{{ comprarOp }}">Comprar</button>
+                        <button onClick="{{ setAlugar }}" style="position:relative;width:78px;border:0;background:none;cursor:pointer;font-size:13px;font-weight:600;opacity:{{ alugarOp }}">Alugar</button>
+                      </div>
+                      <span style="flex:1"></span>
+                      <button onClick="{{ onFiltros }}" aria-label="Filtros" style="position:relative;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(41,45,41,.18);border-radius:10px;background:{{ filtrosBg }};cursor:pointer">
+                        <span style="display:flex;flex-direction:column;gap:5px;width:17px">
+                          <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:{{ k1 }};width:6px;height:6px;background:#EFE6D2;border:1.5px solid #292D29;transition:left .45s"></span></span>
+                          <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:{{ k2 }};width:6px;height:6px;background:#EFE6D2;border:1.5px solid #292D29;transition:left .45s"></span></span>
+                          <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:{{ k3 }};width:6px;height:6px;background:#EFE6D2;border:1.5px solid #292D29;transition:left .45s"></span></span>
+                        </span>
+                        <sc-if value="{{ hasExtra }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:#A64B36;color:#F1E9D7;font-family:'IBM Plex Mono',monospace;font-size:10px">{{ extraCount }}</span></sc-if>
+                      </button>
+                      <button onClick="{{ onBuscar }}" aria-label="Buscar" style="width:52px;height:44px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:16px">→</button>
+                    </div>
+                    <div style="height:1px;margin:8px 4px;background:rgba(41,45,41,.13)"></div>
+                    <label style="display:flex;flex-direction:column;gap:4px;height:46px;padding:2px 8px 0">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">LOCALIZAÇÃO</span>
+                      <input value="{{ local }}" onChange="{{ onLocal }}" onKeyDown="{{ onLocalKey }}" placeholder="Bairro, rua ou código" style="width:100%;height:26px;padding:0;border:0;outline:none;background:transparent;font-family:Archivo,sans-serif;font-size:16px;font-weight:500;color:#292D29">
+                    </label>
+                    <div style="height:1px;margin:8px 4px;background:rgba(41,45,41,.13)"></div>
+                    <div style="display:grid;grid-template-columns:1fr 1px 1fr;height:46px">
+                      <label style="display:flex;flex-direction:column;gap:4px;padding:2px 8px 0">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">TIPO</span>
+                        <select value="{{ tipo }}" onChange="{{ onTipoSelect }}" style="width:100%;height:26px;padding:0;border:0;outline:none;background:transparent;font-size:15px;font-weight:500;color:#292D29">
+                          <sc-for list="{{ tipoOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                        </select>
+                      </label>
+                      <span style="background:rgba(41,45,41,.13)"></span>
+                      <label style="display:flex;flex-direction:column;gap:4px;padding:2px 8px 0 14px">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">PREÇO</span>
+                        <select value="{{ preco }}" onChange="{{ onPrecoSelect }}" style="width:100%;height:26px;padding:0;border:0;outline:none;background:transparent;font-size:15px;font-weight:500;color:#292D29">
+                          <sc-for list="{{ precoOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-rows:{{ expRows }};transition:grid-template-rows .7s cubic-bezier(.2,.7,0,1)">
+              <div style="min-height:0;overflow:hidden">
+                <div ref="{{ R.panel }}" style="margin:0 8px;padding:24px 16px 16px;border-top:1px solid rgba(41,45,41,.1);max-height:min(52vh,560px);overflow:auto;display:flex;flex-direction:column;gap:24px;opacity:{{ expOp }};transition:opacity .45s">
+                  <div style="display:flex;flex-wrap:wrap;gap:24px 40px">
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">ÁREA ÚTIL (M²)</span>
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <input value="{{ areaMin }}" onChange="{{ onAreaMin }}" inputmode="numeric" placeholder="mín." style="width:88px;height:40px;padding:0 12px;border:0;border-radius:10px;background:rgba(41,45,41,.06);outline:none;font-family:Archivo,sans-serif;font-size:13px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.55);box-shadow:inset 0 0 0 1.5px #292D29">
+                        <span style="width:8px;height:1.5px;background:rgba(41,45,41,.4)"></span>
+                        <input value="{{ areaMax }}" onChange="{{ onAreaMax }}" inputmode="numeric" placeholder="máx." style="width:88px;height:40px;padding:0 12px;border:0;border-radius:10px;background:rgba(41,45,41,.06);outline:none;font-family:Archivo,sans-serif;font-size:13px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.55);box-shadow:inset 0 0 0 1.5px #292D29">
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">DORMITÓRIOS</span>
+                      <div style="display:flex;gap:4px;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none;border-radius:10px;background:rgba(41,45,41,.06)">
+                        <sc-for list="{{ dormSegs }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="flex:none;height:32px;padding:0 12px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:background .3s,color .3s">{{ c.label }}</button></sc-for>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">VAGAS</span>
+                      <div style="display:flex;gap:4px;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none;border-radius:10px;background:rgba(41,45,41,.06)">
+                        <sc-for list="{{ vagaSegs }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="flex:none;height:32px;padding:0 12px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:background .3s,color .3s">{{ c.label }}</button></sc-for>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">CONDOMÍNIO</span>
+                      <div style="display:flex;gap:4px;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none;border-radius:10px;background:rgba(41,45,41,.06)">
+                        <sc-for list="{{ condoSegs }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="flex:none;height:32px;padding:0 12px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:background .3s,color .3s">{{ c.label }}</button></sc-for>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">CARACTERÍSTICAS</span>
+                    <div style="display:flex;flex-wrap:{{ featWrap }};gap:8px;overflow-x:auto;scrollbar-width:none">
+                      <sc-for list="{{ featChips }}" as="c" hint-placeholder-count="8"><button onClick="{{ c.onClick }}" style="flex:none;height:40px;padding:0 16px;border:0;border-radius:10px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:background .3s,color .3s">{{ c.label }}</button></sc-for>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+                    <button onClick="{{ clearFilters }}" style="height:40px;padding:0;border:0;background:none;cursor:pointer;font-size:13px;font-weight:500;text-decoration:underline;text-underline-offset:4px;opacity:{{ clearOp }};transition:opacity .3s">Limpar filtros</button>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em">{{ matchLine }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section ref="{{ R.catalog }}" data-screen-label="03 Destaques" style="position:relative;background:#DCD1BA;padding:clamp(64px,10vh,112px) 0 clamp(96px,12vh,144px)">
+    <div ref="{{ R.noiseB }}" style="position:absolute;inset:0;opacity:.6;pointer-events:none;background-size:256px 256px,720px 720px"></div>
+    <div style="position:relative;max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 48px;padding-bottom:24px;border-bottom:2px solid #292D29">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>03 — DESTAQUES</div>
+          <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(56px,9.4vw,160px);line-height:.8;letter-spacing:.005em">IMÓVEIS<br>DISPONÍVEIS</h2>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;max-width:100%">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;max-width:100%">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62;width:88px">PRETENSÃO</span>
+            <div style="display:flex;gap:4px;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none;border-radius:10px;background:rgba(41,45,41,.06)"><sc-for list="{{ modeTabs }}" as="c" hint-placeholder-count="2"><button onClick="{{ c.onClick }}" style="flex:none;height:32px;padding:0 12px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:background .3s,color .3s;padding:0 16px">{{ c.label }}</button></sc-for></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;max-width:100%">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62;width:88px">ORDENAR</span>
+            <div style="display:flex;gap:4px;padding:4px;max-width:100%;overflow-x:auto;scrollbar-width:none;border-radius:10px;background:rgba(41,45,41,.06)"><sc-for list="{{ sortOptions }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.onClick }}" style="flex:none;height:32px;padding:0 12px;border:0;border-radius:7px;background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:background .3s,color .3s;padding:0 16px">{{ c.label }}</button></sc-for></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 24px;padding-top:16px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
+        <span><span style="font-weight:500">{{ countLabel }}</span><span style="opacity:.6"> — {{ summary }}</span></span>
+        <button onClick="{{ editFilters }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0;border:0;background:none;cursor:pointer;font:inherit;letter-spacing:inherit">EDITAR FILTROS <span>↑</span></button>
+      </div>
+
+      <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="2">
+        <div style="margin-top:clamp(64px,9vh,96px)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
+            <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 16px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em">{{ b.n }}</span>
+              <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,76px);line-height:.85">{{ b.titleUp }}</h3>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.62">{{ b.countLabel }}</span>
+            </div>
+            <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:8px;flex:none">
+                <button onClick="{{ b.prev }}" aria-label="Anterior" style="width:40px;height:40px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s,color .3s,border-color .3s" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29">←</button>
+                <button onClick="{{ b.next }}" aria-label="Próximo" style="width:40px;height:40px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s,color .3s,border-color .3s" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29">→</button>
+              </div>
+            </sc-if>
+          </div>
+          <div ref="{{ b.trackRef }}" onScroll="{{ b.onScroll }}" style="display:flex;align-items:flex-start;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * clamp(24px,4vw,64px));padding:24px clamp(24px,4vw,64px) 8px;scroll-padding-inline:clamp(24px,4vw,64px)">
+            <sc-for list="{{ b.cards }}" as="p" hint-placeholder-count="3">
+              <article style="flex:0 0 {{ p.w }};scroll-snap-align:start;display:flex;flex-direction:column">
+                <div onMouseEnter="{{ p.onEnter }}" onMouseLeave="{{ p.onLeave }}" onClick="{{ p.onTap }}" style="position:relative;height:clamp(320px,28vw,440px);overflow:hidden;background:#292D29;cursor:pointer">
+                  <div style="position:absolute;inset:{{ p.inset }};overflow:hidden;background:#CFC4AC;transition:inset .7s cubic-bezier(.2,.7,0,1)">
+                    <div style="position:absolute;inset:0;transform:scale({{ p.imgScale }});transition:transform 1.2s cubic-bezier(.2,.7,0,1)">
+                      <image-slot id="{{ p.slotId }}" shape="rect" placeholder="{{ p.placeholder }}"></image-slot>
+                    </div>
+                    <div style="position:absolute;left:0;top:0;display:flex;pointer-events:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#E3D8C2">
+                      <span style="padding:8px 12px;background:#292D29">{{ p.code }} · {{ p.modeLabel }}</span>
+                      
+                    </div>
+                    <button onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
+                        <span style="position:relative;display:block;width:12px;height:16px;background:{{ p.favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .3s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#3A3832;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ p.favInner }};transition:opacity .3s"></span></span>
+                      </button>
+                  </div>
+                  <div style="position:absolute;left:16px;right:16px;bottom:0;height:64px;display:flex;align-items:center;justify-content:space-between;gap:8px;opacity:{{ p.ctaOp }};transform:translateY({{ p.ctaY }});pointer-events:{{ p.ctaPE }};transition:opacity .4s {{ p.ctaDelay }},transform .6s cubic-bezier(.2,.7,0,1) {{ p.ctaDelay }}">
+                    <button onClick="{{ p.onContact }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0;border:0;background:none;color:#EFE6D2;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap" style-hover="color:#FFFFFF"><span style="flex:none;width:8px;height:8px;border-radius:50%;background:#A64B36"></span>{{ p.contactLabel }}</button>
+                    <button onClick="{{ p.onOpen }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:0;border-radius:20px;background:#EFE6D2;color:#292D29;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;transition:background .3s" style-hover="background:#FFFFFF">Anúncio completo <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+                  </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;padding-top:16px">
+                  <h4 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ p.bairroSize }};line-height:1;letter-spacing:.01em">{{ p.bairroUp }}</h4>
+                  <div style="display:flex;flex-wrap:wrap;gap:4px 12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.72">
+                    <sc-for list="{{ p.specs }}" as="sp" hint-placeholder-count="4"><span style="white-space:nowrap">{{ sp }}</span></sc-for>
+                  </div>
+                </div>
+                <div style="margin-top:8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ p.priceSize }};line-height:1;letter-spacing:.01em">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px;letter-spacing:.06em">{{ p.per }}</span></div>
+                <p style="margin:8px 0 0;max-width:60ch;font-size:14px;line-height:1.5;opacity:.78;text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:{{ p.descLines }};-webkit-box-orient:vertical;overflow:hidden">{{ p.short }}</p>
+              </article>
+            </sc-for>
+          </div>
+          <div style="position:relative;height:2px;margin-top:24px;background:rgba(41,45,41,.12)">
+            <span ref="{{ b.progRef }}" style="position:absolute;left:0;top:0;bottom:0;width:100%;background:#292D29;transform-origin:left;transform:scaleX(.3);transition:transform .2s"></span>
+          </div>
+        </div>
+      </sc-for>
+
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:64px 0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;border-bottom:1px solid rgba(41,45,41,.28)">
+          <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:44px;line-height:.9">NENHUM IMÓVEL COM ESSES FILTROS.</span>
+          <span style="font-size:15px;opacity:.78">{{ emptyHint }}</span>
+          <button onClick="{{ clearFilters }}" style="height:48px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500">Limpar filtros</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ false }}">
+        <div ref="{{ R.saved }}" style="margin-top:clamp(64px,9vh,96px)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
+            <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 16px">
+              <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(32px,3.4vw,48px);line-height:.85">SALVOS</h3>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.62">{{ savedLabel }}</span>
+            </div>
+            <button onClick="{{ clearSaved }}" style="height:40px;padding:0;border:0;background:none;cursor:pointer;font-size:13px;font-weight:500;text-decoration:underline;text-underline-offset:4px">Limpar salvos</button>
+          </div>
+          <div style="display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * clamp(24px,4vw,64px));padding:24px clamp(24px,4vw,64px) 8px">
+            <sc-for list="{{ saved }}" as="p" hint-placeholder-count="0">
+              <article style="position:relative;flex:0 0 clamp(248px,20vw,304px);height:208px;overflow:hidden;background:#292D29">
+                <image-slot id="{{ p.slotId }}" shape="rect" placeholder="{{ p.placeholder }}"></image-slot>
+                <div onClick="{{ p.onOpen }}" style="position:absolute;inset:0;cursor:pointer;background:linear-gradient(180deg,rgba(22,22,19,0) 32%,rgba(22,22,19,.84) 100%)"></div>
+                <div style="position:absolute;left:16px;right:16px;bottom:16px;display:flex;flex-direction:column;gap:4px;color:#EFE6D2;pointer-events:none">
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;opacity:.8">{{ p.code }} · {{ p.tipoUp }}</span>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;line-height:1"><span>{{ p.bairroUp }}</span><span style="white-space:nowrap">{{ p.priceFmt }}</span></div>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;opacity:.8">{{ p.specLine }}</span>
+                </div>
+                <button onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
+                        <span style="position:relative;display:block;width:12px;height:16px;background:{{ p.favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .3s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#3A3832;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ p.favInner }};transition:opacity .3s"></span></span>
+                      </button>
+              </article>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <footer style="position:relative;background:#292D29;color:#DCD1BA;padding:48px clamp(24px,4vw,64px) 36px">
+    <div style="max-width:1640px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="position:relative;display:block;width:26px;height:26px;border:2px solid currentColor"><span style="position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;background:#A64B36"></span></span>
+        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:21px;letter-spacing:.05em">CAPITAL SP IMÓVEIS</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:28px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em">
+        <span>HOME</span><span>SOBRE</span><span>CONTATO</span><span>BLOG</span>
+      </div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.6">© 2026 — SÃO PAULO, SP</span>
+    </div>
+  </footer>
+
+  <div style="position:fixed;inset:0;z-index:90;pointer-events:{{ drawerPE }}">
+    <div onClick="{{ closeDrawer }}" style="position:absolute;inset:0;background:rgba(26,25,22,.55);opacity:{{ drawerOp }};transition:opacity .5s"></div>
+    <aside ref="{{ R.drawer }}" style="position:absolute;top:0;right:0;bottom:0;width:min(640px,100vw);overflow:auto;background:#E3D8C2;box-shadow:-40px 0 120px -40px rgba(26,25,22,.55);transform:translateX({{ drawerX }});transition:transform .7s cubic-bezier(.2,.7,0,1)">
+      <sc-if value="{{ hasDrawer }}" hint-placeholder-val="{{ false }}">
+        <div style="position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:16px;height:64px;padding:0 32px;background:rgba(227,216,194,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em">
+          <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ dr.code }} · {{ dr.modeLabel }} · {{ dr.tipoUp }}</span>
+          <div style="display:flex;align-items:center;gap:24px;flex:none">
+            <button onClick="{{ dr.onFav }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0;border:0;background:none;cursor:pointer;font:inherit;letter-spacing:inherit">
+              <span style="position:relative;display:block;width:10px;height:14px;background:{{ dr.favIcon }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .3s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#E3D8C2;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ dr.favInner }};transition:opacity .3s"></span></span>{{ dr.favText }}
+            </button>
+            <button onClick="{{ closeDrawer }}" style="height:40px;padding:0;border:0;background:none;cursor:pointer;font:inherit;letter-spacing:inherit">FECHAR ×</button>
+          </div>
+        </div>
+        <div style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#CFC4AC">
+          <sc-for list="{{ dr.photos }}" as="ph" hint-placeholder-count="0">
+            <div style="position:absolute;inset:0;opacity:{{ ph.op }};transform:scale({{ ph.scale }});pointer-events:{{ ph.pe }};transition:opacity .7s cubic-bezier(.2,.7,0,1),transform 1.2s cubic-bezier(.2,.7,0,1)">
+              <image-slot id="{{ ph.id }}" shape="rect" placeholder="{{ ph.placeholder }}"></image-slot>
+            </div>
+          </sc-for>
+          <div style="position:absolute;right:16px;bottom:16px;display:flex;align-items:center;gap:4px;padding:4px;border-radius:12px;background:rgba(26,25,22,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#EFE6D2">
+            <button onClick="{{ prevPhoto }}" aria-label="Foto anterior" style="width:40px;height:40px;border:0;border-radius:8px;background:transparent;color:inherit;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s" style-hover="background:rgba(239,230,210,.14)">←</button>
+            <span style="min-width:56px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em">{{ dr.counter }}</span>
+            <button onClick="{{ nextPhoto }}" aria-label="Próxima foto" style="width:40px;height:40px;border:0;border-radius:8px;background:transparent;color:inherit;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s" style-hover="background:rgba(239,230,210,.14)">→</button>
+          </div>
+        </div>
+        <div style="padding:32px 32px 64px;display:flex;flex-direction:column">
+          <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:56px;line-height:.86">{{ dr.bairroUp }}</h3>
+          <span style="margin-top:8px;font-size:15px;opacity:.75">{{ dr.rua }} — São Paulo, SP</span>
+          <span style="margin-top:24px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:44px;line-height:1">{{ dr.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:13px">{{ dr.per }}</span></span>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:24px;padding:16px 0;border-top:1px solid rgba(41,45,41,.25);border-bottom:1px solid rgba(41,45,41,.25)">
+            <sc-for list="{{ dr.cells }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:700;font-size:22px;line-height:1;white-space:nowrap">{{ c.v }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ c.l }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="margin-top:32px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">DESCRIÇÃO</span>
+          <p style="margin:8px 0 0;font-size:16px;line-height:1.6;text-wrap:pretty">{{ dr.desc }}</p>
+          <span style="margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">CARACTERÍSTICAS</span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+            <sc-for list="{{ dr.feats }}" as="f" hint-placeholder-count="2">
+              <span style="height:32px;display:flex;align-items:center;padding:0 12px;border-radius:8px;background:rgba(41,45,41,.07);font-size:13px">{{ f }}</span>
+            </sc-for>
+          </div>
+          <div ref="{{ R.contact }}" style="margin-top:48px;padding-top:24px;border-top:2px solid #292D29;display:flex;flex-direction:column;gap:8px">
+            <h4 style="margin:0 0 8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:32px;line-height:.95">FALAR COM O CORRETOR</h4>
+            <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+              <input value="{{ cName }}" onChange="{{ onCName }}" placeholder="Nome" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
+              <input value="{{ cInfo }}" onChange="{{ onCInfo }}" placeholder="Telefone ou e-mail" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
+              <textarea value="{{ cMsg }}" onChange="{{ onCMsg }}" rows="3" style="padding:16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;resize:vertical;font-size:15px;line-height:1.5;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29"></textarea>
+              <button onClick="{{ sendContact }}" style="align-self:flex-start;display:flex;align-items:center;gap:16px;height:48px;margin-top:8px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;transition:background .3s" style-hover="background:#3B403B">Enviar mensagem <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            </sc-if>
+            <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:flex-start;gap:16px;padding:16px;border-radius:10px;background:rgba(41,45,41,.07);font-size:15px;line-height:1.5">
+                <span style="flex:none;width:12px;height:7px;margin-top:6px;border-left:1.5px solid #292D29;border-bottom:1.5px solid #292D29;transform:rotate(-45deg)"></span>
+                <span>{{ sentLine }}</span>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </aside>
+  </div>
+
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div ref="{{ R.mnav }}" style="position:fixed;left:50%;bottom:16px;z-index:60;display:flex;gap:4px;padding:4px;border-radius:16px;background:rgba(236,228,210,.76);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,252,242,.6);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 48px -20px rgba(30,32,28,.45);transform:translate(-50%,120px);opacity:0;pointer-events:none;transition:transform .6s cubic-bezier(.2,.7,0,1),opacity .4s">
+      <button onClick="{{ mnavSearch }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500"><span style="position:relative;display:block;flex:none;width:18px;height:17px"><span style="position:absolute;left:3px;top:2px;width:12px;height:12px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span><span style="position:absolute;left:3.5px;top:8px;width:11px;height:9px;border:1.5px solid currentColor;border-top:0"></span><span style="position:absolute;left:7.5px;top:12px;width:3px;height:5px;background:currentColor"></span></span>Buscar</button>
+      <button onClick="{{ mnavFilters }}" style="position:relative;display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:transparent;cursor:pointer;font-size:14px;font-weight:500">
+        <span style="display:flex;flex-direction:column;gap:5px;width:17px">
+          <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:1px;width:6px;height:6px;background:#E9E1CD;border:1.5px solid #292D29"></span></span>
+          <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:9px;width:6px;height:6px;background:#E9E1CD;border:1.5px solid #292D29"></span></span>
+          <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:4px;width:6px;height:6px;background:#E9E1CD;border:1.5px solid #292D29"></span></span>
+        </span>Filtros
+      </button>
+      <button onClick="{{ mnavSaved }}" aria-label="Salvos" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px">
+        <span style="position:relative;display:block;width:12px;height:16px;background:{{ mnavFavFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#E9E1CD;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ mnavFavInner }}"></span></span>{{ savedCount }}
+      </button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ mobileMenu }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:80;background:#C9BEA8;display:flex;flex-direction:column;padding:24px 20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;height:44px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">
+        <span>CAPITAL SP — MENU</span>
+        <button onClick="{{ closeMenu }}" style="height:44px;padding:0;border:0;background:none;cursor:pointer;font:inherit;letter-spacing:inherit">FECHAR ×</button>
+      </div>
+      <nav style="margin-top:auto;display:flex;flex-direction:column;border-top:2px solid #292D29">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+          <a href="#" onClick="{{ item.onClick }}" style="display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(41,45,41,.28);color:#292D29">
+            <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:64px;line-height:.85">{{ item.labelUp }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">{{ item.n }}</span>
+          </a>
+        </sc-for>
+      </nav>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;revealStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Máscara vertical&quot;,&quot;Dissolução radial&quot;],&quot;default&quot;:&quot;Máscara vertical&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;titleMotion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Pilares escalonados&quot;,&quot;Bloco único&quot;],&quot;default&quot;:&quot;Pilares escalonados&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+class Component extends DCLogic {
+  FOTOS = {"csp-institucional":{"s":"fotos/copan-looking-up-c48fb1.jpg","c":"Foto: Boaventuravinicius · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Copan_Looking_UP.jpg"},"csp-v2-csp-0301":{"s":"fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg","c":"Foto: JessNantes · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_de_Vidro,_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg"},"csp-v2-csp-0301-2":{"s":"fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg","c":"Foto: Arthurit · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG"},"csp-v2-csp-0301-3":{"s":"fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0301-4":{"s":"fotos/escadaria-da-casa-de-vidro-de-lina-bo-ba-2673e0.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0301-5":{"s":"fotos/living-room-paul-schweiker-house-and-stu-6a7993.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54209407507.jpg"},"csp-v2-csp-0301-6":{"s":"fotos/casa-modernista-rua-bahia-03-f24fb6.jpg","c":"Foto: Marina Marini Balbino · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_-_Rua_Bahia_03.jpg"},"csp-v2-csp-0301-7":{"s":"fotos/casa-modernista-da-rua-bahia-gregori-war-44442b.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg"},"csp-v2-csp-0302":{"s":"fotos/escadaria-da-casa-de-vidro-de-lina-bo-ba-2673e0.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0302-2":{"s":"fotos/living-room-paul-schweiker-house-and-stu-6a7993.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54209407507.jpg"},"csp-v2-csp-0302-3":{"s":"fotos/casa-modernista-rua-bahia-03-f24fb6.jpg","c":"Foto: Marina Marini Balbino · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_-_Rua_Bahia_03.jpg"},"csp-v2-csp-0303":{"s":"fotos/casa-modernista-da-rua-bahia-gregori-war-44442b.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg"},"csp-v2-csp-0303-2":{"s":"fotos/interior-of-camille-pissarro-s-studio-at-654b2e.jpg","c":"Foto: AlexDS05 · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg"},"csp-v2-csp-0303-3":{"s":"fotos/casa-modernista-da-rua-it-polis-gregori--db0a5a.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg"},"csp-v2-csp-0304":{"s":"fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg"},"csp-v2-csp-0304-2":{"s":"fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg","c":"Foto: JessNantes · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_de_Vidro,_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg"},"csp-v2-csp-0304-3":{"s":"fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg","c":"Foto: Arthurit · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG"},"csp-v2-csp-0305":{"s":"fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0305-2":{"s":"fotos/escadaria-da-casa-de-vidro-de-lina-bo-ba-2673e0.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0305-3":{"s":"fotos/living-room-paul-schweiker-house-and-stu-6a7993.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54209407507.jpg"},"csp-v2-csp-0306":{"s":"fotos/casa-modernista-rua-bahia-03-f24fb6.jpg","c":"Foto: Marina Marini Balbino · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_-_Rua_Bahia_03.jpg"},"csp-v2-csp-0306-2":{"s":"fotos/casa-modernista-da-rua-bahia-gregori-war-44442b.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_04.jpg"},"csp-v2-csp-0306-3":{"s":"fotos/interior-of-camille-pissarro-s-studio-at-654b2e.jpg","c":"Foto: AlexDS05 · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_of_Camille_Pissarro_s_studio_at_%C3%89ragny-sur-Epte_-_2026.jpg"},"csp-v2-csp-0307":{"s":"fotos/casa-modernista-da-rua-it-polis-gregori--db0a5a.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_It%C3%A1polis_-_Gregori_Warchavchik_01.jpg"},"csp-v2-csp-0307-2":{"s":"fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg","c":"Foto: Dianarchitect · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_Modernista_da_Rua_Bahia_-_Gregori_Warchavchik_02.jpg"},"csp-v2-csp-0307-3":{"s":"fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg","c":"Foto: JessNantes · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Casa_de_Vidro,_sede_do_Instituto_Lina_Bo_e_P._M._Bardi.jpg"},"csp-v2-csp-0308":{"s":"fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg","c":"Foto: Arthurit · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Paulo_Mendes_da_Rocha_-_Casa_Butant%C3%A3.JPG"},"csp-v2-csp-0308-2":{"s":"fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0308-3":{"s":"fotos/escadaria-da-casa-de-vidro-de-lina-bo-ba-2673e0.jpg","c":"Foto: Igor Marotti · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escadaria_da_Casa_de_Vidro_de_Lina_Bo_Bardi.jpg"},"csp-v2-csp-0311":{"s":"fotos/parque-residencial-sav-ia-3-d6104d.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_3.jpg"},"csp-v2-csp-0311-2":{"s":"fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:John_R_Street,_Brush_Park,_Midtown,_Detroit,_MI_-_53013871196.jpg"},"csp-v2-csp-0311-3":{"s":"fotos/parque-residencial-sav-ia-2-477baf.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_2.jpg"},"csp-v2-csp-0312":{"s":"fotos/2916-2924-n-street-nw-227882.jpg","c":"Foto: APK · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:2916-2924_N_Street_NW.jpg"},"csp-v2-csp-0312-2":{"s":"fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg","c":"Foto: Sara Yaqoob Siddiqui (s.Y.s) · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_staircase_railing_-_Mukhi_Mahal.jpg"},"csp-v2-csp-0312-3":{"s":"fotos/parque-residencial-sav-ia-5-8e1395.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_5.jpg"},"csp-v2-csp-0313":{"s":"fotos/colorful-row-of-houses-981837.jpg","c":"Foto: Wonderlane from Seattle, USA · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Colorful_row_of_houses.jpg"},"csp-v2-csp-0313-2":{"s":"fotos/rainbow-row-east-bay-street-south-of-bro-c51c42.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Rainbow_Row,_East_Bay_Street,_South_of_Broad,_Charleston,_SC.jpg"},"csp-v2-csp-0313-3":{"s":"fotos/parque-residencial-sav-ia-7-700195.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_7.jpg"},"csp-v2-csp-0314":{"s":"fotos/parque-residencial-sav-ia-3-d6104d.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_3.jpg"},"csp-v2-csp-0314-2":{"s":"fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:John_R_Street,_Brush_Park,_Midtown,_Detroit,_MI_-_53013871196.jpg"},"csp-v2-csp-0314-3":{"s":"fotos/parque-residencial-sav-ia-2-477baf.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_2.jpg"},"csp-v2-csp-0315":{"s":"fotos/2916-2924-n-street-nw-227882.jpg","c":"Foto: APK · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:2916-2924_N_Street_NW.jpg"},"csp-v2-csp-0315-2":{"s":"fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg","c":"Foto: Sara Yaqoob Siddiqui (s.Y.s) · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_staircase_railing_-_Mukhi_Mahal.jpg"},"csp-v2-csp-0315-3":{"s":"fotos/parque-residencial-sav-ia-5-8e1395.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_5.jpg"},"csp-v2-csp-0315-4":{"s":"fotos/colorful-row-of-houses-981837.jpg","c":"Foto: Wonderlane from Seattle, USA · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Colorful_row_of_houses.jpg"},"csp-v2-csp-0316":{"s":"fotos/colorful-row-of-houses-981837.jpg","c":"Foto: Wonderlane from Seattle, USA · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Colorful_row_of_houses.jpg"},"csp-v2-csp-0316-2":{"s":"fotos/rainbow-row-east-bay-street-south-of-bro-c51c42.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Rainbow_Row,_East_Bay_Street,_South_of_Broad,_Charleston,_SC.jpg"},"csp-v2-csp-0316-3":{"s":"fotos/parque-residencial-sav-ia-7-700195.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_7.jpg"},"csp-v2-csp-0317":{"s":"fotos/parque-residencial-sav-ia-3-d6104d.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_3.jpg"},"csp-v2-csp-0317-2":{"s":"fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:John_R_Street,_Brush_Park,_Midtown,_Detroit,_MI_-_53013871196.jpg"},"csp-v2-csp-0317-3":{"s":"fotos/parque-residencial-sav-ia-2-477baf.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_2.jpg"},"csp-v2-csp-0318":{"s":"fotos/2916-2924-n-street-nw-227882.jpg","c":"Foto: APK · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:2916-2924_N_Street_NW.jpg"},"csp-v2-csp-0318-2":{"s":"fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg","c":"Foto: Sara Yaqoob Siddiqui (s.Y.s) · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_staircase_railing_-_Mukhi_Mahal.jpg"},"csp-v2-csp-0318-3":{"s":"fotos/parque-residencial-sav-ia-5-8e1395.jpg","c":"Foto: Paulo S. Higa · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Parque_Residencial_Sav%C3%B3ia_5.jpg"},"csp-v2-csp-0321":{"s":"fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0321-2":{"s":"fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg"},"csp-v2-csp-0321-3":{"s":"fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0321-4":{"s":"fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0321-5":{"s":"fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg"},"csp-v2-csp-0321-6":{"s":"fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg"},"csp-v2-csp-0321-7":{"s":"fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:This_cozy_kitchen_showcases_modern_design_elements.jpg"},"csp-v2-csp-0321-8":{"s":"fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg","c":"Foto: David from Colorado Springs, United  · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Atlanta_24-27_Feb_2010_(4399677164).jpg"},"csp-v2-csp-0322":{"s":"fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0322-2":{"s":"fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg"},"csp-v2-csp-0322-3":{"s":"fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg"},"csp-v2-csp-0323":{"s":"fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:This_cozy_kitchen_showcases_modern_design_elements.jpg"},"csp-v2-csp-0323-2":{"s":"fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg","c":"Foto: David from Colorado Springs, United  · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Atlanta_24-27_Feb_2010_(4399677164).jpg"},"csp-v2-csp-0323-3":{"s":"fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0324":{"s":"fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54210548534.jpg"},"csp-v2-csp-0324-2":{"s":"fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0324-3":{"s":"fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg"},"csp-v2-csp-0325":{"s":"fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0325-2":{"s":"fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0325-3":{"s":"fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_dining_area_with_stylish_table_and_chairs_in_cozy_interior_design.jpg"},"csp-v2-csp-0326":{"s":"fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_in_a_simple_home_setting_showing_light_colors_and_minimal_decor.jpg"},"csp-v2-csp-0326-2":{"s":"fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:This_cozy_kitchen_showcases_modern_design_elements.jpg"},"csp-v2-csp-0326-3":{"s":"fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg","c":"Foto: David from Colorado Springs, United  · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Atlanta_24-27_Feb_2010_(4399677164).jpg"},"csp-v2-csp-0327":{"s":"fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL.jpg"},"csp-v2-csp-0327-2":{"s":"fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg","c":"Foto: w_lemay · CC BY-SA 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Living_Room,_Paul_Schweiker_House_and_Studio,_Meacham_Road,_Schaumburg,_IL_-_54210548534.jpg"},"csp-v2-csp-0327-3":{"s":"fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0328":{"s":"fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_kitchen_and_dining_area_with_stylish_furnishings_and_natural_light_in_a_contemporary_home_setting.jpg"},"csp-v2-csp-0328-2":{"s":"fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_luxury_living_room_with_kitchen_interior.jpg"},"csp-v2-csp-0328-3":{"s":"fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg","c":"Foto: Shixart1985 · CC BY 2.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Modern_bedroom_design_in_a_stylish_hotel_room_featuring_geometric_patterns_and_soft_linens.jpg"},"csp-v2-csp-0331":{"s":"fotos/conjunto-nacional-em-31-de-julho-de-2025-9f5c5e.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Conjunto_Nacional_em_31_de_julho_de_2025.jpg"},"csp-v2-csp-0331-2":{"s":"fotos/escrit-rio-virtual-ac68d0.jpg","c":"Foto: Cascais Virtual Office · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escrit%C3%B3rio_Virtual.jpg"},"csp-v2-csp-0331-3":{"s":"fotos/c4di-interior-coworking-space-2025-803799.jpg","c":"Foto: Influence Media · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:C4DI_interior_coworking_space_2025.jpg"},"csp-v2-csp-0332":{"s":"fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg","c":"Foto: Apesito.nomas · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1,_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg"},"csp-v2-csp-0332-2":{"s":"fotos/winplace-coworking-space-22730c.jpg","c":"Foto: Nguyendinhtruong2020 · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Winplace-coworking-space.jpg"},"csp-v2-csp-0332-3":{"s":"fotos/openspace-wao-coworking-f9666a.jpg","c":"Foto: WAO Coworking · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Openspace_wao_coworking.jpg"},"csp-v2-csp-0333":{"s":"fotos/exterior-view-of-the-glass-fronted-ascen-d4f388.jpg","c":"Foto: OathOn · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre,_Chatham,_Kent,_England_-_13_October_2025.jpg"},"csp-v2-csp-0333-2":{"s":"fotos/work-wall-espace-de-coworking-neyron-jui-efae79.jpg","c":"Foto: Benoît Prieur · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Work_%26_Wall,_espace_de_coworking_%C3%A0_Neyron_(juillet_2021).jpg"},"csp-v2-csp-0333-3":{"s":"fotos/vista-lateral-do-conjunto-nacional-em-20-391830.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg"},"csp-v2-csp-0334":{"s":"fotos/communal-coworking-interior-unsplash-f2068a.jpg","c":"Foto: Dan Gold danielcgold · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Communal_Coworking_interior_(Unsplash).jpg"},"csp-v2-csp-0334-2":{"s":"fotos/tsohue-coworking-1f-80a2b1.jpg","c":"Foto: Rubiyj · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Tsohue_coworking_1F.jpg"},"csp-v2-csp-0334-3":{"s":"fotos/conjunto-nacional-em-31-de-julho-de-2025-9f5c5e.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Conjunto_Nacional_em_31_de_julho_de_2025.jpg"},"csp-v2-csp-0335":{"s":"fotos/escrit-rio-virtual-ac68d0.jpg","c":"Foto: Cascais Virtual Office · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escrit%C3%B3rio_Virtual.jpg"},"csp-v2-csp-0335-2":{"s":"fotos/c4di-interior-coworking-space-2025-803799.jpg","c":"Foto: Influence Media · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:C4DI_interior_coworking_space_2025.jpg"},"csp-v2-csp-0335-3":{"s":"fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg","c":"Foto: Apesito.nomas · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Interior_de_galp%C3%A3o_do_Cais_Mau%C3%A1,_em_Porto_Alegrem_com_as_marcas_da_enchente_de_2024.jpg"},"csp-v2-csp-0335-4":{"s":"fotos/winplace-coworking-space-22730c.jpg","c":"Foto: Nguyendinhtruong2020 · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Winplace-coworking-space.jpg"},"csp-v2-csp-0335-5":{"s":"fotos/openspace-wao-coworking-f9666a.jpg","c":"Foto: WAO Coworking · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Openspace_wao_coworking.jpg"},"csp-v2-csp-0336":{"s":"fotos/winplace-coworking-space-22730c.jpg","c":"Foto: Nguyendinhtruong2020 · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Winplace-coworking-space.jpg"},"csp-v2-csp-0336-2":{"s":"fotos/openspace-wao-coworking-f9666a.jpg","c":"Foto: WAO Coworking · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Openspace_wao_coworking.jpg"},"csp-v2-csp-0336-3":{"s":"fotos/exterior-view-of-the-glass-fronted-ascen-d4f388.jpg","c":"Foto: OathOn · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Exterior_view_of_the_glass-fronted_Ascend_Coworking_space_on_the_first_floor_of_the_Pentagon_Shopping_Centre,_Chatham,_Kent,_England_-_13_October_2025.jpg"},"csp-v2-csp-0337":{"s":"fotos/work-wall-espace-de-coworking-neyron-jui-efae79.jpg","c":"Foto: Benoît Prieur · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Work_%26_Wall,_espace_de_coworking_%C3%A0_Neyron_(juillet_2021).jpg"},"csp-v2-csp-0337-2":{"s":"fotos/vista-lateral-do-conjunto-nacional-em-20-391830.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Vista_Lateral_do_Conjunto_Nacional_em_2025.jpg"},"csp-v2-csp-0337-3":{"s":"fotos/communal-coworking-interior-unsplash-f2068a.jpg","c":"Foto: Dan Gold danielcgold · CC0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Communal_Coworking_interior_(Unsplash).jpg"},"csp-v2-csp-0338":{"s":"fotos/tsohue-coworking-1f-80a2b1.jpg","c":"Foto: Rubiyj · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Tsohue_coworking_1F.jpg"},"csp-v2-csp-0338-2":{"s":"fotos/conjunto-nacional-em-31-de-julho-de-2025-9f5c5e.jpg","c":"Foto: Boaventuravinicius · CC BY 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Conjunto_Nacional_em_31_de_julho_de_2025.jpg"},"csp-v2-csp-0338-3":{"s":"fotos/escrit-rio-virtual-ac68d0.jpg","c":"Foto: Cascais Virtual Office · CC BY-SA 4.0 · Wikimedia Commons","h":"https://commons.wikimedia.org/wiki/File:Escrit%C3%B3rio_Virtual.jpg"}};
+  D = (() => {
+    const raw = [
+      ['CSP-0301','comprar','Casa térrea','Alto de Pinheiros','Av. Prof. Fonseca Rodrigues',320,4,4,4850000,0,'Quintal|Vista livre','Casa térrea modernista em lote de esquina, com estrutura em concreto aparente e caixilhos de piso a teto voltados para o jardim. Quatro suítes, living integrado com pé-direito duplo e edícula independente nos fundos.'],
+      ['CSP-0302','comprar','Casa térrea','Vila Mariana','R. Joaquim Távora',180,3,2,1890000,0,'Quintal|Perto do metrô|Pet friendly','Térrea reformada em rua arborizada, a poucos minutos do metrô. Planta linear com sala de jantar aberta para o quintal, três dormitórios sendo uma suíte e cozinha com bancada em granito polido.'],
+      ['CSP-0303','comprar','Casa térrea','Butantã','R. Corinto',210,3,3,1450000,450,'Quintal|Portaria 24h','Casa em vila residencial fechada, com laje plana e cobertura aproveitável. Ambientes amplos, iluminação zenital no corredor central e garagem coberta para três carros.'],
+      ['CSP-0304','comprar','Casa térrea','Planalto Paulista','Al. dos Anapurus',260,4,3,2700000,0,'Quintal|Pet friendly','Projeto dos anos 1970 preservado, com brises de concreto na fachada e pátio interno. Quatro dormitórios, escritório independente e área gourmet coberta voltada para o jardim.'],
+      ['CSP-0305','alugar','Casa térrea','Brooklin','R. Princesa Isabel',200,3,2,9500,0,'Quintal|Pet friendly','Térrea em rua residencial tranquila, com recuo frontal ajardinado. Três dormitórios, sala em dois ambientes e quintal pavimentado nos fundos com churrasqueira.'],
+      ['CSP-0306','alugar','Casa térrea','Vila Madalena','R. Fradique Coutinho',150,2,1,7800,0,'Quintal|Perto do metrô','Casa térrea compacta com estrutura aparente e piso de cimento queimado. Dois dormitórios, cozinha aberta para a sala e pequeno pátio com jardim vertical.'],
+      ['CSP-0307','alugar','Casa térrea','Pacaembu','R. Itápolis',380,4,4,22000,0,'Quintal|Vista livre|Pet friendly','Residência térrea em terreno amplo, com grandes panos de vidro e beirais profundos. Quatro suítes, biblioteca e garagem para quatro carros. Contrato com garantia flexível.'],
+      ['CSP-0308','alugar','Casa térrea','Saúde','R. Luís Góis',170,3,2,6400,0,'Quintal|Perto do metrô','Térrea bem conservada próxima à estação Saúde do metrô. Três dormitórios, sala ampla com acesso ao quintal e garagem coberta para dois carros.'],
+      ['CSP-0311','comprar','Sobrado','Perdizes','R. Ministro Godói',240,4,3,3250000,0,'Varanda|Vista livre|Pet friendly','Sobrado em rua de declive suave, com volume superior em concreto e térreo envidraçado. Quatro dormitórios, sendo duas suítes, terraço com vista para o bairro e garagem para três carros.'],
+      ['CSP-0312','comprar','Sobrado','Vila Romana','R. Coriolano',165,3,2,1590000,0,'Quintal|Pet friendly','Sobrado geminado totalmente reformado, com escada metálica e iluminação natural em todos os ambientes. Três dormitórios, home office no mezanino e quintal com deck de madeira.'],
+      ['CSP-0313','comprar','Sobrado','Moema','Al. dos Nhambiquaras',230,3,3,2980000,0,'Varanda|Quintal','Sobrado de linhas retas a quatro quadras do Parque Ibirapuera. Três suítes, living com lareira e terraço superior com jardim. Acabamentos em madeira e pedra natural.'],
+      ['CSP-0314','comprar','Sobrado','Ipiranga','R. Bom Pastor',190,3,2,1120000,0,'Quintal','Sobrado amplo próximo ao Museu do Ipiranga, com fachada restaurada e esquadrias originais. Três dormitórios, sala de jantar independente e edícula com lavanderia.'],
+      ['CSP-0315','alugar','Sobrado','Pompeia','R. Tavares Bastos',180,3,2,8200,0,'Varanda|Pet friendly','Sobrado com fachada em tijolo aparente em rua residencial da Pompeia. Três dormitórios, sala com pé-direito alto e terraço coberto nos fundos.'],
+      ['CSP-0316','alugar','Sobrado','Tatuapé','R. Itapura',200,3,3,6900,850,'Portaria 24h|Varanda','Sobrado moderno em condomínio de quatro casas, com portaria e segurança. Três suítes, área gourmet integrada e garagem para três carros.'],
+      ['CSP-0317','alugar','Sobrado','Aclimação','R. Pires da Mota',210,4,2,9900,0,'Quintal|Pet friendly','Sobrado clássico a poucos passos do Parque da Aclimação. Quatro dormitórios, escritório no térreo e quintal sombreado. Ideal para família ou uso misto.'],
+      ['CSP-0318','alugar','Sobrado','Vila Clementino','R. Botucatu',160,3,2,7400,0,'Perto do metrô|Vista livre','Sobrado bem iluminado próximo ao metrô Santa Cruz e aos hospitais da região. Três dormitórios, sala em L e terraço com vista desobstruída.'],
+      ['CSP-0321','comprar','Apartamento','Pinheiros','R. dos Pinheiros',92,2,1,1380000,1150,'Varanda|Perto do metrô','Apartamento em edifício contemporâneo de fachada em concreto e vidro, a duas quadras do metrô Fradique Coutinho. Planta integrada, varanda com fechamento em vidro e duas suítes.'],
+      ['CSP-0322','comprar','Apartamento','Higienópolis','Av. Higienópolis',210,3,3,3900000,3800,'Vista livre|Varanda|Portaria 24h','Cobertura em edifício modernista dos anos 1950, com pilotis e jardins. Três suítes, salão com piso de taco original e terraço com vista livre para a cidade.'],
+      ['CSP-0323','comprar','Apartamento','Consolação','R. Augusta',58,1,1,720000,650,'Academia|Perto do metrô','Unidade compacta em edifício recente, com academia e lavanderia coletiva. Dormitório com armários planejados, cozinha americana e janelas amplas voltadas para o leste.'],
+      ['CSP-0324','comprar','Apartamento','Brooklin','R. Barão do Triunfo',116,3,2,1720000,1400,'Academia|Varanda|Portaria 24h','Apartamento em andar alto com três dormitórios, sendo uma suíte, e varanda gourmet. Condomínio com academia, salão de festas e portaria 24 horas.'],
+      ['CSP-0325','alugar','Apartamento','Bela Vista','R. Treze de Maio',64,2,1,4300,780,'Pet friendly|Perto do metrô','Apartamento em edifício de 1960 com elevadores reformados, no coração do Bixiga. Dois dormitórios, sala com janela de canto e piso de tacos restaurado.'],
+      ['CSP-0326','alugar','Apartamento','Pinheiros','R. Cardeal Arcoverde',88,2,1,7200,1100,'Varanda|Pet friendly','Apartamento em prédio boutique com apenas duas unidades por andar. Duas suítes, varanda integrada à sala e vaga coberta. Aceita animais de estimação.'],
+      ['CSP-0327','alugar','Apartamento','República','Av. Ipiranga',34,1,0,3200,620,'Mobiliado|Perto do metrô|Vista livre','Studio mobiliado em edifício icônico do centro, com vista para o skyline. Cozinha equipada, armários sob medida e acesso direto a duas linhas de metrô.'],
+      ['CSP-0328','alugar','Apartamento','Vila Mariana','R. Domingos de Morais',148,3,2,14500,2100,'Vista livre|Academia|Varanda','Cobertura duplex com terraço, deck e vista livre para o Ibirapuera ao longe. Três dormitórios, academia no condomínio e duas vagas cobertas.'],
+      ['CSP-0331','comprar','Comercial','Itaim Bibi','R. Joaquim Floriano',120,0,3,2650000,2900,'Portaria 24h|Perto do metrô','Conjunto comercial em edifício corporativo certificado, com planta livre e piso elevado. Três vagas, recepção 24 horas e acesso rápido à Av. Brigadeiro Faria Lima.'],
+      ['CSP-0332','comprar','Comercial','Barra Funda','R. Barra Funda',640,0,6,4200000,0,'Perto do metrô','Galpão de estrutura metálica com pé-direito de nove metros e cobertura em sheds. Mezanino administrativo, docas de carga e ótima conexão com as marginais.'],
+      ['CSP-0333','comprar','Comercial','Vila Olímpia','R. Funchal',380,0,8,6900000,6200,'Vista livre|Portaria 24h','Laje corporativa inteira com fachada em pele de vidro e vista para o Rio Pinheiros. Ar-condicionado central, gerador e oito vagas privativas.'],
+      ['CSP-0334','comprar','Comercial','República','R. Barão de Itapetininga',95,0,0,890000,450,'Perto do metrô','Loja de rua em galeria histórica do centro, com vitrine dupla e mezanino. Alto fluxo de pedestres e proximidade com o Theatro Municipal.'],
+      ['CSP-0335','alugar','Comercial','Jardim Paulista','Al. Santos',85,0,1,9800,1900,'Portaria 24h|Perto do metrô','Sala comercial a uma quadra da Avenida Paulista, pronta para uso. Duas salas privativas, copa e banheiro. Edifício com controle de acesso e portaria 24 horas.'],
+      ['CSP-0336','alugar','Comercial','Pinheiros','Av. Brig. Faria Lima',210,0,4,28000,5400,'Portaria 24h|Vista livre','Conjunto corporativo em edifício de alto padrão na Faria Lima, entregue com forro e iluminação. Quatro vagas, auditório compartilhado e heliponto.'],
+      ['CSP-0337','alugar','Comercial','Santa Cecília','R. Jaguaribe',140,0,0,12500,0,'Perto do metrô','Loja térrea com fachada em vidro e pé-direito duplo, em esquina movimentada. Ideal para café, galeria ou showroom. Sem condomínio.'],
+      ['CSP-0338','alugar','Comercial','Lapa','R. Guaicurus',900,0,4,38000,0,'','Galpão logístico com piso de alta resistência, docas niveladoras e pátio de manobras. Escritórios no mezanino e acesso imediato à Marginal Tietê.']
+    ];
+    return {
+      cats: ['Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'],
+      tipos: ['Todos', 'Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'],
+      feats: ['Quintal', 'Varanda', 'Pet friendly', 'Mobiliado', 'Portaria 24h', 'Academia', 'Perto do metrô', 'Vista livre'],
+      precos: {
+        comprar: [{ l: 'Qualquer' }, { l: 'Até R$ 800 mil', max: 8e5 }, { l: 'Até R$ 1,5 mi', max: 1.5e6 }, { l: 'Até R$ 3 mi', max: 3e6 }, { l: 'Acima de R$ 3 mi', min: 3e6 }],
+        alugar: [{ l: 'Qualquer' }, { l: 'Até R$ 5 mil', max: 5000 }, { l: 'Até R$ 10 mil', max: 10000 }, { l: 'Até R$ 20 mil', max: 20000 }, { l: 'Acima de R$ 20 mil', min: 20000 }]
+      },
+      condos: [{ l: 'Sem condomínio', max: 0 }, { l: 'Até R$ 1 mil', max: 1000 }, { l: 'Até R$ 2 mil', max: 2000 }, { l: 'Até R$ 4 mil', max: 4000 }],
+      data: raw.map(r => ({ code: r[0], mode: r[1], tipo: r[2], bairro: r[3], rua: r[4], area: r[5], dorms: r[6], vagas: r[7], price: r[8], condo: r[9], feats: r[10] ? r[10].split('|') : [], desc: r[11] }))
+    };
+  })();
+  _feat = (() => { const seen = {}; this.D.data.forEach(d => { const k = d.tipo + d.mode; if (!seen[k]) { seen[k] = 1; d.featured = true; } }); })();
+  el = {};
+  letterEls = [];
+  trackEls = {};
+  progEls = {};
+  R = Object.fromEntries(['header', 'headerLine', 'stage', 'photo', 'scrim', 'concrete', 'titleWrap', 'title', 'sub', 'subRule', 'subText', 'heroMeta', 'searchCopy', 'searchFoot', 'endFade', 'dock', 'dockIn', 'glass', 'bar', 'panel', 'catalog', 'noiseA', 'noiseB', 'drawer', 'contact', 'saved', 'mnav'].map(k => [k, el => { this.el[k] = el; }]));
+  letterRefs = Array.from({ length: 10 }, (_, i) => el => { this.letterEls[i] = el; });
+  catRefs = Object.fromEntries(['Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'].map(c => [c, {
+    track: el => { this.trackEls[c] = el; },
+    prog: el => { this.progEls[c] = el; },
+    onScroll: () => this.updProg(c),
+    prev: () => this.slide(c, -1),
+    next: () => this.slide(c, 1)
+  }]));
+  state = {
+    mode: 'comprar', tipo: 0, local: '', preco: 0, menu: null, open: false, settled: false, expanded: false, hShow: false, hOpen: false,
+    areaMin: '', areaMax: '', dorms: null, vagas: null, condo: null, feats: [], sort: 0,
+    isMobile: typeof window !== 'undefined' && window.innerWidth < 760,
+    narrow: typeof window !== 'undefined' && window.innerWidth < 1100,
+    hoverNav: null, hoverCard: null, hoverBtn: false, hoverPill: false, mobileMenu: false,
+    drawer: null, drawerOpen: false, photo: 0,
+    favs: (() => { try { return JSON.parse(localStorage.getItem('csp-favs')) || []; } catch (e) { return []; } })(), cName: '', cInfo: '', cMsg: '', sent: false
+  };
+
+  applyFotos() {
+    document.querySelectorAll('image-slot').forEach(el => {
+      const f = this.FOTOS[el.id];
+      if (f) {
+        if (el.getAttribute('src') !== f.s) {
+          el.setAttribute('src', f.s); el.dataset.auto = '1';
+          if (el.closest('button')) { el.removeAttribute('credit'); el.removeAttribute('credit-href'); }
+          else { el.setAttribute('credit', f.c); el.setAttribute('credit-href', f.h); }
+        }
+      } else if (el.dataset.auto) { el.removeAttribute('src'); el.removeAttribute('credit'); el.removeAttribute('credit-href'); delete el.dataset.auto; }
+    });
+  }
+  componentDidMount() {
+    setTimeout(() => this.applyFotos(), 0);
+    this._prev = Object.assign({}, this.state);
+    this.reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const tex = this.texture();
+    ['noiseA', 'noiseB'].forEach(k => { if (this.el[k]) this.el[k].style.backgroundImage = tex; });
+    this.onScroll = () => { if (!this.raf) this.raf = requestAnimationFrame(() => { this.raf = 0; this.tick(); }); };
+    this.onResize = () => {
+      const m = innerWidth < 760, nr = innerWidth < 1100;
+      if (nr !== this.state.narrow) this.setState({ narrow: nr });
+      if (m !== this.state.isMobile) this.setState({ isMobile: m });
+      else { this.fit(); this.tick(); this.allProg(); }
+    };
+    this.onDown = e => { if (this.state.menu && this.el.glass && !this.el.glass.contains(e.target)) this.setState({ menu: null }); };
+    this.onKey = e => { if (e.key === 'Escape') this.setState({ drawerOpen: false, menu: null }); };
+    addEventListener('scroll', this.onScroll, { passive: true });
+    ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, () => { this.userScrolled = true; }, { passive: true, once: true }));
+    addEventListener('resize', this.onResize);
+    addEventListener('keydown', this.onKey);
+    document.addEventListener('pointerdown', this.onDown);
+    const st = new URLSearchParams(location.search).get('state');
+    this.fit(); this.tick(); this.allProg();
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+      this.fit(); this.tick(); this.allProg();
+      if (st) [60, 400, 1000, 2000].forEach(t => setTimeout(() => { if (!this.userScrolled) this.jump(st); }, t));
+    });
+    if (!st && !this.reduce) this.entrance();
+  }
+  componentWillUnmount() {
+    removeEventListener('scroll', this.onScroll);
+    removeEventListener('resize', this.onResize);
+    removeEventListener('keydown', this.onKey);
+    document.removeEventListener('pointerdown', this.onDown);
+    document.documentElement.style.overflow = '';
+  }
+  componentDidUpdate() {
+    this.applyFotos();
+    const ps = this._prev || this.state;
+    this._prev = Object.assign({}, this.state);
+    if (ps.isMobile !== this.state.isMobile) this.fit();
+    if (ps.drawerOpen !== this.state.drawerOpen) document.documentElement.style.overflow = this.state.drawerOpen ? 'hidden' : '';
+    if (ps.open !== this.state.open) {
+      clearTimeout(this.settleT);
+      if (this.state.open) this.settleT = setTimeout(() => this.setState({ settled: true }), 820);
+      else if (this.state.settled) this.setState({ settled: false });
+    }
+    if (ps.favs !== this.state.favs) { try { localStorage.setItem('csp-favs', JSON.stringify(this.state.favs)); } catch (e) {} }
+    const st = this.state;
+    const sig = [st.mode, st.tipo, st.local, st.preco, st.areaMin, st.areaMax, st.dorms, st.vagas, st.condo, st.feats.join(), st.sort].join('|');
+    if (this._sig && sig !== this._sig && !this.reduce) {
+      Object.values(this.trackEls).forEach(t => t && t.isConnected && [...t.children].forEach((el, i) => el.animate && el.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 560, delay: Math.min(i, 6) * 45, easing: 'cubic-bezier(.2,.7,0,1)', fill: 'backwards' })));
+    }
+    this._sig = sig;
+    this.tick();
+    if (ps.mode !== this.state.mode || ps.sort !== this.state.sort || ps.tipo !== this.state.tipo) {
+      Object.values(this.trackEls).forEach(t => t && t.isConnected && (t.scrollLeft = 0));
+    }
+    this.allProg();
+  }
+
+  texture() {
+    const a = document.createElement('canvas'); a.width = a.height = 256;
+    const x = a.getContext('2d'), img = x.createImageData(256, 256), d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = Math.random(); let v, al;
+      if (r < 0.005) { v = 70; al = 150; } else if (r < 0.011) { v = 252; al = 120; } else { v = 105 + Math.random() * 70; al = Math.random() * 34; }
+      d[i] = v; d[i + 1] = v * 0.97; d[i + 2] = v * 0.88; d[i + 3] = al;
+    }
+    x.putImageData(img, 0, 0);
+    const b = document.createElement('canvas'); b.width = b.height = 720;
+    const y = b.getContext('2d');
+    for (let n = 0; n < 90; n++) {
+      const cx = Math.random() * 720, cy = Math.random() * 720, rad = 30 + Math.random() * 140, dark = Math.random() < 0.55;
+      for (const ox of [-720, 0, 720]) for (const oy of [-720, 0, 720]) {
+        const g = y.createRadialGradient(cx + ox, cy + oy, 0, cx + ox, cy + oy, rad);
+        g.addColorStop(0, dark ? 'rgba(96,84,62,.07)' : 'rgba(255,248,228,.09)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+        y.fillStyle = g; y.fillRect(cx + ox - rad, cy + oy - rad, rad * 2, rad * 2);
+      }
+    }
+    return `url(${a.toDataURL()}), url(${b.toDataURL()})`;
+  }
+
+  fit() {
+    const t = this.el.title, w = this.el.titleWrap; if (!t || !w) return;
+    const cs = getComputedStyle(w);
+    const avail = w.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    t.style.fontSize = '100px';
+    const lines = t.querySelectorAll('[data-line]'); let mw = 0;
+    lines.forEach(l => { mw = Math.max(mw, l.scrollWidth); });
+    if (!mw) return;
+    let fs = 100 * avail / mw;
+    fs = Math.min(fs, innerHeight * 0.4 / (lines.length * 0.8));
+    t.style.fontSize = fs + 'px';
+  }
+
+  updProg(c) {
+    const t = this.trackEls[c], pg = this.progEls[c];
+    if (!t || !pg || !t.isConnected) return;
+    const r = t.scrollWidth <= t.clientWidth + 2 ? 1 : (t.scrollLeft + t.clientWidth) / t.scrollWidth;
+    pg.style.transform = `scaleX(${r})`;
+  }
+  allProg() { Object.keys(this.trackEls).forEach(c => this.updProg(c)); }
+  slide(c, dir) {
+    const t = this.trackEls[c]; if (!t) return;
+    const card = t.firstElementChild;
+    t.scrollBy({ left: dir * ((card ? card.offsetWidth : 360) + 28), behavior: this.reduce ? 'auto' : 'smooth' });
+  }
+
+  targets() {
+    const s = this.el.stage; if (!s) return { search: 0, reveal: 0, catalog: 0 };
+    const range = s.offsetHeight - innerHeight;
+    return { reveal: s.offsetTop + range * 0.72 * 0.42, search: s.offsetTop + range * 0.78, catalog: (this.el.catalog ? this.el.catalog.offsetTop : 0) - 20 };
+  }
+  scrollToY(y) { scrollTo({ top: y, behavior: this.reduce ? 'auto' : 'smooth' }); }
+  glideTo(y, ms) {
+    if (this.reduce) { scrollTo(0, y); return; }
+    if (this.glideStop) this.glideStop();
+    const y0 = scrollY, dy = y - y0;
+    if (Math.abs(dy) < 2) return;
+    const dur = ms || Math.min(1900, 1100 + Math.abs(dy) * 0.22);
+    const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const t0 = performance.now(); let raf = 0;
+    const stop = () => { cancelAnimationFrame(raf); removeEventListener('wheel', stop); removeEventListener('touchstart', stop); removeEventListener('keydown', stop); this.glideStop = null; };
+    this.glideStop = stop;
+    addEventListener('wheel', stop, { passive: true }); addEventListener('touchstart', stop, { passive: true }); addEventListener('keydown', stop);
+    const step = now => {
+      const k = Math.min(1, (now - t0) / dur);
+      scrollTo(0, y0 + dy * ease(k));
+      if (k < 1) raf = requestAnimationFrame(step); else stop();
+    };
+    raf = requestAnimationFrame(step);
+  }
+  jump(st) {
+    const t = this.targets();
+    const y = { hero: 0, reveal: t.reveal, search: t.search, catalog: t.catalog }[st];
+    if (y != null) scrollTo(0, y);
+    if (st === 'open') this.setState({ open: true });
+    if (st === 'filters') { scrollTo(0, t.search); this.setState({ open: true, expanded: true }); }
+    this.tick();
+  }
+  goSearch(expand) {
+    if ((this.p || 0) >= 0.92) { if (expand) this.setState({ open: true, expanded: true }); return; }
+    if (expand) this.pendingExpand = true;
+    this.scrollToY(this.targets().search);
+  }
+  goCatalog() { this.setState({ menu: null, mobileMenu: false }); this.scrollToY(this.targets().catalog); }
+  openDrawer(code, contact) {
+    const d = this.D.data.find(x => x.code === code);
+    this.setState({ drawer: code, drawerOpen: true, sent: false, photo: 0, cMsg: `Olá, tenho interesse no imóvel ${code} em ${d.bairro}. Gostaria de agendar uma visita.` }, () => {
+      const dr = this.el.drawer; if (!dr) return;
+      dr.scrollTop = 0;
+      if (contact) setTimeout(() => { const c = this.el.contact; if (c) dr.scrollTo({ top: c.offsetTop - 72, behavior: this.reduce ? 'auto' : 'smooth' }); }, 380);
+    });
+  }
+
+  entrance() {
+    const E = 'cubic-bezier(.2,.7,0,1)';
+    const a = (el, k, o) => el && el.animate && el.animate(k, Object.assign({ easing: E, fill: 'backwards' }, o));
+    a(this.el.header, [{ opacity: 0, transform: 'translateY(-10px)' }, { opacity: 1, transform: 'none' }], { duration: 700 });
+    a(this.el.headerLine, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 1300, delay: 120 });
+    this.letterEls.forEach((el, i) => el && el.isConnected && a(el, [{ transform: 'translateY(108%)' }, { transform: 'translateY(0%)' }], { duration: 1100, delay: 260 + i * 60 }));
+    a(this.el.subRule, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 700, delay: 820 });
+    a(this.el.subText, [{ opacity: 0, letterSpacing: '.8em' }, { opacity: 1, letterSpacing: '.34em' }], { duration: 1200, delay: 860 });
+    a(this.el.heroMeta, [{ opacity: 0 }, { opacity: 0.75 }], { duration: 900, delay: 1100 });
+    a(this.el.dockIn, [{ opacity: 0, transform: 'translateY(34px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 1000, delay: 780 });
+  }
+
+  tick() {
+    const s = this.el.stage; if (!s) return;
+    const cl = v => Math.max(0, Math.min(1, v)), sm = v => v * v * (3 - 2 * v);
+    const vh = innerHeight, vw = innerWidth, Y = scrollY;
+    const top = s.offsetTop, range = Math.max(1, s.offsetHeight - vh);
+    const raw = cl((Y - top) / range), p = cl(raw / 0.72), hold = cl((raw - 0.8) / 0.2);
+    this.p = p;
+    const m = this.reduce ? 0 : 1, mob = this.state.isMobile, pr = this.props || {};
+    const stag = (pr.titleMotion ?? 'Pilares escalonados') !== 'Bloco único';
+    const tp = cl(p / 0.5);
+    this.letterEls.forEach((el, i) => {
+      if (!el || !el.isConnected) return;
+      const q = sm(cl(tp * 1.5 - (stag ? i * 0.05 : 0.25)));
+      el.style.transform = `translateY(${-q * 108 * m}%)`;
+    });
+    if (this.el.titleWrap) {
+      this.el.titleWrap.style.transform = `translateY(${-sm(tp) * 6 * m}vh)`;
+      this.el.titleWrap.style.opacity = m ? (p > 0.6 ? 0 : 1) : 1 - cl(p / 0.3);
+    }
+    const f = 1 - cl(p / 0.18);
+    ['sub', 'heroMeta'].forEach(k => { const e = this.el[k]; if (e) { e.style.opacity = k === 'heroMeta' ? f * 0.75 : f; e.style.transform = `translateY(${-(1 - f) * 16 * m}px)`; } });
+
+    const er = sm(cl((p - 0.1) / 0.58));
+    const c = this.el.concrete;
+    if (c) {
+      let mk;
+      if ((pr.revealStyle ?? 'Máscara vertical') === 'Dissolução radial') { const a = er * 140 - 35; mk = `radial-gradient(circle at 50% 58%, transparent ${a}%, #000 ${a + 28}%)`; }
+      else { const e = -30 + er * 170; mk = `linear-gradient(to top, transparent ${e - 30}%, #000 ${e}%)`; }
+      c.style.webkitMaskImage = mk; c.style.maskImage = mk;
+      c.style.opacity = 1 - er * 0.25;
+      c.style.visibility = er >= 1 ? 'hidden' : 'visible';
+    }
+    const ph = this.el.photo;
+    if (ph) {
+      ph.style.transform = `scale(${1 + 0.14 * (1 - er) * m}) translateY(${-hold * 3 * m}vh)`;
+      ph.style.filter = er >= 1 || !m ? 'none' : `blur(${(1 - er) * 8}px) grayscale(${(1 - er) * 0.9}) brightness(${0.92 + 0.08 * er})`;
+    }
+    if (this.el.scrim) this.el.scrim.style.opacity = cl((p - 0.4) / 0.4);
+
+    if (p > 0.04 && !this.state.open) { this.scrollOpen = true; this.setState({ open: true }); }
+    if (p < 0.01 && this.state.open && this.scrollOpen && !this.clickOpen && !this.state.expanded) { this.scrollOpen = false; this.setState({ open: false }); }
+    const open = this.state.open;
+    const bh = open ? (mob ? 190 : 80) : 64;
+    const y0 = vh * 0.885 - bh;
+    const scEl = this.el.searchCopy;
+    const y1 = scEl ? Math.max(vh * (mob ? 0.3 : 0.4), Math.min(vh * (mob ? 0.34 : 0.5), scEl.offsetTop + scEl.offsetHeight + 28)) : vh * 0.5;
+    if (this.el.panel) this.el.panel.style.maxHeight = Math.max(160, Math.min(560, vh - y1 - bh - (mob ? 24 : 64))) + 'px';
+    const dp = sm(cl((p - 0.32) / 0.52));
+    const d = this.el.dock;
+    if (d) {
+      const w0 = mob ? vw - 32 : Math.min(1080, vw * 0.92), w1 = mob ? vw - 32 : Math.min(1240, vw * 0.94);
+      const w = w0 + (w1 - w0) * dp;
+      const morph = this.lastOpen !== open;
+      if (morph) { this.lastOpen = open; this.morphUntil = performance.now() + 820; }
+      const morphing = performance.now() < (this.morphUntil || 0);
+      d.style.transition = morphing && m ? 'width .8s cubic-bezier(.2,.7,0,1), transform .8s cubic-bezier(.2,.7,0,1)' : 'none';
+      d.style.width = (open ? w : (mob ? 230 : 252)) + 'px';
+      const yy = y0 + (y1 - y0) * dp, hh = mob ? 0 : sm(hold);
+      d.style.transform = `translate(-50%, ${yy + (36 - yy) * hh}px) scale(${1 - 0.42 * hh})`;
+      d.style.opacity = 1 - sm(cl((hold - 0.15) / 0.55));
+      d.style.pointerEvents = hold > 0.4 && !mob ? 'none' : 'auto';
+      if (this.el.bar) this.el.bar.style.width = w + 'px';
+    }
+    const sc = sm(cl((p - 0.6) / 0.32));
+    ['searchCopy', 'searchFoot'].forEach(k => { const e = this.el[k]; if (e) { e.style.opacity = sc * (1 - hold); e.style.transform = `translateY(${(1 - sc) * 28 * m}px)`; } });
+    if (this.el.searchFoot) this.el.searchFoot.style.pointerEvents = sc > 0.5 ? 'auto' : 'none';
+    if (this.el.endFade) this.el.endFade.style.opacity = hold;
+
+    const h = this.el.header;
+    if (h) {
+      const past = Y > top + s.offsetHeight - 70;
+      const mode = past ? 'solid' : (p > 0.4 && hold < 0.8 ? 'photo' : 'clear');
+      if (mode !== this.hdr) {
+        this.hdr = mode;
+        h.style.color = mode === 'photo' ? '#EDE4D0' : '#292D29';
+        h.style.backgroundColor = mode === 'solid' ? 'rgba(220,209,186,.82)' : 'rgba(220,209,186,0)';
+        h.style.backdropFilter = h.style.webkitBackdropFilter = mode === 'solid' ? 'blur(14px)' : 'none';
+        h.style.height = mode === 'solid' ? '64px' : 'clamp(68px,14vh,124px)';
+      }
+    }
+
+    const mn = this.el.mnav;
+    if (mn) {
+      const show = Y > top + s.offsetHeight - vh * 0.5 && !this.state.drawerOpen && !this.state.mobileMenu;
+      if (show !== this.mnShow || mn !== this.mnEl) {
+        this.mnShow = show; this.mnEl = mn;
+        mn.style.transform = `translate(-50%, ${show ? 0 : 120}px)`; mn.style.opacity = show ? 1 : 0; mn.style.pointerEvents = show ? 'auto' : 'none';
+      }
+    }
+    const hs = !mob && hold > 0.55;
+    if (hs !== this.state.hShow) this.setState(hs ? { hShow: true } : { hShow: false, hOpen: false });
+    if (p >= 0.92 && this.pendingExpand) { this.pendingExpand = false; if (!this.state.expanded) this.setState({ expanded: true }); }
+    if (p < 0.3 && !this.pendingExpand && this.state.expanded) this.setState({ expanded: false });
+  }
+
+  filtered() {
+    const s = this.state, D = this.D;
+    const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    let L = D.data.filter(d => d.mode === s.mode);
+    if (s.tipo > 0) L = L.filter(d => d.tipo === D.tipos[s.tipo]);
+    if (s.local.trim()) { const q = norm(s.local.trim()); L = L.filter(d => norm(`${d.bairro} ${d.rua} ${d.code}`).includes(q)); }
+    const pr = D.precos[s.mode][s.preco];
+    if (pr.max) L = L.filter(d => d.price <= pr.max);
+    if (pr.min) L = L.filter(d => d.price > pr.min);
+    const amin = parseInt(s.areaMin, 10), amax = parseInt(s.areaMax, 10);
+    if (amin) L = L.filter(d => d.area >= amin);
+    if (amax) L = L.filter(d => d.area <= amax);
+    if (s.dorms) L = L.filter(d => d.dorms >= s.dorms);
+    if (s.vagas) L = L.filter(d => d.vagas >= s.vagas);
+    if (s.condo != null) L = L.filter(d => d.condo <= D.condos[s.condo].max);
+    if (s.feats.length) L = L.filter(d => s.feats.every(f => d.feats.includes(f)));
+    L = L.slice();
+    if (s.sort === 0) L.sort((a, b) => ((b.featured ? 1 : 0) - (a.featured ? 1 : 0)) || a.code.localeCompare(b.code));
+    if (s.sort === 1) L.sort((a, b) => a.price - b.price);
+    if (s.sort === 2) L.sort((a, b) => b.area - a.area);
+    return L;
+  }
+
+  renderVals() {
+    const s = this.state, D = this.D, mob = s.isMobile;
+    const list = this.filtered();
+    const precos = D.precos[s.mode];
+    const fmt = n => n.toLocaleString('pt-BR');
+    const seg = (label, active, onClick) => ({ label, onClick, bg: active ? '#292D29' : 'rgba(41,45,41,0)', fg: active ? '#EFE6D2' : '#292D29' });
+    const tog = (label, active, onClick) => ({ label, onClick, bg: active ? '#292D29' : 'rgba(41,45,41,.06)', fg: active ? '#EFE6D2' : '#292D29' });
+    let gi = 0;
+    const titleLines = (mob ? ['CAPITAL', 'SP'] : ['CAPITAL SP']).map(t => ({
+      letters: t.split('').map(ch => { const i = gi++; return { ch: ch === ' ' ? '\u00A0' : ch, ref: this.letterRefs[i], w: ch === ' ' ? '.24em' : 'auto' }; })
+    }));
+    const navGo = [() => scrollTo({ top: 0, behavior: 'smooth' }), null, null, null, () => { location.href = 'Capital%20SP%20Cadastro.dc.html'; }];
+    const navItems = ['Home', 'Sobre', 'Contato', 'Blog', 'Cadastro'].map((label, i) => ({
+      label, labelUp: label.toUpperCase(), n: '0' + (i + 1),
+      ul: (s.hoverNav === i || (i === 0 && s.hoverNav == null)) ? 1 : 0,
+      onEnter: () => this.setState({ hoverNav: i }), onLeave: () => this.setState({ hoverNav: null }),
+      onClick: e => { e.preventDefault(); this.setState({ mobileMenu: false }); if (navGo[i]) navGo[i](); }
+    }));
+    const extraCount = (s.areaMin || s.areaMax ? 1 : 0) + (s.dorms ? 1 : 0) + (s.vagas ? 1 : 0) + (s.condo != null ? 1 : 0) + s.feats.length;
+    const summaryParts = [];
+    if (s.tipo > 0) summaryParts.push(D.tipos[s.tipo]);
+    if (s.local.trim()) summaryParts.push(`"${s.local.trim()}"`);
+    if (s.preco > 0) summaryParts.push(precos[s.preco].l);
+    if (s.areaMin || s.areaMax) summaryParts.push(`${s.areaMin || '0'}–${s.areaMax || '∞'} m²`);
+    if (s.dorms) summaryParts.push(`${s.dorms}+ dorm.`);
+    if (s.vagas) summaryParts.push(`${s.vagas}+ vagas`);
+    if (s.condo != null) summaryParts.push(D.condos[s.condo].l);
+    s.feats.forEach(f => summaryParts.push(f));
+    const n = list.length;
+    const bairros = new Set(D.data.map(d => d.bairro)).size;
+    const favSet = new Set(s.favs);
+    const toggleFav = code => e => {
+      if (e) { e.stopPropagation(); const t = e.currentTarget; if (t && t.animate && !this.reduce) t.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.2,.7,0,1)' }); }
+      this.setState(st => ({ favs: st.favs.includes(code) ? st.favs.filter(x => x !== code) : [...st.favs, code] }));
+    };
+    const cut = (t, k) => t.length > k ? t.slice(0, t.lastIndexOf(' ', k)).replace(/[,.;:]$/, '') + '…' : t;
+    const base = d => {
+      const fav = favSet.has(d.code);
+      const specs = [`${d.area} m²`, d.dorms ? `${d.dorms} dorm.` : null, d.vagas ? `${d.vagas} ${d.vagas > 1 ? 'vagas' : 'vaga'}` : 'Sem vaga', d.condo ? `Cond. R$ ${fmt(d.condo)}` : 'Sem cond.'].filter(Boolean);
+      return {
+        code: d.code, bairroUp: d.bairro.toUpperCase(), tipoUp: d.tipo.toUpperCase(), rua: d.rua,
+        modeLabel: d.mode === 'comprar' ? 'VENDA' : 'ALUGUEL',
+        priceFmt: 'R$ ' + fmt(d.price), per: d.mode === 'alugar' ? ' /mês' : '',
+        slotId: 'csp-v2-' + d.code.toLowerCase(), placeholder: `Foto — ${d.tipo}, ${d.bairro}`,
+        specs, specLine: specs.join(' · ').toUpperCase(),
+        favFill: fav ? '#A64B36' : '#EFE6D2', favInner: fav ? 0 : 1, favLabel: fav ? 'Remover dos salvos' : 'Salvar imóvel',
+        onFav: toggleFav(d.code), onOpen: () => { location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; }
+      };
+    };
+    const rel = s.sort === 0;
+    const blocks = D.cats.map((cat, ci) => {
+      const items = list.filter(d => d.tipo === cat);
+      const r = this.catRefs[cat];
+      return {
+        n: '0' + (ci + 1), titleUp: cat.toUpperCase(), countLabel: `${items.length} ${items.length === 1 ? 'IMÓVEL' : 'IMÓVEIS'}`,
+        trackRef: r.track, progRef: r.prog, onScroll: r.onScroll, prev: r.prev, next: r.next,
+        cards: items.map(d => {
+          const hov = s.hoverCard === d.code, big = true;
+          return Object.assign(base(d), {
+            isFeatured: big,
+            w: mob ? 'calc(100vw - 80px)' : big ? 'clamp(480px,44vw,760px)' : 'clamp(300px,26vw,420px)',
+            bairroSize: big && !mob ? '28px' : '22px', priceSize: big && !mob ? '44px' : '32px',
+            descLines: big ? 3 : 2, short: cut(d.desc, big && !mob ? 230 : 118),
+            contactLabel: 'Falar com corretor',
+            inset: hov ? '16px 16px 64px 16px' : '0px 0px 0px 0px', imgScale: hov ? 1.06 : 1,
+            ctaOp: hov ? 1 : 0, ctaY: hov ? '0px' : '16px', ctaPE: hov ? 'auto' : 'none', ctaDelay: hov ? '.18s' : '0s',
+            onEnter: () => { if (!mob) this.setState({ hoverCard: d.code }); },
+            onLeave: () => { if (!mob) this.setState({ hoverCard: null }); },
+            onTap: () => { if (mob) this.setState(st => ({ hoverCard: st.hoverCard === d.code ? null : d.code })); else location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; },
+            onContact: e => { e.stopPropagation(); this.openDrawer(d.code, true); },
+            onOpen: e => { e.stopPropagation(); location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; }
+          });
+        })
+      };
+    }).filter(b => b.cards.length);
+    const saved = s.favs.map(c => D.data.find(d => d.code === c)).filter(Boolean).map(base);
+    const dd = s.drawer ? D.data.find(d => d.code === s.drawer) : null;
+    const db = dd ? base(dd) : null;
+    const dr = dd ? Object.assign(db, {
+      desc: dd.desc, feats: dd.feats.length ? dd.feats : ['—'],
+      cells: [
+        { v: dd.area + ' m²', l: 'ÁREA ÚTIL' },
+        { v: dd.dorms ? String(dd.dorms) : '—', l: 'DORMITÓRIOS' },
+        { v: dd.vagas ? String(dd.vagas) : '—', l: 'VAGAS' },
+        { v: dd.condo ? 'R$ ' + fmt(dd.condo) : '—', l: 'CONDOMÍNIO' }
+      ],
+      photos: [0, 1, 2].map(i => ({ id: db.slotId + (i ? '-' + (i + 1) : ''), op: i === s.photo ? 1 : 0, scale: i === s.photo ? 1 : 1.04, pe: i === s.photo ? 'auto' : 'none', placeholder: `Foto ${i + 1} de 3 — ${dd.tipo}, ${dd.bairro}` })),
+      counter: `0${s.photo + 1} / 03`,
+      favText: favSet.has(dd.code) ? 'SALVO' : 'SALVAR', favIcon: favSet.has(dd.code) ? '#A64B36' : '#292D29'
+    }) : { cells: [], feats: [], photos: [] };
+    const open = s.open;
+    return {
+      R: this.R, isMobile: mob, isDesktop: !mob, titleLines, navItems,
+      openMenu: () => this.setState({ mobileMenu: true }), closeMenu: () => this.setState({ mobileMenu: false }), mobileMenu: s.mobileMenu,
+      goTop: e => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); },
+      goCatalog: () => this.goCatalog(),
+      editFilters: () => this.goSearch(true),
+      totalLine: `${D.data.length} imóveis em destaque, em ${bairros} bairros de São Paulo. Refine por área, dormitórios, vagas e características.`,
+      glassRadius: open ? '16px' : '32px', rowH: open ? (mob ? '190px' : '80px') : '64px',
+      rowOverflow: open && s.settled ? 'visible' : 'hidden',
+      pillOp: open ? 0 : 1, pillPE: open ? 'none' : 'auto',
+      barOp: open ? 1 : 0, barPE: open ? 'auto' : 'none', barDelay: open ? '.25s' : '0s',
+      navOp: s.hOpen ? 0 : 1, navPE: s.hOpen ? 'none' : 'auto',
+      hOp: s.hShow ? 1 : 0, hPE: s.hShow ? 'auto' : 'none',
+      hPillOn: !s.hOpen, hBarOn: s.hOpen,
+      hOpenBar: () => this.setState({ hOpen: true }, () => setTimeout(() => { const i = document.getElementById('h-local'); if (i) i.focus(); }, 80)),
+      hClose: () => this.setState({ hOpen: false }),
+      hKey: e => { if (e.key === 'Escape') this.setState({ hOpen: false }); },
+      hBuscar: () => { this.setState({ hOpen: false }); this.goCatalog(); },
+      openDock: () => { this.clickOpen = true; this.pendingExpand = false; this.setState({ open: true, expanded: false, menu: null }); this.glideTo(this.targets().search); },
+      pillIn: () => this.setState({ hoverPill: true }), pillOut: () => this.setState({ hoverPill: false }),
+      pillBg: s.hoverPill ? '#3B403B' : '#292D29', houseY: s.hoverPill ? '-2px' : '0px',
+      thumbX: s.mode === 'comprar' ? '0%' : '100%',
+      comprarOp: s.mode === 'comprar' ? 1 : 0.5, alugarOp: s.mode === 'alugar' ? 1 : 0.5,
+      setComprar: () => this.setState({ mode: 'comprar', preco: 0 }), setAlugar: () => this.setState({ mode: 'alugar', preco: 0 }),
+      tipo: String(s.tipo), preco: String(s.preco),
+      onTipoSelect: e => this.setState({ tipo: +e.target.value }), onPrecoSelect: e => this.setState({ preco: +e.target.value }),
+      tipoLabel: D.tipos[s.tipo], precoLabel: precos[s.preco].l,
+      menuTipo: s.menu === 'tipo', menuPreco: s.menu === 'preco',
+      tipoCaret: s.menu === 'tipo' ? 'rotate(-135deg) translate(-3px,-3px)' : 'rotate(45deg)',
+      precoCaret: s.menu === 'preco' ? 'rotate(-135deg) translate(-3px,-3px)' : 'rotate(45deg)',
+      toggleTipo: () => this.setState(st => ({ menu: st.menu === 'tipo' ? null : 'tipo' })),
+      togglePreco: () => this.setState(st => ({ menu: st.menu === 'preco' ? null : 'preco' })),
+      tipoOptions: D.tipos.map((l, i) => ({ label: l, value: String(i), mark: i === s.tipo ? 1 : 0, onClick: () => this.setState({ tipo: i, menu: null }) })),
+      precoOptions: precos.map((o, i) => ({ label: o.l, value: String(i), mark: i === s.preco ? 1 : 0, onClick: () => this.setState({ preco: i, menu: null }) })),
+      local: s.local, onLocal: e => this.setState({ local: e.target.value }),
+      onLocalKey: e => { if (e.key === 'Enter') this.goCatalog(); },
+      onFiltros: () => { this.setState({ menu: null }); if ((this.p || 0) < 0.85) this.goSearch(true); else this.setState(st => ({ expanded: !st.expanded })); },
+      filtrosBg: s.expanded ? 'rgba(41,45,41,.08)' : 'rgba(41,45,41,0)',
+      k1: s.expanded ? '11px' : '1px', k2: s.expanded ? '1px' : '9px', k3: s.expanded ? '7px' : '4px',
+      hasExtra: extraCount > 0, extraCount,
+      onBuscar: () => this.goCatalog(),
+      btnIn: () => this.setState({ hoverBtn: true }), btnOut: () => this.setState({ hoverBtn: false }),
+      btnBg: s.hoverBtn ? '#3B403B' : '#292D29', btnArrowX: s.hoverBtn ? '4px' : '0px',
+      buscarLabel: s.expanded ? `Ver ${n} ${n === 1 ? 'imóvel' : 'imóveis'}` : 'Buscar',
+      expRows: s.expanded ? '1fr' : '0fr', expOp: s.expanded ? 1 : 0,
+      areaMin: s.areaMin, areaMax: s.areaMax,
+      onAreaMin: e => this.setState({ areaMin: e.target.value.replace(/\D/g, '') }),
+      onAreaMax: e => this.setState({ areaMax: e.target.value.replace(/\D/g, '') }),
+      dormSegs: [['Todos', null], ['1+', 1], ['2+', 2], ['3+', 3], ['4+', 4]].map(([l, v]) => seg(l, s.dorms === v, () => this.setState({ dorms: v }))),
+      vagaSegs: [['Todas', null], ['1+', 1], ['2+', 2], ['3+', 3]].map(([l, v]) => seg(l, s.vagas === v, () => this.setState({ vagas: v }))),
+      condoSegs: [['Qualquer', null], ['Sem', 0], ['Até 1 mil', 1], ['Até 2 mil', 2], ['Até 4 mil', 3]].map(([l, v]) => seg(l, s.condo === v, () => this.setState({ condo: v }))),
+      featChips: D.feats.map(f => tog(f, s.feats.includes(f), () => this.setState(st => ({ feats: st.feats.includes(f) ? st.feats.filter(x => x !== f) : [...st.feats, f] })))),
+      featWrap: mob ? 'nowrap' : 'wrap',
+      clearOp: extraCount ? 1 : 0.4,
+      clearFilters: () => this.setState({ tipo: 0, local: '', preco: 0, areaMin: '', areaMax: '', dorms: null, vagas: null, condo: null, feats: [] }),
+      matchLine: `${n} ${n === 1 ? 'IMÓVEL CORRESPONDE' : 'IMÓVEIS CORRESPONDEM'}`,
+      modeTabs: [['comprar', 'Comprar'], ['alugar', 'Alugar']].map(([k, l]) => seg(l, s.mode === k, () => this.setState({ mode: k, preco: 0 }))),
+      sortOptions: ['Relevância', 'Menor preço', 'Maior área'].map((l, i) => seg(l, s.sort === i, () => this.setState({ sort: i }))),
+      countLabel: `${n} ${n === 1 ? 'IMÓVEL' : 'IMÓVEIS'} PARA ${s.mode === 'comprar' ? 'COMPRAR' : 'ALUGAR'}`,
+      summary: summaryParts.length ? summaryParts.join(' · ').toUpperCase() : 'SEM FILTROS ADICIONAIS',
+      blocks, isEmpty: n === 0,
+      emptyHint: summaryParts.length ? `Filtros ativos: ${summaryParts.join(', ')}. Remova algum deles ou limpe todos.` : 'Nenhum imóvel cadastrado para esta pretensão.',
+      saved, hasSaved: saved.length > 0, savedCount: String(saved.length),
+      savedLabel: `${saved.length} ${saved.length === 1 ? 'IMÓVEL' : 'IMÓVEIS'} — SALVOS NESTE NAVEGADOR`,
+      clearSaved: () => this.setState({ favs: [] }),
+      mnavSearch: () => { this.setState({ open: true }); this.goSearch(false); },
+      mnavFilters: () => { this.setState({ open: true }); this.goSearch(true); },
+      mnavSaved: () => { const el = this.el.saved; if (el) this.scrollToY(el.getBoundingClientRect().top + scrollY - 80); },
+      mnavFavFill: saved.length ? '#A64B36' : '#292D29', mnavFavInner: saved.length ? 0 : 1,
+      hasDrawer: !!dd, dr,
+      prevPhoto: () => this.setState(st => ({ photo: (st.photo + 2) % 3 })), nextPhoto: () => this.setState(st => ({ photo: (st.photo + 1) % 3 })),
+      drawerPE: s.drawerOpen ? 'auto' : 'none', drawerOp: s.drawerOpen ? 1 : 0, drawerX: s.drawerOpen ? '0%' : '102%',
+      closeDrawer: () => this.setState({ drawerOpen: false }),
+      cName: s.cName, cInfo: s.cInfo, cMsg: s.cMsg,
+      onCName: e => this.setState({ cName: e.target.value }), onCInfo: e => this.setState({ cInfo: e.target.value }), onCMsg: e => this.setState({ cMsg: e.target.value }),
+      sendContact: () => this.setState({ sent: true }), sent: s.sent, notSent: !s.sent,
+      sentLine: dd ? `Mensagem enviada. O corretor responsável pelo ${dd.code} retorna pelo contato informado${s.cInfo.trim() ? ' (' + s.cInfo.trim() + ')' : ''}.` : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

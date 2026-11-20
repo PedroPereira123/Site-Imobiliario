@@ -31,6 +31,6 @@ Banco de dados, imóveis reais, fotos cadastradas, credenciais, backups e outros
 
 Para compartilhar uma demonstração sem backend, importe este repositório na Vercel com Root Directory na raiz e Framework Preset Other. O vercel.json configura o build e a saída. Não são necessárias variáveis de ambiente. Consulte `Site Imobiliario/docs/DEMO-VERCEL.md`.
 
-## Novo design Capital SP (19/11/2026)
+## Design Capital SP — fonte única (19/11/2026)
 
-A apresentação Vercel agora utiliza os HTMLs do Claude Design. Execute `npm run build` na raiz. A saída inclui `/` (home e busca), `/imovel.html?id=CSP-0321` (detalhes) e `/design.html` (prancha de design). Os exports originais estão em `Site Imobiliario/design-export`; o histórico Git conserva a apresentação anterior. Fotos/mapa e fluxos comerciais ainda são demonstrativos. Veja `Site Imobiliario/docs/design/claude-export.md`.
+O front-end público tem uma única fonte: `Site Imobiliario/design/` (`home.dc.html` e `imovel.dc.html`, sincronizados com o Claude Design, mais o runtime `support.js`, `image-slot.js` e React). Execute `npm run build` na raiz: o script gera `presentation-dist` com `/` (home e busca) e `/imovel.html?id=CSP-0321`. Para alterar o design, edite os `.dc.html` (ou reexporte do Claude Design para esta pasta) e refaça o build. Fotos são ilustrativas (Wikimedia Commons, com crédito) e carregadas da internet; mapa e fluxos comerciais são demonstrativos. Os exports antigos de 30 MB foram removidos; continuam no histórico Git. Veja `Site Imobiliario/docs/design/design-unico.md`.
