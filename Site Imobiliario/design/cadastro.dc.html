@@ -1,0 +1,1142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadastro digital de locação</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0;background:#C9BEA8}
+.cad{container-type:inline-size;container-name:cad;position:relative;min-height:100vh;font-family:Inter,sans-serif;color:#292D29;background:#C9BEA8;-webkit-font-smoothing:antialiased}
+.cad *{box-sizing:border-box}
+.cad button,.cad input,.cad select,.cad textarea{font-family:inherit;color:inherit;font-size:inherit}
+.cad a{color:#292D29}
+.cad a:hover{color:#A64B36}
+.cad :focus-visible{outline:2px solid #292D29;outline-offset:3px}
+.cad .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.bsd{font-family:'Big Shoulders Display',sans-serif;text-transform:uppercase}
+.mono{font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.2em}
+.grain{position:absolute;inset:0;pointer-events:none;background-image:url(./grain.png);background-size:256px 256px;opacity:.7}
+.panel{position:relative;background:#F1E9D7;border-top:2px solid #292D29;border-radius:2px;padding:32px;display:flex;flex-direction:column;gap:24px}
+.g12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px 20px}
+.fld{display:flex;flex-direction:column;gap:8px;min-width:0}
+.inp{width:100%;min-height:52px;padding:12px 14px;border-radius:6px;background:#FBF8F1;font-size:16px;line-height:1.4;transition:border-color .2s,box-shadow .2s}
+.inp:focus{outline:none;box-shadow:0 0 0 2px #292D29}
+.inp::placeholder{color:#6E6A60}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 24px;border-radius:8px;border:1px solid transparent;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .25s,color .25s,border-color .25s}
+.bp{background:#C8102E;color:#FFFFFF !important}
+.bp:hover{background:#A80D26}
+.bo{background:transparent;border-color:#292D29;color:#292D29}
+.bo:hover{background:#292D29;color:#EFE6D2 !important}
+.bl{min-height:44px;padding:0 4px;background:none;border:0;font-weight:500;text-decoration:underline;text-underline-offset:4px}
+.bl:hover{color:#A64B36}
+.btn[disabled]{background:#B9AF9B;border-color:#B9AF9B;color:#33362F !important;cursor:not-allowed}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:150px;padding:20px 22px;text-align:left;border-radius:4px;border:1px solid #292D29;background:#FBF8F1;cursor:pointer;transition:background .3s,color .3s}
+.tile:hover{background:#FFFFFF}
+.tile .tdesc{font-size:14px;line-height:1.5;color:#45483F}
+.tile .tmark{position:absolute;top:-1px;right:-1px;width:16px;height:16px;background:transparent;transition:background .3s}
+.tile[aria-pressed="true"]{background:#292D29;color:#EFE6D2}
+.tile[aria-pressed="true"] .tdesc{color:#DCD1BA}
+.tile[aria-pressed="true"] .tmark{background:#A64B36}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:10px;background:rgba(41,45,41,.09)}
+.segb{min-height:40px;min-width:76px;padding:0 16px;border:0;border-radius:7px;background:transparent;font-size:14px;font-weight:600;cursor:pointer;transition:background .3s,color .3s}
+.segb[aria-pressed="true"]{background:#292D29;color:#EFE6D2}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.kv{display:grid;grid-template-columns:minmax(140px,1fr) 2fr;gap:4px 24px;padding:10px 0;border-top:1px solid rgba(41,45,41,.16);font-size:14px;line-height:1.45}
+.cad progress{appearance:none;-webkit-appearance:none;display:block;width:100%;height:4px;border:0;background:rgba(41,45,41,.18);accent-color:#292D29}
+.cad progress::-webkit-progress-bar{background:rgba(41,45,41,.18)}
+.cad progress::-webkit-progress-value{background:#292D29;transition:width .5s cubic-bezier(.2,.7,0,1)}
+.cad progress::-moz-progress-bar{background:#292D29}
+.filebtn:focus-within{outline:2px solid #292D29;outline-offset:3px}
+.cam{display:none !important}
+.docrow{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px 20px;padding:22px 0;border-top:1px solid rgba(41,45,41,.2)}
+.dact{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.paper{background:#FFFFFF;box-shadow:0 1px 2px rgba(41,45,41,.08),0 24px 48px -28px rgba(30,32,28,.5);padding:40px;max-width:760px;width:100%;margin:0 auto;font-size:12px;line-height:1.5}
+.paper .kv{font-size:12px;padding:5px 0;grid-template-columns:1fr 1.6fr}
+.dock{position:sticky;bottom:16px;z-index:6;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:8px;border-radius:12px;background:rgba(238,230,212,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,252,242,.7);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 44px -20px rgba(30,32,28,.45)}
+.rev{animation:rev .4s cubic-bezier(.2,.7,0,1)}
+@keyframes rev{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.stepbtn{transition:background .3s,color .3s}
+@container cad (max-width:980px){
+.shell{grid-template-columns:minmax(0,1fr) !important;padding:20px 20px 64px !important;gap:20px !important}
+.rail{position:static !important}
+.wide{display:none !important}
+.steps{flex-direction:row !important;overflow-x:auto;scrollbar-width:none;margin:0 -20px !important;padding:0 20px !important}
+.steps li{flex:none}
+.hpad{padding-left:20px !important;padding-right:20px !important}
+.panel{padding:24px 20px}
+}
+@container cad (max-width:640px){
+.fld,.tile{grid-column:span 12 !important}
+.tile{min-height:0}
+.cam{display:inline-flex !important}
+.kv{grid-template-columns:1fr}
+.docrow{grid-template-columns:1fr}
+.dact{align-items:flex-start}
+.pair{flex-direction:column;align-items:stretch !important}
+.dock .nn{display:none}
+.dock .btn{flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){.rev{animation:none}.btn,.tile,.segb,.stepbtn{transition:none}}
+</style>
+</helmet>
+<div class="cad">
+
+  <div style="background:#292D29;color:#EFE6D2">
+    <div class="hpad" style="max-width:1440px;margin:0 auto;padding:8px 48px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px">
+      <span class="mono" style="font-size:10.5px;letter-spacing:.16em"><span style="display:inline-block;width:7px;height:7px;margin-right:10px;background:#A64B36;vertical-align:1px"></span>Protótipo — dados fictícios. Nada é enviado nem salvo.</span>
+      <span style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onClick="{{ demoFill }}" style="min-height:36px;padding:0 14px;border:1px solid #EFE6D2;border-radius:8px;background:transparent;color:#EFE6D2;cursor:pointer;font-size:13px;font-weight:500">Preencher exemplo fictício</button>
+        <button onClick="{{ resetAll }}" style="min-height:36px;padding:0 14px;border:1px solid rgba(239,230,210,.45);border-radius:8px;background:transparent;color:#EFE6D2;cursor:pointer;font-size:13px;font-weight:500">Reiniciar</button>
+      </span>
+    </div>
+  </div>
+
+  <header style="position:sticky;top:0;z-index:20;background:rgba(201,190,168,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
+    <div class="hpad" style="position:relative;max-width:1440px;margin:0 auto;padding:0 48px;height:80px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <a href="Capital%20SP%20Home%20v3.dc.html" style="display:flex;align-items:center;gap:12px;color:#292D29" aria-label="Capital SP Imóveis — voltar ao site">
+        <span style="position:relative;display:block;width:26px;height:26px;border:2px solid #292D29">
+          <span style="position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;background:#A64B36"></span>
+        </span>
+        <span style="display:flex;flex-direction:column;line-height:1">
+          <span style="font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:21px;letter-spacing:.05em">CAPITAL SP</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.42em;margin-top:3px">IMÓVEIS</span>
+        </span>
+      </a>
+      <span class="mono wide" style="font-size:11px;letter-spacing:.18em">Ficha cadastral de locação</span>
+      <span class="mono" style="font-size:11px;letter-spacing:.18em"><span style="opacity:.75">Etapa </span>{{ stepNo }} / 06</span>
+      <span style="position:absolute;left:48px;right:48px;bottom:0;height:1px;background:#292D29;opacity:.32"></span>
+      <span style="position:absolute;left:48px;bottom:-1px;width:44px;height:3px;background:#A64B36"></span>
+    </div>
+  </header>
+
+  <section style="position:relative;overflow:hidden;background:#C9BEA8">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 80% at 14% 10%,rgba(240,231,208,.6),rgba(240,231,208,0) 70%),radial-gradient(ellipse 60% 70% at 90% 100%,rgba(112,98,74,.2),rgba(112,98,74,0) 70%)"></div>
+    <div class="grain"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(to right,rgba(41,45,41,.06) 1px,rgba(41,45,41,0) 1px);background-size:25% 100%"></div>
+    <sc-if value="{{ heroBig }}" hint-placeholder-val="{{ true }}">
+      <div class="hpad" style="position:relative;max-width:1440px;margin:0 auto;padding:72px 48px 56px;display:flex;flex-direction:column;gap:28px">
+        <div class="mono" style="display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>01 — Perfil e garantia</div>
+        <h1 class="bsd" style="margin:0;font-weight:900;font-size:clamp(64px,11.5cqi,172px);line-height:.8;letter-spacing:.005em;color:#292D29">Cadastro<br>de locação</h1>
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="display:block;width:30px;height:2px;background:#A64B36"></span>
+            <span class="mono" style="font-size:12px;letter-spacing:.3em">Uma ficha. Só o que se aplica a você.</span>
+          </div>
+          <p style="margin:0;max-width:46ch;font-size:16px;line-height:1.55">Responda a três perguntas e mostramos apenas os campos e documentos do seu caso. No fim, você baixa a ficha em PDF e a encaminha pelo WhatsApp.</p>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ heroSmall }}" hint-placeholder-val="{{ false }}">
+      <div class="hpad" style="position:relative;max-width:1440px;margin:0 auto;padding:48px 48px 36px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 48px">
+        <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+          <div class="mono" style="display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>{{ heroEyebrow }}</div>
+          <h1 class="bsd" style="margin:0;font-weight:900;font-size:clamp(48px,7.4cqi,112px);line-height:.84;letter-spacing:.005em;color:#292D29">{{ heroTitle }}</h1>
+        </div>
+        <p style="margin:0 0 6px;max-width:46ch;font-size:15px;line-height:1.55">{{ heroDesc }}</p>
+      </div>
+    </sc-if>
+  </section>
+
+  <div style="position:relative;background:#DCD1BA;border-top:2px solid #292D29">
+    <div class="grain" style="opacity:.5"></div>
+    <div class="shell" style="position:relative;display:grid;grid-template-columns:288px minmax(0,1fr);gap:40px;max-width:1440px;margin:0 auto;padding:40px 48px 96px;align-items:start">
+
+      <aside class="rail" aria-label="Acompanhamento do cadastro" style="position:sticky;top:104px;display:flex;flex-direction:column;gap:28px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+            <span style="display:flex;flex-direction:column;gap:6px">
+              <span class="mono" style="font-size:10.5px">Progresso</span>
+              <span class="bsd" style="font-weight:900;font-size:56px;line-height:.82">{{ pctLabel }}</span>
+            </span>
+            <span class="mono" style="font-size:10.5px;letter-spacing:.14em;text-align:right;padding-bottom:4px">{{ stepName }}</span>
+          </div>
+          <progress max="100" value="{{ pct }}" aria-label="Progresso do cadastro"></progress>
+        </div>
+        <ol class="steps" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ stepItems }}" as="s" hint-placeholder-count="6">
+            <li>
+              <button class="stepbtn" onClick="{{ s.go }}" aria-current="{{ s.aria }}" aria-disabled="{{ s.locked }}" style="width:100%;min-height:48px;display:flex;align-items:center;gap:14px;padding:6px 12px;border:0;border-radius:4px;background:{{ s.bg }};color:{{ s.fg }};cursor:{{ s.cur }};text-align:left;white-space:nowrap">
+                <span class="mono" style="flex:none;width:22px;font-size:11px;letter-spacing:.08em">{{ s.num }}</span>
+                <span style="flex:1 1 auto;font-size:14px;font-weight:{{ s.fw }}">{{ s.label }}</span>
+                <sc-if value="{{ s.ok }}" hint-placeholder-val="{{ false }}">
+                  <span style="flex:none;display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#17603A;color:#FFFFFF" aria-label="Concluída"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+                </sc-if>
+              </button>
+            </li>
+          </sc-for>
+        </ol>
+
+        <sc-if value="{{ hasProfile }}" hint-placeholder-val="{{ false }}">
+          <div class="wide" style="display:flex;flex-direction:column;gap:8px;padding-top:20px;border-top:1px solid rgba(41,45,41,.3)">
+            <span class="mono" style="font-size:10.5px">Perfil</span>
+            <span style="font-size:15px;font-weight:600">{{ profLine }}</span>
+            <sc-if value="{{ hasGuar }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px">Garantia: {{ guarLabel }}</span></sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasPendDocs }}" hint-placeholder-val="{{ false }}">
+          <div class="wide" style="display:flex;flex-direction:column;gap:10px;padding-top:20px;border-top:1px solid rgba(41,45,41,.3)">
+            <span style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span class="mono" style="font-size:10.5px">Documentos pendentes</span><span class="chip" style="background:#FFF2D6;color:#855400">{{ pendN }}</span></span>
+            <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.5;display:flex;flex-direction:column;gap:4px">
+              <sc-for list="{{ pendDocs }}" as="d" hint-placeholder-count="3"><li>{{ d }}</li></sc-for>
+            </ul>
+            <sc-if value="{{ morePend }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px">e mais {{ morePendN }}</span></sc-if>
+          </div>
+        </sc-if>
+
+        <p class="wide" style="margin:0;padding-top:20px;border-top:1px solid rgba(41,45,41,.3);font-size:12.5px;line-height:1.55">Os dados são preenchidos e organizados neste aparelho. Fechar ou recarregar a página apaga o que já foi digitado.</p>
+      </aside>
+
+      <main style="min-width:0;display:flex;flex-direction:column;gap:24px" aria-live="polite">
+
+        <!-- ETAPA 1 -->
+        <sc-if value="{{ s0 }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <section class="panel">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.22)">
+                <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px">01.1</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">Quem vai se cadastrar?</h2></div>
+              </div>
+              <div class="g12" role="group" aria-label="Tipo de pessoa">
+                <sc-for list="{{ personOpts }}" as="o" hint-placeholder-count="2">
+                  <button class="tile" style="grid-column:span 6" aria-pressed="{{ o.on }}" onClick="{{ o.pick }}"><span class="tmark" aria-hidden="true"></span><span class="mono" style="font-size:10.5px">{{ o.code }}</span><strong class="bsd" style="font-weight:800;font-size:30px;line-height:.9">{{ o.label }}</strong><span class="tdesc">{{ o.desc }}</span></button>
+                </sc-for>
+              </div>
+            </section>
+
+            <sc-if value="{{ showRole }}" hint-placeholder-val="{{ false }}">
+              <section class="panel rev">
+                <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.22)"><span class="mono" style="font-size:11px">01.2</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">Qual é o seu papel?</h2></div>
+                <div class="g12" role="group" aria-label="Papel no cadastro">
+                  <sc-for list="{{ roleOpts }}" as="o" hint-placeholder-count="2">
+                    <button class="tile" style="grid-column:span 6" aria-pressed="{{ o.on }}" onClick="{{ o.pick }}"><span class="tmark" aria-hidden="true"></span><span class="mono" style="font-size:10.5px">{{ o.code }}</span><strong class="bsd" style="font-weight:800;font-size:30px;line-height:.9">{{ o.label }}</strong><span class="tdesc">{{ o.desc }}</span></button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ blocked }}" hint-placeholder-val="{{ false }}">
+                  <div class="rev" role="status" style="padding:16px 20px;border-radius:6px;background:#FFF2D6;color:#2C2C2C;font-size:14px;line-height:1.55">
+                    <span class="chip" style="background:#855400;color:#FFFFFF;margin-bottom:10px">Em espera</span>
+                    <strong style="display:block;font-weight:600;margin-bottom:4px">Ficha de proprietário pessoa jurídica ainda não disponível</strong>
+                    A Capital SP ainda não definiu quais informações e documentos pedir neste caso. Para não solicitar nada sem confirmação, este caminho fica em espera. Fale com a equipe pelo WhatsApp para seguir com o cadastro.
+                  </div>
+                </sc-if>
+                <sc-if value="{{ showGuarNone }}" hint-placeholder-val="{{ false }}">
+                  <p class="rev" style="margin:0;padding:14px 18px;border-radius:6px;background:#EEEEEA;color:#2C2C2C;font-size:14px;line-height:1.5">Para proprietários não é necessário escolher uma garantia.</p>
+                </sc-if>
+              </section>
+            </sc-if>
+
+            <sc-if value="{{ showGuar }}" hint-placeholder-val="{{ false }}">
+              <section class="panel rev">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.22)">
+                  <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px">01.3</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">Como será a garantia?</h2></div>
+                  <p style="margin:0;max-width:40ch;font-size:14px;line-height:1.5">A garantia protege o contrato de locação. Cada modalidade pede informações diferentes.</p>
+                </div>
+                <div class="g12" role="group" aria-label="Modalidade de garantia">
+                  <sc-for list="{{ guarOpts }}" as="o" hint-placeholder-count="3">
+                    <button class="tile" style="grid-column:span 4;min-height:200px" aria-pressed="{{ o.on }}" onClick="{{ o.pick }}"><span class="tmark" aria-hidden="true"></span><span class="mono" style="font-size:10.5px">{{ o.code }}</span><strong class="bsd" style="font-weight:800;font-size:30px;line-height:.9">{{ o.label }}</strong><span class="tdesc">{{ o.desc }}</span></button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ guarProvisional }}" hint-placeholder-val="{{ false }}">
+                  <p class="rev" style="margin:0;padding:14px 18px;border-radius:6px;background:#E6F0F7;color:#23567C;font-size:14px;line-height:1.5"><strong style="font-weight:600">Requisitos em definição.</strong> A Capital SP ainda vai informar as regras desta garantia. Por enquanto, usamos os documentos da ficha de locação.</p>
+                </sc-if>
+              </section>
+            </sc-if>
+
+            <p style="margin:0;padding:0 4px;font-size:13px;line-height:1.55;max-width:80ch">Coletamos estes dados para preencher a ficha cadastral de locação. O preenchimento e a geração do PDF acontecem neste aparelho. Os arquivos que você selecionar não são enviados automaticamente.</p>
+          </div>
+        </sc-if>
+
+        <!-- ETAPAS 2 E 3 -->
+        <sc-if value="{{ sForm }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <sc-if value="{{ showErrSum }}" hint-placeholder-val="{{ false }}">
+              <p role="alert" style="margin:0;padding:14px 18px;border-radius:6px;background:#FBE9ED;color:#9E1830;font-size:14px;font-weight:600">{{ errSum }}</p>
+            </sc-if>
+            <sc-for list="{{ panels }}" as="pn" hint-placeholder-count="2">
+              <section class="panel">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.22)">
+                  <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px">{{ pn.code }}</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">{{ pn.title }}</h2></div>
+                  <sc-if value="{{ pn.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0;max-width:40ch;font-size:14px;line-height:1.5">{{ pn.desc }}</p></sc-if>
+                </div>
+                <sc-if value="{{ pn.isTog }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+                    <span style="font-size:16px;font-weight:500;max-width:48ch">{{ pn.q }}</span>
+                    <div class="seg" role="group" aria-label="{{ pn.q }}">
+                      <button class="segb" aria-pressed="{{ pn.yesP }}" onClick="{{ pn.onYes }}">Sim</button>
+                      <button class="segb" aria-pressed="{{ pn.noP }}" onClick="{{ pn.onNo }}">Não</button>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pn.isLock }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin:0;padding:14px 18px;border-radius:6px;background:#E6F0F7;color:#23567C;font-size:14px;line-height:1.5">{{ pn.lockNote }}</p>
+                </sc-if>
+                <sc-if value="{{ pn.open }}" hint-placeholder-val="{{ true }}">
+                  <div class="rev" style="display:flex;flex-direction:column;gap:28px">
+                    <sc-for list="{{ pn.blocks }}" as="b" hint-placeholder-count="1">
+                      <div style="display:flex;flex-direction:column;gap:18px;{{ b.frame }}">
+                        <sc-if value="{{ b.hasTitle }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+                            <span style="display:flex;align-items:baseline;gap:12px"><span class="mono" style="font-size:11px">{{ b.num }}</span><h3 class="bsd" style="margin:0;font-weight:800;font-size:24px;line-height:1">{{ b.title }}</h3></span>
+                            <sc-if value="{{ b.removable }}" hint-placeholder-val="{{ false }}"><button class="btn bl" onClick="{{ b.onRemove }}" aria-label="{{ b.removeLabel }}">Remover</button></sc-if>
+                          </div>
+                        </sc-if>
+                        <div class="g12">
+                          <sc-for list="{{ b.fields }}" as="fl" hint-placeholder-count="6">
+                            <div style="display:contents">
+                              <sc-if value="{{ fl.head }}" hint-placeholder-val="{{ false }}">
+                                <div class="mono" style="grid-column:1/-1;display:flex;align-items:center;gap:10px;padding-top:12px;font-size:10.5px;letter-spacing:.18em"><span style="width:6px;height:6px;background:#A64B36"></span>{{ fl.g }}<span style="flex:1;height:1px;background:rgba(41,45,41,.18)"></span></div>
+                              </sc-if>
+                              <sc-if value="{{ fl.isTog }}" hint-placeholder-val="{{ false }}">
+                                <div style="grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:6px;background:rgba(41,45,41,.06)">
+                                  <span style="font-size:15px;font-weight:500;max-width:48ch">{{ fl.l }}</span>
+                                  <div class="seg" role="group" aria-label="{{ fl.l }}">
+                                    <button class="segb" aria-pressed="{{ fl.yesP }}" onClick="{{ fl.onYes }}">Sim</button>
+                                    <button class="segb" aria-pressed="{{ fl.noP }}" onClick="{{ fl.onNo }}">Não</button>
+                                  </div>
+                                </div>
+                              </sc-if>
+                              <sc-if value="{{ fl.isField }}" hint-placeholder-val="{{ true }}">
+                                <div class="fld" style="grid-column:{{ fl.span }}">
+                                  <label for="{{ fl.id }}" style="font-size:14px;font-weight:500">{{ fl.l }}<sc-if value="{{ fl.req }}" hint-placeholder-val="{{ false }}"><span style="color:#9E1830" aria-hidden="true"> *</span><span class="sr"> (obrigatório)</span></sc-if></label>
+                                  <sc-if value="{{ fl.isInput }}" hint-placeholder-val="{{ true }}">
+                                    <input class="inp" id="{{ fl.id }}" type="{{ fl.type }}" inputmode="{{ fl.im }}" autocomplete="{{ fl.ac }}" placeholder="{{ fl.ph }}" maxlength="{{ fl.max }}" value="{{ fl.value }}" onChange="{{ fl.onChange }}" onBlur="{{ fl.onBlur }}" aria-invalid="{{ fl.invalid }}" aria-describedby="{{ fl.eid }}" style="border:1px solid {{ fl.bc }}">
+                                  </sc-if>
+                                  <sc-if value="{{ fl.isSelect }}" hint-placeholder-val="{{ false }}">
+                                    <select class="inp" id="{{ fl.id }}" value="{{ fl.value }}" onChange="{{ fl.onChange }}" onBlur="{{ fl.onBlur }}" aria-invalid="{{ fl.invalid }}" aria-describedby="{{ fl.eid }}" style="border:1px solid {{ fl.bc }};cursor:pointer">
+                                      <option value="">Selecione</option>
+                                      <sc-for list="{{ fl.opts }}" as="o" hint-placeholder-count="3"><option value="{{ o }}">{{ o }}</option></sc-for>
+                                    </select>
+                                  </sc-if>
+                                  <sc-if value="{{ fl.isArea }}" hint-placeholder-val="{{ false }}">
+                                    <textarea class="inp" id="{{ fl.id }}" rows="3" placeholder="{{ fl.ph }}" value="{{ fl.value }}" onChange="{{ fl.onChange }}" onBlur="{{ fl.onBlur }}" aria-invalid="{{ fl.invalid }}" aria-describedby="{{ fl.eid }}" style="border:1px solid {{ fl.bc }};resize:vertical"></textarea>
+                                  </sc-if>
+                                  <sc-if value="{{ fl.isRadio }}" hint-placeholder-val="{{ false }}">
+                                    <div class="seg" role="group" aria-label="{{ fl.l }}" style="align-self:flex-start">
+                                      <sc-for list="{{ fl.choices }}" as="c" hint-placeholder-count="2"><button class="segb" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for>
+                                    </div>
+                                  </sc-if>
+                                  <sc-if value="{{ fl.err }}" hint-placeholder-val="{{ false }}"><span id="{{ fl.eid }}" style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9E1830;font-weight:500"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>{{ fl.errMsg }}</span></sc-if>
+                                </div>
+                              </sc-if>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                    <sc-if value="{{ pn.hasAdd }}" hint-placeholder-val="{{ false }}">
+                      <button class="btn bo" style="align-self:flex-start" onClick="{{ pn.onAdd }}"><span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">+</span>{{ pn.addLabel }}</button>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </section>
+            </sc-for>
+            <sc-if value="{{ noPanels }}" hint-placeholder-val="{{ false }}">
+              <section class="panel"><p style="margin:0;font-size:15px;line-height:1.55">Não há informações complementares para este perfil. Siga para a etapa de documentos.</p></section>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- ETAPA 4 -->
+        <sc-if value="{{ s3 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <sc-if value="{{ showDocSum }}" hint-placeholder-val="{{ false }}">
+              <p role="alert" style="margin:0;padding:14px 18px;border-radius:6px;background:#FFF2D6;color:#855400;font-size:14px;font-weight:600">{{ docSum }}</p>
+            </sc-if>
+            <sc-for list="{{ docGroups }}" as="g" hint-placeholder-count="2">
+              <section class="panel" style="gap:16px">
+                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding-bottom:16px">
+                  <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px">{{ g.code }}</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">{{ g.title }}</h2></div>
+                  <sc-if value="{{ g.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0;max-width:44ch;font-size:14px;line-height:1.5">{{ g.desc }}</p></sc-if>
+                </div>
+                <sc-if value="{{ g.hasChoice }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;gap:12px;padding-bottom:8px">
+                    <span style="font-size:15px;font-weight:500">{{ g.choiceQ }}</span>
+                    <div class="g12" role="group" aria-label="{{ g.choiceQ }}">
+                      <sc-for list="{{ g.choices }}" as="c" hint-placeholder-count="2">
+                        <button class="tile" style="grid-column:span 6;min-height:104px" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}"><span class="tmark" aria-hidden="true"></span><strong class="bsd" style="font-weight:800;font-size:24px;line-height:.95">{{ c.label }}</strong><span class="tdesc">{{ c.desc }}</span></button>
+                      </sc-for>
+                    </div>
+                    <sc-if value="{{ g.fee }}" hint-placeholder-val="{{ false }}">
+                      <p class="rev" style="margin:0;padding:14px 18px;border-radius:6px;background:#E6F0F7;color:#23567C;font-size:14px;line-height:1.5">A Capital SP informará como realizar o pagamento da taxa. Nenhum pagamento é feito nesta página.</p>
+                    </sc-if>
+                  </div>
+                </sc-if>
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ g.items }}" as="d" hint-placeholder-count="3">
+                    <div class="docrow">
+                      <span class="mono" style="font-size:11px;letter-spacing:.1em;padding-top:4px">{{ d.n }}</span>
+                      <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                        <span style="font-size:16px;font-weight:600">{{ d.label }}</span>
+                        <sc-if value="{{ d.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;line-height:1.5;color:#45483F">{{ d.hint }}</span></sc-if>
+                        <span class="mono" style="font-size:10px;letter-spacing:.12em;color:#45483F">PDF · JPG · PNG{{ d.multiNote }}</span>
+                        <sc-for list="{{ d.files }}" as="f" hint-placeholder-count="0">
+                          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;padding:6px 6px 6px 14px;border-radius:6px;background:#FBF8F1;border:1px solid {{ f.bd }}">
+                            <span style="min-width:0;display:flex;flex-direction:column;gap:2px;font-size:14px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span><sc-if value="{{ f.bad }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:#9E1830;font-weight:500">Formato não aceito. Use PDF, JPG ou PNG.</span></sc-if></span>
+                            <button class="btn bl" style="min-height:40px" onClick="{{ f.onRemove }}" aria-label="Remover {{ f.name }}">Remover</button>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <div class="dact">
+                        <span style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end">
+                          <span class="chip" style="background:rgba(41,45,41,.08);color:#292D29">{{ d.tag }}</span>
+                          <span class="chip" style="background:{{ d.stBg }};color:{{ d.stFg }}"><span aria-hidden="true">{{ d.stGlyph }}</span>{{ d.stLabel }}</span>
+                        </span>
+                        <span style="display:flex;flex-wrap:wrap;gap:8px">
+                          <label class="btn filebtn {{ d.btnCls }}" style="position:relative;min-height:44px;padding:0 18px;font-size:14px;cursor:pointer">
+                            <input class="sr" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" multiple="{{ d.multi }}" onChange="{{ d.onPick }}">
+                            <span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">↑</span>{{ d.btnLabel }}
+                          </label>
+                          <label class="btn bo filebtn cam" style="position:relative;min-height:44px;padding:0 18px;font-size:14px;cursor:pointer">
+                            <input class="sr" type="file" accept="image/*" capture="environment" onChange="{{ d.onPick }}">
+                            Tirar foto
+                          </label>
+                        </span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </section>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <!-- ETAPA 5 -->
+        <sc-if value="{{ s4 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <section class="panel" style="flex-direction:row;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;background:{{ sumBg }};border-top-color:{{ sumFg }}">
+              <span style="display:flex;flex-direction:column;gap:6px;max-width:64ch">
+                <strong class="bsd" style="font-weight:800;font-size:30px;line-height:.95;color:{{ sumFg }}">{{ sumTitle }}</strong>
+                <span style="font-size:14px;line-height:1.5;color:#2C2C2C">{{ sumText }}</span>
+              </span>
+            </section>
+            <section class="panel" style="flex-direction:row;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between">
+              <span style="display:flex;flex-direction:column;gap:6px"><span class="mono" style="font-size:10.5px">Perfil e garantia</span><span style="font-size:17px;font-weight:600">{{ profLine }}{{ guarSuffix }}</span></span>
+              <button class="btn bl" onClick="{{ goStep0 }}" aria-label="Editar perfil e garantia">Editar</button>
+            </section>
+            <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+              <section class="panel" style="gap:12px">
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+                  <h2 class="bsd" style="margin:0;font-weight:800;font-size:28px;line-height:.95">{{ g.title }}</h2>
+                  <button class="btn bl" onClick="{{ g.onEdit }}" aria-label="Editar {{ g.title }}">Editar</button>
+                </div>
+                <div>
+                  <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="4">
+                    <div class="kv"><span style="color:#45483F">{{ r.l }}</span><span style="font-weight:500;color:{{ r.fg }}">{{ r.v }}</span></div>
+                  </sc-for>
+                </div>
+              </section>
+            </sc-for>
+            <section class="panel" style="gap:12px">
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+                <h2 class="bsd" style="margin:0;font-weight:800;font-size:28px;line-height:.95">Documentos</h2>
+                <button class="btn bl" onClick="{{ goStep3 }}" aria-label="Editar documentos">Editar</button>
+              </div>
+              <div>
+                <sc-for list="{{ docRows }}" as="r" hint-placeholder-count="5">
+                  <div class="kv"><span style="color:#45483F">{{ r.l }}</span><span style="font-weight:500;color:{{ r.fg }}">{{ r.v }}</span></div>
+                </sc-for>
+              </div>
+            </section>
+          </div>
+        </sc-if>
+
+        <!-- ETAPA 6: PDF -->
+        <sc-if value="{{ s5 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <sc-if value="{{ cannotGen }}" hint-placeholder-val="{{ false }}">
+              <p role="alert" style="margin:0;padding:14px 18px;border-radius:6px;background:#FBE9ED;color:#9E1830;font-size:14px;font-weight:600">{{ genBlock }}</p>
+            </sc-if>
+            <div style="display:flex;flex-direction:column;gap:24px;padding:40px 24px;background:#C9BEA8;border-top:2px solid #292D29;border-radius:2px">
+              <div class="paper" aria-label="Página 1 da ficha cadastral">
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:2px solid #292D29">
+                  <span style="display:flex;align-items:center;gap:10px">
+                    <span style="position:relative;display:block;width:18px;height:18px;border:1.5px solid #292D29"><span style="position:absolute;right:-1.5px;bottom:-1.5px;width:8px;height:8px;background:#A64B36"></span></span>
+                    <span style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:15px;letter-spacing:.05em">CAPITAL SP</span><span style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.42em;margin-top:2px">IMÓVEIS</span></span>
+                  </span>
+                  <span class="mono" style="font-size:9px;letter-spacing:.14em">Preenchida em {{ today }}</span>
+                </div>
+                <h2 style="margin:18px 0 2px;font-size:18px;font-weight:700;color:#1A1A1A">Ficha cadastral de locação</h2>
+                <p style="margin:0 0 8px;color:#45483F">{{ profLine }}{{ guarSuffix }}</p>
+                <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+                  <div style="margin-top:14px">
+                    <div class="mono" style="font-size:8.5px;letter-spacing:.16em;color:#A64B36;padding-bottom:3px">{{ g.title }}</div>
+                    <sc-for list="{{ g.filled }}" as="r" hint-placeholder-count="3"><div class="kv"><span style="color:#45483F">{{ r.l }}</span><span>{{ r.v }}</span></div></sc-for>
+                  </div>
+                </sc-for>
+                <div style="margin-top:22px;padding-top:8px;border-top:1px solid #DADAD4;display:flex;justify-content:space-between;color:#45483F;font-size:9.5px"><span>Capital SP Imóveis · Av. São Miguel, 2177 · São Paulo - SP</span><span>Página 1 de 2</span></div>
+              </div>
+              <div class="paper" aria-label="Página 2 da ficha cadastral">
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:2px solid #292D29">
+                  <span style="font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:15px;letter-spacing:.05em">CAPITAL SP</span>
+                  <span class="mono" style="font-size:9px;letter-spacing:.14em">Ficha cadastral de locação</span>
+                </div>
+                <h2 style="margin:18px 0 8px;font-size:15px;font-weight:700;color:#1A1A1A">Relação de documentos</h2>
+                <sc-for list="{{ docRows }}" as="r" hint-placeholder-count="5"><div class="kv"><span style="color:#45483F">{{ r.l }}</span><span>{{ r.v }}</span></div></sc-for>
+                <h2 style="margin:20px 0 6px;font-size:15px;font-weight:700;color:#1A1A1A">Anexos</h2>
+                <p style="margin:0;color:#45483F">Os documentos em PDF, JPG ou PNG seguem nas páginas seguintes, organizados na ordem acima. Arquivos que não puderem ser incorporados devem ser enviados separadamente pelo cliente.</p>
+                <div style="margin-top:22px;padding-top:8px;border-top:1px solid #DADAD4;display:flex;justify-content:space-between;color:#45483F;font-size:9.5px"><span>Capital SP Imóveis · Av. São Miguel, 2177 · São Paulo - SP</span><span>Página 2 de 2</span></div>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 4px;font-size:13px;line-height:1.55;max-width:80ch">Na versão final, o PDF é montado no seu navegador. Nada é enviado a servidores e nenhuma informação é guardada depois que você fecha a página.</p>
+          </div>
+        </sc-if>
+
+        <!-- CONCLUSÃO -->
+        <sc-if value="{{ s6 }}" hint-placeholder-val="{{ false }}">
+          <section class="panel" style="gap:32px;padding:48px 40px;background:#292D29;color:#EFE6D2;border-top-color:#A64B36">
+            <div style="display:flex;align-items:center;gap:12px" class="mono"><span style="width:8px;height:8px;background:#A64B36"></span><span style="font-size:11px;letter-spacing:.3em">Cadastro concluído neste aparelho</span></div>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <h2 class="bsd" style="margin:0;font-weight:900;font-size:clamp(48px,7cqi,104px);line-height:.84;color:#EFE6D2">Sua ficha cadastral está pronta.</h2>
+              <p style="margin:0;font-size:17px;line-height:1.6;max-width:56ch;color:#E3D8C2">Baixe sua ficha e encaminhe o documento para nossa equipe pelo WhatsApp para dar continuidade ao processo cadastral.</p>
+            </div>
+            <div class="pair" style="display:flex;flex-wrap:wrap;gap:12px">
+              <button class="btn bp" onClick="{{ doDownload }}">Baixar ficha cadastral<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">↓</span></button>
+              <a class="btn" href="{{ waHref }}" target="_blank" rel="noopener" style="border-color:#EFE6D2;color:#EFE6D2">Abrir WhatsApp<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></a>
+            </div>
+            <sc-if value="{{ dl }}" hint-placeholder-val="{{ false }}">
+              <p class="rev" role="status" style="margin:0;padding:14px 18px;border-radius:6px;background:#E6F0F7;color:#23567C;font-size:14px;line-height:1.5">Simulação: na versão final, o PDF é baixado neste aparelho e fica sob a sua guarda até você decidir enviá-lo.</p>
+            </sc-if>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding-top:24px;border-top:1px solid rgba(239,230,210,.3)">
+              <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">01</span><span style="font-size:14px;line-height:1.55">Baixe a ficha.</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">02</span><span style="font-size:14px;line-height:1.55">Abra o WhatsApp. A conversa começa com: “Olá! Preenchi minha ficha cadastral e gostaria de encaminhá-la para análise.”</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">03</span><span style="font-size:14px;line-height:1.55">Anexe o PDF à conversa ou use o compartilhamento do seu aparelho.</span></div>
+            </div>
+            <p style="margin:0;font-size:13px;line-height:1.55;color:#E3D8C2">O WhatsApp não recebe o arquivo automaticamente. A ficha só será considerada recebida depois que você a enviar e a equipe confirmar.</p>
+            <div><button class="btn bl" onClick="{{ backToPreview }}" style="color:#EFE6D2">Voltar e editar a ficha</button></div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ showActions }}" hint-placeholder-val="{{ true }}">
+          <div class="dock">
+            <sc-if value="{{ showBack }}" hint-placeholder-val="{{ true }}"><button class="btn bo" onClick="{{ back }}"><span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">←</span>Voltar</button></sc-if>
+            <sc-if value="{{ noBack }}" hint-placeholder-val="{{ false }}"><span class="mono nn" style="padding-left:12px;font-size:10.5px;letter-spacing:.16em">Etapa {{ stepNo }} / 06</span></sc-if>
+            <span style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end;flex:1 1 auto">
+              <sc-if value="{{ hasNextNote }}" hint-placeholder-val="{{ false }}"><span class="nn" style="font-size:13px;max-width:36ch;text-align:right">{{ nextNote }}</span></sc-if>
+              <button class="btn bp" disabled="{{ nextDisabled }}" onClick="{{ next }}">{{ nextLabel }}<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
+            </span>
+          </div>
+        </sc-if>
+      </main>
+    </div>
+  </div>
+
+  <sc-if value="{{ hasConfirm }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(26,25,22,.55)">
+      <div class="rev" role="alertdialog" aria-modal="true" aria-labelledby="cf-t" aria-describedby="cf-d" style="width:min(480px,100%);display:flex;flex-direction:column;gap:16px;padding:28px;border-radius:12px;background:#F1E9D7;border-top:2px solid #855400;box-shadow:0 30px 60px -24px rgba(26,25,22,.6)">
+        <span class="chip" style="align-self:flex-start;background:#FFF2D6;color:#855400">Atenção</span>
+        <strong id="cf-t" class="bsd" style="font-weight:800;font-size:30px;line-height:.95">Descartar informações?</strong>
+        <span id="cf-d" style="font-size:15px;line-height:1.55">{{ confirmMsg }}</span>
+        <span class="pair" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+          <button class="btn bo" onClick="{{ confirmNo }}">Manter</button>
+          <button class="btn bp" onClick="{{ confirmYes }}">Descartar</button>
+        </span>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+
+class Component extends DCLogic {
+  state = { step: 0, max: 0, person: null, role: null, guar: null, v: {}, touched: {}, tried: {}, on: {}, lists: { res: [1], dep: [1], soc: [1] }, uid: 2, docs: {}, rm: {}, ch: {}, done: false, dl: false, confirm: null };
+  pend = null;
+  EC = ['Solteiro(a)', 'Casado(a)', 'União estável', 'Divorciado(a)', 'Viúvo(a)', 'Separado(a)'];
+  STEPS = ['Perfil e garantia', 'Dados principais', 'Complementares', 'Documentos', 'Revisão', 'Ficha em PDF'];
+  GUAR = { caucao: 'Caução', seguro: 'Seguro fiança', fiador: 'Fiador' };
+
+  F(k, l, t, w, o) { return Object.assign({ k: k, l: l, t: t || 'text', w: w || 6 }, o || {}); }
+  tog(key, q, g) { return { k: 'tog:' + key, key: key, l: q, t: 'tog', w: 12, g: g }; }
+
+  pfFull(p, q, gp) {
+    const pre = gp ? gp + ' · ' : '';
+    const r = k => (q.indexOf(k) >= 0 ? { req: 1 } : {});
+    const f = (k, l, t, w, g, o) => this.F(p + '.' + k, l, t, w, Object.assign({ g: pre + g }, r(k), o || {}));
+    const I = 'Identificação pessoal', C = 'Informações de contato', E = 'Endereço residencial', P = 'Dados profissionais', M = 'Informações financeiras';
+    return [
+      f('nome', 'Nome completo', 'text', 12, I, { ph: 'Como consta no documento' }),
+      f('nasc', 'Data de nascimento', 'date', 6, I, { ph: 'dd/mm/aaaa' }),
+      f('nac', 'Nacionalidade', 'text', 6, I),
+      f('ec', 'Estado civil', 'select', 6, I, { opts: this.EC }),
+      f('prof', 'Profissão', 'text', 6, I),
+      f('rg', 'RG', 'text', 6, I),
+      f('cpf', 'CPF', 'cpf', 6, I, { ph: '000.000.000-00' }),
+      f('email', 'E-mail', 'email', 6, C),
+      f('tel', 'Telefone ou celular', 'tel', 6, C, { ph: '(00) 00000-0000' }),
+      f('end', 'Endereço (rua e número)', 'text', 12, E),
+      f('bairro', 'Bairro', 'text', 5, E), f('mun', 'Município', 'text', 5, E), f('uf', 'UF', 'uf', 2, E),
+      f('emp', 'Empresa onde trabalha', 'text', 12, P),
+      f('empEnd', 'Endereço da empresa', 'text', 12, P),
+      f('empBairro', 'Bairro', 'text', 5, P), f('empMun', 'Município', 'text', 5, P), f('empUf', 'UF', 'uf', 2, P),
+      f('cargo', 'Cargo', 'text', 6, P), f('tempo', 'Tempo de serviço', 'text', 6, P),
+      f('sal', 'Salário bruto', 'money', 6, M)
+    ];
+  }
+
+  imovel(pj) {
+    const D = 'Dados do imóvel', P = 'Proposta de locação';
+    const f = (k, l, t, w, g, o) => this.F('im.' + k, l, t, w, Object.assign({ g: g }, o || {}));
+    const a = [
+      f('tipo', 'Tipo do imóvel', 'text', 6, D, { req: 1, ph: 'Ex.: casa, apartamento, salão' }),
+      f('fins', 'Finalidade', 'select', 6, D, { req: 1, opts: ['Residencial', 'Comercial'] }),
+      f('end', 'Endereço do imóvel', 'text', 12, D, { req: 1 }),
+      f('num', 'Número', 'text', 6, D), f('compl', 'Complemento', 'text', 6, D),
+      f('aluguel', 'Valor mensal do aluguel inicial (proposta)', 'money', 6, P, { req: 1 }),
+      f('prazo', 'Prazo contratual', 'text', 6, P, { ph: 'Ex.: 30 meses' })
+    ];
+    if (pj) a.push(f('cond', 'Outras condições da proposta', 'area', 12, P, { ph: 'Reajuste, carência e demais condições propostas' }));
+    else a.push(f('iptu', 'Valor do IPTU mensal', 'money', 6, P), f('condo', 'Valor do condomínio (se houver)', 'money', 6, P));
+    return a;
+  }
+
+  empresa() {
+    const D = 'Dados da empresa', E = 'Endereço comercial', C = 'Informações de contato';
+    const f = (k, l, t, w, g, o) => this.F('e.' + k, l, t, w, Object.assign({ g: g }, o || {}));
+    return [
+      f('razao', 'Razão social', 'text', 12, D, { req: 1 }),
+      f('cnpj', 'CNPJ', 'cnpj', 6, D, { req: 1, ph: '00.000.000/0000-00' }),
+      f('tempo', 'Tempo de empresa', 'text', 6, D),
+      f('renda', 'Renda mensal', 'money', 6, D),
+      f('end', 'Endereço (rua e número)', 'text', 12, E, { req: 1 }),
+      f('bairro', 'Bairro', 'text', 5, E), f('mun', 'Município', 'text', 5, E), f('uf', 'UF', 'uf', 2, E),
+      f('tel', 'Telefone ou celular', 'tel', 6, C, { req: 1, ph: '(00) 00000-0000' })
+    ];
+  }
+
+  socio(id) {
+    const p = 's' + id;
+    const I = 'Identificação pessoal', C = 'Informações de contato', E = 'Endereço residencial', M = 'Informações financeiras', R = 'Referências pessoais';
+    const f = (k, l, t, w, g, o) => this.F(p + '.' + k, l, t, w, Object.assign({ g: g }, o || {}));
+    const a = [
+      f('nome', 'Nome completo', 'text', 12, I, { req: 1 }),
+      f('nasc', 'Data de nascimento', 'date', 6, I, { ph: 'dd/mm/aaaa' }),
+      f('nac', 'Nacionalidade', 'text', 6, I),
+      f('ec', 'Estado civil', 'select', 6, I, { opts: this.EC }),
+      f('prof', 'Profissão', 'text', 6, I),
+      f('rg', 'RG', 'text', 6, I, { req: 1 }),
+      f('cpf', 'CPF', 'cpf', 6, I, { req: 1, ph: '000.000.000-00' }),
+      f('tel', 'Telefone ou celular', 'tel', 6, C, { ph: '(00) 00000-0000' }),
+      f('end', 'Endereço (rua e número)', 'text', 12, E),
+      f('bairro', 'Bairro', 'text', 5, E), f('mun', 'Município', 'text', 5, E), f('uf', 'UF', 'uf', 2, E),
+      f('renda', 'Renda mensal', 'money', 6, M),
+      f('refs', 'Referências pessoais (com telefone)', 'area', 12, R),
+      this.tog(p, 'O(A) sócio(a) é casado(a) ou possui companheiro(a)?', 'Cônjuge')
+    ];
+    if (this.state.on[p]) {
+      const c = 'sc' + id, G = 'Cônjuge';
+      const g2 = (k, l, t, w, o) => this.F(c + '.' + k, l, t, w, Object.assign({ g: G }, o || {}));
+      a.push(g2('nome', 'Nome completo', 'text', 12, { req: 1 }), g2('rg', 'RG', 'text', 6), g2('cpf', 'CPF', 'cpf', 6, { ph: '000.000.000-00' }), g2('nasc', 'Data de nascimento', 'date', 6, { ph: 'dd/mm/aaaa' }));
+    }
+    return a;
+  }
+
+  locador(p, q, gp) {
+    const pre = gp ? gp + ' · ' : '';
+    const r = k => (q.indexOf(k) >= 0 ? { req: 1 } : {});
+    const f = (k, l, t, w, g, o) => this.F(p + '.' + k, l, t, w, Object.assign({ g: pre + g }, r(k), o || {}));
+    const I = 'Identificação pessoal', C = 'Informações de contato';
+    const a = [
+      f('nome', 'Nome completo', 'text', 12, I),
+      f('nac', 'Nacionalidade', 'text', 6, I),
+      f('ec', 'Estado civil', 'select', 6, I, { opts: this.EC }),
+      f('prof', 'Profissão', 'text', 6, I),
+      f('nasc', 'Data de nascimento', 'date', 6, I, { ph: 'dd/mm/aaaa' }),
+      f('rg', 'RG', 'text', 6, I),
+      f('cpf', 'CPF', 'cpf', 6, I, { ph: '000.000.000-00' }),
+      f('email', 'E-mail', 'email', 12, C)
+    ];
+    if (p === 't') {
+      const E = 'Endereço residencial', T = 'Telefones', B = 'Dados bancários para depósito';
+      a.push(
+        f('tel', 'Telefone residencial', 'tel', 6, T, { ph: '(00) 0000-0000' }), f('cel', 'Celular', 'tel', 6, T, { ph: '(00) 00000-0000' }),
+        f('end', 'Endereço (rua)', 'text', 8, E), f('num', 'Número', 'text', 4, E),
+        f('cep', 'CEP', 'cep', 4, E, { ph: '00000-000' }), f('bairro', 'Bairro', 'text', 4, E), f('cidade', 'Cidade', 'text', 4, E),
+        f('banco', 'Banco', 'text', 6, B), f('ag', 'Agência', 'text', 3, B), f('conta', 'Conta', 'text', 3, B),
+        f('tipoConta', 'Tipo de conta', 'radio', 6, B, { choices: ['Conta corrente', 'Poupança'] }),
+        f('titular', 'Titular da conta', 'text', 6, B)
+      );
+    }
+    return a;
+  }
+
+  item(p, id, t, noun) {
+    const f = (k, l, tt, w, o) => this.F(p + id + '.' + k, l, tt, w, Object.assign({ g: 'Identificação' }, o || {}));
+    return [f('nome', 'Nome completo', 'text', 12, { req: 1 }), f('par', 'Grau de parentesco', 'text', 6), f('rg', 'RG', 'text', 6), f('cpf', 'CPF', 'cpf', 6, { ph: '000.000.000-00' })];
+  }
+
+  isOn(k) { return !!this.state.on[k]; }
+
+  profile() {
+    const s = this.state;
+    const pf = s.person === 'pf', loc = s.role === 'locatario';
+    const label = s.person && s.role ? (pf ? 'Pessoa física' : 'Pessoa jurídica') + ' · ' + (loc ? 'Locatário(a)' : 'Locador(a)') : '';
+    const blocked = s.person === 'pj' && s.role === 'locador';
+    const ok = !!(s.person && s.role && !blocked && (!loc || s.guar));
+    return { pf: pf, loc: loc, label: label, blocked: blocked, ok: ok };
+  }
+
+  panels(step) {
+    const s = this.state, P = this.profile(), out = [];
+    if (!P.ok) return out;
+    const tg = (id, title, q, desc) => ({ id: id, title: title, desc: desc || '', tog: true, q: q, open: this.isOn(id), blocks: [] });
+    if (step === 1) {
+      if (P.loc && P.pf) {
+        out.push({ id: 'imovel', title: 'Imóvel e proposta', desc: 'Dados do imóvel que você deseja alugar.', open: true, blocks: [{ id: 'im', fields: this.imovel(false) }] });
+        out.push({ id: 'titular', title: 'Seus dados', desc: 'Informações do(a) locatário(a).', open: true, blocks: [{ id: 't', fields: this.pfFull('t', ['nome', 'nasc', 'rg', 'cpf', 'email', 'tel', 'end']).concat([this.F('t.refs', 'Referências pessoais (com telefone)', 'area', 12, { g: 'Referências pessoais', ph: 'Nome e telefone de quem possa dar referências' })]) }] });
+      } else if (P.loc && !P.pf) {
+        out.push({ id: 'imovel', title: 'Imóvel e proposta', desc: 'Dados do imóvel que a empresa deseja alugar.', open: true, blocks: [{ id: 'im', fields: this.imovel(true) }] });
+        out.push({ id: 'empresa', title: 'Dados da empresa', desc: 'Informações da empresa locatária.', open: true, blocks: [{ id: 'e', fields: this.empresa() }] });
+        out.push({ id: 'socios', title: 'Sócios e representantes legais', desc: 'Inclua cada sócio ou representante, com os dados do cônjuge quando houver.', open: true, add: { label: 'Adicionar sócio ou representante', list: 'soc' }, blocks: s.lists.soc.map((id, i) => ({ id: 's' + id, title: 'Sócio ou representante', idx: i + 1, removable: s.lists.soc.length > 1, rem: { list: 'soc', id: id, prefixes: ['s' + id + '.', 'sc' + id + '.'], offKeys: ['s' + id] }, fields: this.socio(id) })) });
+      } else if (!P.loc && P.pf) {
+        out.push({ id: 'proprietario', title: 'Seus dados', desc: 'Informações do(a) proprietário(a) do imóvel.', open: true, blocks: [{ id: 't', fields: this.locador('t', ['nome', 'rg', 'cpf', 'email', 'cel', 'end', 'cep', 'banco', 'ag', 'conta', 'titular']) }] });
+      }
+    }
+    if (step === 2) {
+      if (P.loc && P.pf) {
+        const sp = tg('c', 'Cônjuge ou companheiro(a)', 'É necessário incluir os dados do cônjuge ou companheiro(a)?');
+        sp.blocks = [{ id: 'c', fields: this.pfFull('c', ['nome']) }]; sp.prefixes = ['c.']; out.push(sp);
+        const rs = tg('res', 'Moradores', 'Outras pessoas irão residir no imóvel?', 'Informe quem morará com você.');
+        rs.add = { label: 'Adicionar morador', list: 'res' }; rs.prefixes = s.lists.res.map(i => 'r' + i + '.'); rs.all = 'r';
+        rs.blocks = s.lists.res.map((id, i) => ({ id: 'r' + id, title: 'Morador', idx: i + 1, removable: true, rem: { list: 'res', id: id, prefixes: ['r' + id + '.'], toggle: 'res' }, fields: this.item('r', id) }));
+        out.push(rs);
+        const dp = tg('dep', 'Dependentes', 'Há dependentes a informar?');
+        dp.add = { label: 'Adicionar dependente', list: 'dep' }; dp.prefixes = s.lists.dep.map(i => 'd' + i + '.'); dp.all = 'd';
+        dp.blocks = s.lists.dep.map((id, i) => ({ id: 'd' + id, title: 'Dependente', idx: i + 1, removable: true, rem: { list: 'dep', id: id, prefixes: ['d' + id + '.'], toggle: 'dep' }, fields: this.item('d', id) }));
+        out.push(dp);
+      }
+      if (P.loc && s.guar === 'fiador') {
+        const fl = this.pfFull('f', ['nome', 'nasc', 'rg', 'cpf', 'email', 'tel', 'end']);
+        fl.push(this.tog('fc', 'O(A) fiador(a) é casado(a) ou possui companheiro(a)?', 'Cônjuge do fiador'));
+        if (this.isOn('fc')) Array.prototype.push.apply(fl, this.pfFull('fc', ['nome'], 'Cônjuge do fiador'));
+        out.push({ id: 'fiador', title: 'Fiador', desc: 'Dados de quem será o fiador. O imóvel e a proposta já foram informados.', lock: 'A garantia escolhida é fiador, então este cadastro foi ativado automaticamente.' + (!P.pf ? ' Para empresas, a ficha de fiador ainda será confirmada pela Capital SP.' : ''), open: true, blocks: [{ id: 'f', fields: fl }] });
+      }
+      if (!P.loc && P.pf) {
+        const sp = tg('c', 'Cônjuge ou companheiro(a)', 'É necessário incluir os dados do cônjuge ou companheiro(a)?');
+        sp.blocks = [{ id: 'c', fields: this.locador('c', ['nome'], '') }]; sp.prefixes = ['c.']; out.push(sp);
+      }
+    }
+    return out;
+  }
+
+  mask(t, v) {
+    const d = String(v || '').replace(/\D/g, '');
+    if (t === 'cpf') { const x = d.slice(0, 11); return x.replace(/^(\d{3})(\d)/, '$1.$2').replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1-$2'); }
+    if (t === 'cnpj') { const x = d.slice(0, 14); return x.replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2'); }
+    if (t === 'tel') { const x = d.slice(0, 11); return x.length > 10 ? x.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3') : x.replace(/^(\d{2})(\d{0,4})(\d{0,4}).*/, (m, a, b, c) => '(' + a + ')' + (b ? ' ' + b : '') + (c ? '-' + c : '')); }
+    if (t === 'cep') { const x = d.slice(0, 8); return x.replace(/^(\d{5})(\d)/, '$1-$2'); }
+    if (t === 'date') { const x = d.slice(0, 8); return x.replace(/^(\d{2})(\d)/, '$1/$2').replace(/^(\d{2})\/(\d{2})(\d)/, '$1/$2/$3'); }
+    if (t === 'money') { if (!d) return ''; const n = parseInt(d.slice(0, 11), 10) / 100; return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    if (t === 'uf') return String(v || '').replace(/[^A-Za-z]/g, '').toUpperCase().slice(0, 2);
+    return v;
+  }
+
+  err(fd) {
+    if (fd.t === 'tog') return '';
+    const v = this.state.v[fd.k] || '';
+    if (!v) return fd.req ? 'Preencha este campo.' : '';
+    const n = v.replace(/\D/g, '').length;
+    if (fd.t === 'cpf' && n < 11) return 'CPF incompleto.';
+    if (fd.t === 'cnpj' && n < 14) return 'CNPJ incompleto.';
+    if (fd.t === 'tel' && n < 10) return 'Telefone incompleto.';
+    if (fd.t === 'cep' && n < 8) return 'CEP incompleto.';
+    if (fd.t === 'date') { const a = v.split('/'); if (n < 8 || +a[0] < 1 || +a[0] > 31 || +a[1] < 1 || +a[1] > 12) return 'Use uma data válida, como 31/12/1990.'; }
+    if (fd.t === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Confira o e-mail.';
+    return '';
+  }
+
+  fields(step) {
+    const out = [];
+    this.panels(step).forEach(pn => { if (pn.open) pn.blocks.forEach(b => b.fields.forEach(fd => { if (fd.t !== 'tog') out.push(fd); })); });
+    return out;
+  }
+  stepErr(step) { return this.fields(step).filter(fd => this.err(fd)).length; }
+
+  docDefs() {
+    const s = this.state, P = this.profile(), out = [];
+    const D = (id, l, o) => Object.assign({ id: id, l: l, req: true, multi: false }, o || {});
+    const certs = (pre, title, key, q) => ({
+      title: title, desc: 'A ficha pede as certidões abaixo ou o pagamento de uma taxa para a Capital SP contratar o serviço.', key: key, q: q || 'Como você prefere atender a esta exigência?',
+      choices: [{ v: 'cert', l: 'Enviar as certidões', d: 'Seis documentos, listados abaixo.' }, { v: 'taxa', l: 'Pagar a taxa de R$ 50,00', d: 'A Capital SP contrata o serviço por você.' }],
+      items: [D(pre + 'prot', 'Certidões de protestos dos 10 cartórios da capital de SP'), D(pre + 'civ', 'Certidão do distribuidor cível (TJSP)'), D(pre + 'trab', 'Certidão de distribuição de ações trabalhistas (TRTSP)'), D(pre + 'cndt', 'Certidão negativa de débitos trabalhistas (TST)'), D(pre + 'rf', 'Certidão negativa de débitos da Receita Federal'), D(pre + 'scpc', 'Consulta conveniada do SCPC e Serasa')]
+    });
+    if (P.loc && P.pf) {
+      out.push({ title: 'Seus documentos', desc: 'Cópia simples ou digitalizada.', items: [
+        D('t_rg', 'RG', { multi: true, hint: 'Frente e verso.' }), D('t_cpf', 'CPF'),
+        D('t_cas', 'Certidão de casamento', { req: false, tag: 'Se aplicável' }),
+        D('t_res', 'Comprovante de residência', { hint: 'Conta de luz, telefone etc.' }),
+        D('t_renda', 'Comprovante de renda', { multi: true, hint: '3 últimos holerites ou 3 últimos extratos bancários, com identificação do banco, agência e conta.' }),
+        D('t_cart', 'Carteira profissional', { hint: 'Último registro.' }),
+        D('t_rec', 'Recibos de pagamento de aluguel', { multi: true, hint: 'Os 3 últimos.' })
+      ] });
+      if (s.guar !== 'seguro') out.push(certs('t_c_', 'Certidões negativas', 'certT'));
+    }
+    if (P.loc && !P.pf) {
+      out.push({ title: 'Documentação da empresa', desc: 'Cópia simples ou digitalizada.', items: [
+        D('e_cnpj', 'Cartão do CNPJ'), D('e_soc', 'Contrato social e alterações', { multi: true }),
+        D('e_ie', 'Comprovante de inscrição estadual'), D('e_im', 'Comprovante de inscrição municipal'),
+        D('e_dirpj', 'DIRPJ atual ou extratos bancários', { multi: true, hint: 'DIRPJ atual ou extratos dos 3 últimos meses.' }),
+        D('e_socdoc', 'RG e CPF do(s) sócio(s)', { multi: true }),
+        D('e_pro', 'Declaração de pró-labore do(a) sócio(a)', { hint: 'Assinada pelo contador, com CRC.' }),
+        D('e_out', 'Outros registros', { req: false, multi: true })
+      ] });
+    }
+    if (P.loc && s.guar === 'fiador') {
+      const fi = [D('f_rg', 'RG', { multi: true, hint: 'Frente e verso.' }), D('f_cpf', 'CPF'), D('f_res', 'Comprovante de residência', { hint: 'Conta de luz, telefone etc.' }),
+        D('f_renda', 'Comprovante de renda', { multi: true, hint: '3 últimos holerites ou 3 últimos extratos bancários, com identificação do banco, agência e conta.' }),
+        D('f_cart', 'Carteira profissional', { hint: 'Último registro.' }), D('f_mat', 'Matrícula atualizada do imóvel'), D('f_iptu', 'IPTU atual')];
+      if (this.isOn('fc')) fi.push(D('f_conj', 'RG e CPF do cônjuge', { multi: true }));
+      out.push({ title: 'Documentos do fiador', desc: 'Cópia simples ou digitalizada.', items: fi });
+      out.push(certs('f_c_', 'Certidões negativas do fiador', 'certF', 'Como o fiador prefere atender a esta exigência?'));
+    }
+    if (!P.loc && P.pf) {
+      out.push({ title: 'Documentos do proprietário', desc: 'Cópias simples ou digitalizadas.', items: [
+        D('p_rg', 'RG', { multi: true }), D('p_cpf', 'CPF'),
+        D('p_iptu', 'IPTU do ano vigente', { hint: 'Do imóvel a ser locado.' }),
+        D('p_cond', 'Boleto do condomínio', { req: false, tag: 'Se houver', hint: 'Do imóvel a ser locado.' }),
+        D('p_agua', 'Conta de água recente', { hint: 'Do imóvel a ser locado.' }), D('p_luz', 'Conta de luz recente', { hint: 'Do imóvel a ser locado.' })
+      ] });
+    }
+    return out;
+  }
+
+  docStatus(it) {
+    const s = this.state, fs = s.docs[it.id] || [], ok = fs.filter(x => x.ok).length, bad = fs.length - ok;
+    if (ok) return 'added';
+    if (bad) return 'invalid';
+    if (s.rm[it.id]) return 'removed';
+    if (!it.req) return 'optional';
+    return s.tried.s3 ? 'pending' : 'waiting';
+  }
+
+  docsRaw() {
+    const s = this.state;
+    return this.docDefs().map(g => {
+      const open = !g.key || s.ch[g.key] === 'cert';
+      return Object.assign({}, g, { shown: open, items: open ? g.items : [] });
+    });
+  }
+
+  pendingDocs() {
+    const s = this.state, out = [];
+    this.docsRaw().forEach(g => {
+      if (g.key && !s.ch[g.key]) out.push(g.title + ': escolha uma opção');
+      g.items.forEach(it => { if (it.req && this.docStatus(it) !== 'added') out.push(it.l); });
+    });
+    return out;
+  }
+
+  totals() {
+    let tot = 0, done = 0;
+    [1, 2].forEach(st => this.fields(st).forEach(fd => { if (fd.req) { tot++; if ((this.state.v[fd.k] || '') && !this.err(fd)) done++; } }));
+    this.docsRaw().forEach(g => {
+      if (g.key) { tot++; if (this.state.ch[g.key]) done++; }
+      g.items.forEach(it => { if (it.req) { tot++; if (this.docStatus(it) === 'added') done++; } });
+    });
+    return { tot: tot, done: done };
+  }
+
+  hasData(prefixes) {
+    const v = this.state.v;
+    return Object.keys(v).some(k => v[k] && prefixes.some(p => k.indexOf(p) === 0));
+  }
+  askConfirm(msg, fn) { this.pend = fn; this.setState({ confirm: msg }); }
+  wipe(prefixes, docPrefix) {
+    this.setState(st => {
+      const v = Object.assign({}, st.v), t = Object.assign({}, st.touched), d = Object.assign({}, st.docs);
+      Object.keys(v).forEach(k => { if (prefixes.some(p => k.indexOf(p) === 0)) delete v[k]; });
+      Object.keys(t).forEach(k => { if (prefixes.some(p => k.indexOf(p) === 0)) delete t[k]; });
+      if (docPrefix) Object.keys(d).forEach(k => { if (k.indexOf(docPrefix) === 0) delete d[k]; });
+      return { v: v, touched: t, docs: d };
+    });
+  }
+  setOn(key, val) { this.setState(st => ({ on: Object.assign({}, st.on, { [key]: val }) })); }
+
+  switchOn(key, val, prefixes, docPrefix, what) {
+    if (!val && this.hasData(prefixes || [])) {
+      this.askConfirm('Você já preencheu informações em “' + what + '”. Ao desativar, elas serão removidas da ficha.', () => { this.wipe(prefixes, docPrefix); this.setOn(key, false); });
+      return;
+    }
+    this.setOn(key, val);
+  }
+
+  setVal(fd, raw) { const val = this.mask(fd.t, raw); this.setState(st => ({ v: Object.assign({}, st.v, { [fd.k]: val }) })); }
+  touch(k) { this.setState(st => ({ touched: Object.assign({}, st.touched, { [k]: true }) })); }
+
+  pickProfile(key, val) {
+    const s = this.state;
+    if (s[key] === val) return;
+    const leaving = (key === 'guar' && s.guar === 'fiador' && this.hasData(['f.', 'fc.'])) || (key !== 'guar' && (this.hasData(['t.', 'c.', 'e.', 'f.', 'fc.', 'im.']) || s.lists.soc.some(i => this.hasData(['s' + i + '.']))));
+    const apply = () => {
+      if (key === 'guar') { if (s.guar === 'fiador') { this.wipe(['f.', 'fc.'], 'f_'); this.setOn('fc', false); } this.setState({ guar: val, max: 0 }); }
+      else { this.setState({ v: {}, touched: {}, tried: {}, docs: {}, rm: {}, ch: {}, on: {}, lists: { res: [1], dep: [1], soc: [1] }, uid: 2, [key]: val, guar: key === 'role' && val === 'locador' ? null : s.guar, max: 0 }); }
+    };
+    if (leaving) this.askConfirm(key === 'guar' ? 'Trocar a garantia remove os dados e documentos do fiador já preenchidos.' : 'Mudar o perfil limpa as informações já preenchidas, porque cada perfil pede campos diferentes.', apply);
+    else apply();
+  }
+
+  go(i) { this.setState(st => ({ step: i, done: false })); }
+  fakeFor(fd) {
+    const t = fd.t, k = fd.k.split('.').pop();
+    if (t === 'cpf') return '000.000.000-00'; if (t === 'cnpj') return '00.000.000/0000-00';
+    if (t === 'tel') return '(11) 90000-0000'; if (t === 'cep') return '00000-000'; if (t === 'date') return '01/01/1990';
+    if (t === 'money') return 'R$ 1.000,00'; if (t === 'uf') return 'SP'; if (t === 'email') return 'exemplo@exemplo.com.br';
+    if (t === 'select') return fd.opts[0]; if (t === 'radio') return fd.choices[0];
+    if (t === 'area') return 'Exemplo demonstrativo';
+    if (k === 'nome') return 'Pessoa Exemplo'; if (k === 'razao') return 'Empresa Exemplo Ltda.';
+    if (k === 'end') return 'Rua Exemplo, 100'; if (k === 'rg') return '00.000.000-0';
+    return 'Exemplo';
+  }
+  resetAll() { this.setState({ step: 0, max: 0, person: null, role: null, guar: null, v: {}, touched: {}, tried: {}, on: {}, lists: { res: [1], dep: [1], soc: [1] }, uid: 2, docs: {}, rm: {}, ch: {}, done: false, dl: false, confirm: null }); }
+
+  addItem(list) { this.setState(st => ({ lists: Object.assign({}, st.lists, { [list]: st.lists[list].concat([st.uid]) }), uid: st.uid + 1 })); }
+  removeItem(rm) {
+    const run = () => {
+      this.wipe(rm.prefixes);
+      this.setState(st => {
+        const rest = st.lists[rm.list].filter(i => i !== rm.id);
+        const on = Object.assign({}, st.on); (rm.offKeys || []).forEach(k => { delete on[k]; });
+        if (!rest.length) { on[rm.toggle] = false; return { lists: Object.assign({}, st.lists, { [rm.list]: [st.uid] }), uid: st.uid + 1, on: on }; }
+        return { lists: Object.assign({}, st.lists, { [rm.list]: rest }), on: on };
+      });
+    };
+    if (this.hasData(rm.prefixes)) this.askConfirm('Remover este item descarta as informações preenchidas nele.', run); else run();
+  }
+
+  pickFiles(it, e) {
+    const fs = Array.prototype.slice.call((e.target && e.target.files) || []);
+    if (e.target) e.target.value = '';
+    if (!fs.length) return;
+    const add = fs.map(f => ({ n: f.name, ok: /\.(pdf|jpe?g|png)$/i.test(f.name) }));
+    this.setState(st => ({ docs: Object.assign({}, st.docs, { [it.id]: it.multi ? (st.docs[it.id] || []).concat(add) : add }), rm: Object.assign({}, st.rm, { [it.id]: false }) }));
+  }
+  dropFile(it, idx) {
+    this.setState(st => {
+      const arr = (st.docs[it.id] || []).filter((x, i) => i !== idx);
+      return { docs: Object.assign({}, st.docs, { [it.id]: arr }), rm: Object.assign({}, st.rm, { [it.id]: !arr.some(x => x.ok) }) };
+    });
+  }
+
+  next() {
+    const s = this.state, st = s.step, adv = () => this.setState({ step: st + 1, max: Math.max(s.max, st + 1) });
+    if (st === 0) { if (this.profile().ok) adv(); return; }
+    if (st === 1 || st === 2) { if (this.stepErr(st)) { this.setState(x => ({ tried: Object.assign({}, x.tried, { ['s' + st]: true }) })); return; } adv(); return; }
+    if (st === 3) { if (this.pendingDocs().length && !s.tried.s3) { this.setState(x => ({ tried: Object.assign({}, x.tried, { s3: true }) })); return; } adv(); return; }
+    if (st === 4) { adv(); return; }
+    if (st === 5) { if (!this.stepErr(1) && !this.stepErr(2)) this.setState({ done: true, dl: false }); }
+  }
+
+  fmtValue(fd) { return this.state.v[fd.k] || ''; }
+
+  groupsRaw() {
+    const out = [];
+    [1, 2].forEach(st => this.panels(st).forEach(pn => {
+      if (!pn.open) return;
+      pn.blocks.forEach((b, i) => {
+        const title = b.title ? pn.title + ' · ' + b.title + (b.idx ? ' ' + b.idx : '') : pn.title;
+        const rows = [], filled = [];
+        b.fields.forEach(fd => {
+          if (fd.t === 'tog') return;
+          const val = this.state.v[fd.k] || '';
+          if (val) { rows.push({ l: fd.l, v: val, fg: '#2C2C2C' }); filled.push({ l: fd.l, v: val }); }
+          else if (fd.req) rows.push({ l: fd.l, v: 'Pendente: campo obrigatório', fg: '#9E1830' });
+        });
+        out.push({ title: title, step: st, rows: rows, filled: filled });
+      });
+    }));
+    return out;
+  }
+
+  docRowsRaw() {
+    const s = this.state, rows = [];
+    this.docsRaw().forEach(g => {
+      if (g.key && s.ch[g.key] === 'taxa') rows.push({ l: g.title, v: 'Taxa de R$ 50,00 escolhida no lugar das certidões', fg: '#2C2C2C' });
+      if (g.key && !s.ch[g.key]) rows.push({ l: g.title, v: 'Pendente: escolha uma opção', fg: '#9E1830' });
+      g.items.forEach(it => {
+        const st = this.docStatus(it), fs = (s.docs[it.id] || []).filter(x => x.ok);
+        if (st === 'added') rows.push({ l: it.l, v: fs.map(x => x.n).join(', '), fg: '#2C2C2C' });
+        else if (it.req) rows.push({ l: it.l, v: 'Pendente: enviar junto com a ficha', fg: '#9E1830' });
+        else rows.push({ l: it.l, v: 'Opcional, não adicionado', fg: '#555555' });
+      });
+    });
+    return rows;
+  }
+
+  demoFill() {
+    if (!this.profile().ok) { this.setState({ person: 'pf', role: 'locatario', guar: 'fiador', max: 0 }, () => this.demoFill()); return; }
+    const s = this.state, v = Object.assign({}, s.v), docs = Object.assign({}, s.docs), ch = Object.assign({}, s.ch);
+    [1, 2].forEach(st => this.fields(st).forEach(fd => { if (fd.req || st === 1) v[fd.k] = this.fakeFor(fd); }));
+    ch.certT = 'taxa'; ch.certF = 'taxa';
+    this.setState({ v: v, ch: ch, rm: {} }, () => {
+      const d2 = Object.assign({}, this.state.docs);
+      this.docsRaw().forEach(g => g.items.forEach(it => { if (it.req) d2[it.id] = [{ n: 'documento-exemplo.pdf', ok: true }]; }));
+      this.setState({ docs: d2 });
+    });
+  }
+
+  renderVals() {
+    const s = this.state, P = this.profile(), A = this;
+    const step = s.step, done = s.done;
+    const pad = n => (n < 10 ? '0' : '') + n;
+    const T = this.totals();
+    const pct = T.tot ? Math.round(T.done / T.tot * 100) : 0;
+    const pendDocs = this.pendingDocs();
+    const e1 = this.stepErr(1), e2 = this.stepErr(2);
+    const stepDone = i => (i === 0 ? P.ok : i === 1 ? P.ok && !e1 && s.max >= 2 : i === 2 ? P.ok && !e2 && s.max >= 3 : i === 3 ? P.ok && !pendDocs.length && s.max >= 4 : i === 4 ? s.max >= 5 : done);
+
+    const stepItems = this.STEPS.map((label, i) => {
+      const cur = (i === step && !done) || (done && i === 5), can = i <= s.max;
+      return {
+        label: label, num: pad(i + 1), aria: cur ? 'step' : 'false', locked: String(!can), ok: stepDone(i) && !cur,
+        go: () => { if (can) A.go(i); },
+        bg: cur ? '#292D29' : 'transparent', fg: cur ? '#EFE6D2' : (can ? '#292D29' : '#4A4D47'), fw: cur ? 600 : 500, cur: can ? 'pointer' : 'default'
+      };
+    });
+
+    const opt = (arr, cur, key) => arr.map(o => ({ code: o.code, label: o.label, desc: o.desc, on: String(cur === o.v), pick: () => A.pickProfile(key, o.v) }));
+    const personOpts = opt([
+      { v: 'pf', code: 'A — CPF', label: 'Pessoa física', desc: 'Você, como pessoa, em seu nome e com seu CPF.' },
+      { v: 'pj', code: 'B — CNPJ', label: 'Pessoa jurídica', desc: 'Uma empresa, com CNPJ, sócios e representantes legais.' }
+    ], s.person, 'person');
+    const roleOpts = opt([
+      { v: 'locatario', code: 'A — Quem aluga', label: 'Locatário(a)', desc: 'Pessoa ou empresa interessada em alugar um imóvel.' },
+      { v: 'locador', code: 'B — Quem é dono', label: 'Locador(a)', desc: 'Proprietário(a) do imóvel que será alugado.' }
+    ], s.role, 'role');
+    const guarOpts = opt([
+      { v: 'caucao', code: 'G1', label: 'Caução', desc: 'Um valor deixado como garantia da locação. As regras e o valor serão informados pela Capital SP.' },
+      { v: 'seguro', code: 'G2', label: 'Seguro fiança', desc: 'Uma seguradora oferece a garantia. Nesta ficha, as certidões negativas deixam de ser pedidas. A contratação depende da seguradora.' },
+      { v: 'fiador', code: 'G3', label: 'Fiador', desc: 'Uma pessoa que se responsabiliza pela locação. Ela também informa seus dados e envia documentos.' }
+    ], s.guar, 'guar');
+
+    const mk = (fd, st) => {
+      const err = A.err(fd), show = !!err && (s.touched[fd.k] || s.tried['s' + st]);
+      const id = 'f-' + fd.k.replace(/[^A-Za-z0-9]/g, '-'), t = fd.t;
+      const isInput = ['text', 'email', 'tel', 'cpf', 'cnpj', 'cep', 'date', 'money', 'uf'].indexOf(t) >= 0;
+      const ac = { nome: 'name', email: 'email', tel: 'tel', cel: 'tel', cep: 'postal-code' }[fd.k.split('.').pop()] || 'off';
+      return {
+        isField: true, isTog: false, head: false, g: fd.g, id: id, eid: id + '-e', l: fd.l, span: 'span ' + fd.w, req: !!fd.req, ph: fd.ph || '',
+        isInput: isInput, isSelect: t === 'select', isArea: t === 'area', isRadio: t === 'radio',
+        type: t === 'email' ? 'email' : (t === 'tel' ? 'tel' : 'text'),
+        im: (['cpf', 'cnpj', 'cep', 'date', 'money'].indexOf(t) >= 0) ? 'numeric' : (t === 'tel' ? 'tel' : (t === 'email' ? 'email' : 'text')),
+        ac: ac, max: t === 'cpf' ? 14 : t === 'cnpj' ? 18 : t === 'cep' ? 9 : t === 'date' ? 10 : t === 'uf' ? 2 : 200,
+        value: s.v[fd.k] || '', opts: fd.opts || [],
+        choices: (fd.choices || []).map(c => ({ label: c, on: String((s.v[fd.k] || '') === c), pick: () => A.setVal({ k: fd.k, t: 'text' }, c) })),
+        onChange: e => A.setVal(fd, e.target.value), onBlur: () => A.touch(fd.k),
+        err: show, errMsg: err, invalid: String(show), bc: show ? '#9E1830' : '#7A7466'
+      };
+    };
+
+    const buildPanels = st => A.panels(st).map((pn, pi) => {
+      const on = !!pn.open;
+      const blocks = pn.blocks.map(b => {
+        let prev = null;
+        const fields = b.fields.map(fd => {
+          let o;
+          if (fd.t === 'tog') {
+            const isOn = A.isOn(fd.key);
+            o = { isField: false, isTog: true, head: false, g: fd.g, l: fd.l, yesP: String(isOn), noP: String(!isOn),
+              onYes: () => A.setOn(fd.key, true),
+              onNo: () => {
+                const pf = fd.key.charAt(0) === 's' ? ['sc' + fd.key.slice(1) + '.'] : ['fc.'];
+                A.switchOn(fd.key, false, pf, fd.key === 'fc' ? 'f_conj' : null, fd.g);
+              } };
+          } else o = mk(fd, st);
+          o.head = !!fd.g && fd.g !== prev; prev = fd.g || prev;
+          return o;
+        });
+        return {
+          title: b.title || '', num: b.idx ? pad(b.idx) : '', hasTitle: !!b.title, removable: !!b.removable,
+          removeLabel: 'Remover ' + (b.title || '') + (b.idx ? ' ' + b.idx : ''), onRemove: () => A.removeItem(b.rem),
+          frame: b.idx ? 'padding-top:24px;border-top:1px solid rgba(41,45,41,.3)' : '', fields: fields
+        };
+      });
+      const allPrefixes = pn.all ? A.state.lists[pn.id].map(i => pn.all + i + '.') : (pn.prefixes || []);
+      return {
+        code: pad(st + 1) + '.' + (pi + 1), title: pn.title, desc: pn.desc || '', hasDesc: !!pn.desc, isTog: !!pn.tog, q: pn.q || '', open: on,
+        yesP: String(on), noP: String(!on), onYes: () => A.setOn(pn.id, true),
+        onNo: () => A.switchOn(pn.id, false, allPrefixes, null, pn.title),
+        isLock: !!pn.lock, lockNote: pn.lock || '', blocks: blocks,
+        hasAdd: !!pn.add && on, addLabel: pn.add ? pn.add.label : '', onAdd: () => A.addItem(pn.add.list)
+      };
+    });
+
+    const panels = (step === 1 || step === 2) && !done ? buildPanels(step) : [];
+    const errN = step === 1 ? e1 : e2;
+    const showErrSum = (step === 1 || step === 2) && s.tried['s' + step] && errN > 0;
+
+    let dn = 0;
+    const SM = { waiting: ['Aguardando documento', '#EEEEEA', '#555555', '○'], pending: ['Documento pendente', '#FFF2D6', '#855400', '!'], added: ['Documento adicionado', '#E8F3EC', '#17603A', '✓'], optional: ['Documento opcional', '#EEEEEA', '#555555', '–'], invalid: ['Arquivo inválido', '#FBE9ED', '#9E1830', '✕'], removed: ['Documento removido', '#E6F0F7', '#23567C', '↺'] };
+    const docGroups = step === 3 && !done ? A.docsRaw().map((g, gi) => ({
+      code: '04.' + (gi + 1), title: g.title, desc: g.desc || '', hasDesc: !!g.desc, hasChoice: !!g.key, choiceQ: g.q || '', fee: g.key ? s.ch[g.key] === 'taxa' : false,
+      choices: (g.choices || []).map(c => ({ label: c.l, desc: c.d, on: String(s.ch[g.key] === c.v), pick: () => A.setState(st => ({ ch: Object.assign({}, st.ch, { [g.key]: c.v }) })) })),
+      items: g.items.map(it => {
+        dn++;
+        const code = A.docStatus(it), fs = s.docs[it.id] || [], M = SM[code], has = fs.some(x => x.ok);
+        return {
+          n: 'DOC ' + pad(dn), label: it.l, hint: it.hint || '', hasHint: !!it.hint, tag: it.req ? 'Obrigatório' : (it.tag || 'Opcional'),
+          stLabel: M[0], stBg: M[1], stFg: M[2], stGlyph: M[3],
+          multi: !!it.multi, multiNote: it.multi ? ' · mais de um arquivo' : '',
+          files: fs.map((f, i) => ({ name: f.n, bad: !f.ok, bd: f.ok ? 'rgba(41,45,41,.2)' : '#9E1830', onRemove: () => A.dropFile(it, i) })),
+          btnLabel: has ? (it.multi ? 'Adicionar mais' : 'Substituir arquivo') : 'Selecionar arquivo', btnCls: has ? 'bo' : 'bp',
+          onPick: e => A.pickFiles(it, e)
+        };
+      })
+    })) : [];
+    const showDocSum = step === 3 && s.tried.s3 && pendDocs.length > 0;
+
+    const groupsRaw = (step === 4 || step === 5) ? A.groupsRaw() : [];
+    const groups = groupsRaw.map(g => ({ title: g.title, rows: g.rows, filled: g.filled, onEdit: () => A.go(g.step) }));
+    const docRows = (step === 4 || step === 5) ? A.docRowsRaw() : [];
+    const missingF = e1 + e2;
+    const sumOk = missingF === 0 && pendDocs.length === 0;
+    const sumTitle = sumOk ? 'Tudo preenchido' : (missingF ? missingF + (missingF === 1 ? ' campo obrigatório pendente' : ' campos obrigatórios pendentes') : 'Faltam documentos');
+    const sumText = missingF ? 'Preencha os campos marcados como pendentes para gerar a ficha. Cada grupo tem um botão Editar.' : (pendDocs.length ? pendDocs.length + (pendDocs.length === 1 ? ' documento ainda não foi adicionado' : ' documentos ainda não foram adicionados') + '. Eles ficarão listados como pendentes na ficha, e você deve enviá-los junto com o PDF.' : 'Seus dados e documentos estão completos. Você pode gerar a ficha.');
+
+    const nextLabel = ['Continuar', 'Continuar', 'Continuar', (s.tried.s3 && pendDocs.length) ? 'Continuar mesmo assim' : 'Continuar', 'Ver ficha em PDF', 'Gerar ficha cadastral'][step];
+    const nextNote = step === 0 && P.blocked ? 'Este caminho está em espera.' : (step === 0 && !P.ok && s.person && s.role ? 'Escolha a garantia para continuar.' : (step === 0 && !P.ok ? 'Responda às perguntas para continuar.' : (step === 5 && missingF ? 'Complete os campos pendentes para gerar a ficha.' : '')));
+    const nextDisabled = (step === 0 && !P.ok) || (step === 5 && missingF > 0);
+
+    const HT = ['Perfil e garantia', 'Dados principais', 'Complementares', 'Documentos', 'Revisão', 'Ficha em PDF'];
+    const HD = [
+      '',
+      'Preencha os campos marcados com * para continuar. O que não se aplica ao seu caso pode ficar em branco.',
+      'Ative apenas o que se aplica a você. Ao desativar uma seção, ela deixa de ser exigida e não entra na ficha.',
+      'Adicione cada documento no campo correspondente. O arquivo fica apenas neste aparelho: é uma seleção local, sem validação de autenticidade nem aprovação.',
+      'Confira tudo antes de gerar a ficha. Use Editar para voltar direto ao grupo que precisa de ajuste.',
+      'Este é o PDF que será gerado neste aparelho para a equipe da Capital SP. Os arquivos que você adicionou entram como anexos, após a ficha.'
+    ];
+
+    return {
+      heroBig: step === 0 && !done, heroSmall: step > 0 || done,
+      heroEyebrow: done ? 'Concluído — ' + P.label : pad(step + 1) + ' — ' + P.label,
+      heroTitle: done ? 'Ficha pronta' : HT[step], heroDesc: done ? 'Falta só encaminhar o PDF para a equipe da Capital SP.' : HD[step],
+      stepItems: stepItems, pct: pct, pctLabel: pct + '%', stepNo: pad(Math.min(step + 1, 6)), stepName: this.STEPS[done ? 5 : step],
+      hasProfile: P.ok, profLine: P.label, hasGuar: P.loc && !!s.guar, guarLabel: s.guar ? this.GUAR[s.guar] : '', guarSuffix: P.loc && s.guar ? ' · Garantia: ' + this.GUAR[s.guar] : '',
+      hasPendDocs: P.ok && pendDocs.length > 0 && step >= 3, pendDocs: pendDocs.slice(0, 4), pendN: String(pendDocs.length), morePend: pendDocs.length > 4, morePendN: String(pendDocs.length - 4),
+      hasConfirm: !!s.confirm, confirmMsg: s.confirm || '',
+      confirmYes: () => { const f = A.pend; A.pend = null; A.setState({ confirm: null }); if (f) f(); },
+      confirmNo: () => { A.pend = null; A.setState({ confirm: null }); },
+      s0: step === 0 && !done, sForm: (step === 1 || step === 2) && !done, s3: step === 3 && !done, s4: step === 4 && !done, s5: step === 5 && !done, s6: done,
+      personOpts: personOpts, roleOpts: roleOpts, guarOpts: guarOpts,
+      showRole: !!s.person, showGuar: !!s.person && s.role === 'locatario', showGuarNone: !!s.person && s.role === 'locador' && !P.blocked,
+      guarProvisional: s.guar === 'caucao' || s.guar === 'seguro', blocked: P.blocked,
+      panels: panels, noPanels: step === 2 && panels.length === 0, showErrSum: showErrSum, errSum: errN + (errN === 1 ? ' campo precisa de atenção' : ' campos precisam de atenção') + '. Eles estão destacados abaixo.',
+      docGroups: docGroups, showDocSum: showDocSum, docSum: pendDocs.length + (pendDocs.length === 1 ? ' documento pendente' : ' documentos pendentes') + '. Você pode continuar e enviá-los depois, junto com a ficha.',
+      groups: groups, docRows: docRows, goStep0: () => A.go(0), goStep3: () => A.go(3),
+      sumTitle: sumTitle, sumText: sumText, sumBg: sumOk ? '#E8F3EC' : (missingF ? '#FBE9ED' : '#FFF2D6'), sumFg: sumOk ? '#17603A' : (missingF ? '#9E1830' : '#855400'),
+      today: new Date().toLocaleDateString('pt-BR'), cannotGen: step === 5 && missingF > 0, genBlock: 'Ainda há ' + missingF + ' campo(s) obrigatório(s) pendente(s). Volte à revisão para completar.',
+      dl: s.dl, doDownload: () => A.setState({ dl: true }), backToPreview: () => A.setState({ done: false, step: 5 }),
+      waHref: 'https://wa.me/5511976653830?text=' + encodeURIComponent('Olá! Preenchi minha ficha cadastral e gostaria de encaminhá-la para análise.'),
+      showActions: !done, showBack: step > 0, noBack: step === 0, back: () => A.go(step - 1),
+      hasNextNote: !!nextNote, nextNote: nextNote, nextLabel: nextLabel, nextDisabled: nextDisabled, next: () => A.next(),
+      demoFill: () => A.demoFill(), resetAll: () => A.resetAll()
+    };
+  }
+}
+</script>
+</body>
+</html>

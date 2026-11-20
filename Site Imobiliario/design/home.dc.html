@@ -39,7 +39,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
     </a>
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
       <nav style="display:flex;gap:clamp(20px,2.6vw,44px);opacity:{{ navOp }};pointer-events:{{ navPE }};transition:opacity .3s">
-        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="4">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
           <a href="#" onClick="{{ item.onClick }}" onMouseEnter="{{ item.onEnter }}" onMouseLeave="{{ item.onLeave }}" style="position:relative;display:flex;gap:8px;padding:8px 0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:inherit">
             <span style="opacity:.5">{{ item.n }}</span>
             <span>{{ item.label }}</span>
@@ -553,7 +553,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
         <button onClick="{{ closeMenu }}" style="height:44px;padding:0;border:0;background:none;cursor:pointer;font:inherit;letter-spacing:inherit">FECHAR ×</button>
       </div>
       <nav style="margin-top:auto;display:flex;flex-direction:column;border-top:2px solid #292D29">
-        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="4">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
           <a href="#" onClick="{{ item.onClick }}" style="display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(41,45,41,.28);color:#292D29">
             <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:64px;line-height:.85">{{ item.labelUp }}</span>
             <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">{{ item.n }}</span>
@@ -946,8 +946,8 @@ class Component extends DCLogic {
     const titleLines = (mob ? ['CAPITAL', 'SP'] : ['CAPITAL SP']).map(t => ({
       letters: t.split('').map(ch => { const i = gi++; return { ch: ch === ' ' ? '\u00A0' : ch, ref: this.letterRefs[i], w: ch === ' ' ? '.24em' : 'auto' }; })
     }));
-    const navGo = [() => scrollTo({ top: 0, behavior: 'smooth' }), null, null, null];
-    const navItems = ['Home', 'Sobre', 'Contato', 'Blog'].map((label, i) => ({
+    const navGo = [() => scrollTo({ top: 0, behavior: 'smooth' }), null, null, null, () => { location.href = 'Capital%20SP%20Cadastro.dc.html'; }];
+    const navItems = ['Home', 'Sobre', 'Contato', 'Blog', 'Cadastro'].map((label, i) => ({
       label, labelUp: label.toUpperCase(), n: '0' + (i + 1),
       ul: (s.hoverNav === i || (i === 0 && s.hoverNav == null)) ? 1 : 0,
       onEnter: () => this.setState({ hoverNav: i }), onLeave: () => this.setState({ hoverNav: null }),
