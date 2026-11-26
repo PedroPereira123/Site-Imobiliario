@@ -1111,8 +1111,8 @@ class Component extends DCLogic {
     const titleLines = (mob ? ['CAPITAL', 'SP'] : ['CAPITAL SP']).map(t => ({
       letters: t.split('').map(ch => { const i = gi++; return { ch: ch === ' ' ? '\u00A0' : ch, ref: this.letterRefs[i], w: ch === ' ' ? '.24em' : 'auto' }; })
     }));
-    const navGo = [() => scrollTo({ top: 0, behavior: 'smooth' }), null, null, null, () => { location.href = 'Capital%20SP%20Cadastro.dc.html'; }];
-    const navItems = ['Home', 'Sobre', 'Contato', 'Blog', 'Cadastro'].map((label, i) => ({
+    const navGo = [() => scrollTo({ top: 0, behavior: 'smooth' }), null, null, () => { location.href = 'Capital%20SP%20Cadastro.dc.html'; }];
+    const navItems = ['Home', 'Sobre', 'Contato', 'Cadastro'].map((label, i) => ({
       label, labelUp: label.toUpperCase(), n: '0' + (i + 1),
       ul: (s.hoverNav === i || (i === 0 && s.hoverNav == null)) ? 1 : 0,
       onEnter: () => this.setState({ hoverNav: i }), onLeave: () => this.setState({ hoverNav: null }),
