@@ -28,20 +28,20 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 .rstage:focus-visible{outline:2px solid #292D29;outline-offset:-4px}
 .rstage:active{cursor:grabbing}
 @media (prefers-reduced-motion:reduce){.rbtn:active{transform:none}}
-/* Botões: borda luminosa animada (glow-card) — só em hover/foco, tokens Capital SP */
+/* Botões preenchidos (classe .gl): borda luminosa animada (glow-card) em hover/foco, tokens Capital SP */
 @property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
 @keyframes glspin{to{--gl:560deg}}
-button,.btn,a[data-glow]{position:relative}
-button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
-button::before,.btn::before,a[data-glow]::before{inset:-2px;padding:4px;filter:blur(6px)}
-button:focus-visible::after,.btn:focus-visible::after,a[data-glow]:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
-button:focus-visible::before,.btn:focus-visible::before,a[data-glow]:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
+.gl{position:relative}
+.gl::before,.gl::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.gl::before{inset:-2px;padding:4px;filter:blur(6px)}
+.gl:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
 @media (hover:hover) and (pointer:fine){
-button:hover::after,.btn:hover::after,a[data-glow]:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
-button:hover::before,.btn:hover::before,a[data-glow]:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
+.gl:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
 }
-button:disabled::before,button:disabled::after{display:none}
-@media (prefers-reduced-motion:reduce){button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{animation:none!important}}
+.gl:disabled::before,.gl:disabled::after,.gl[disabled]::before,.gl[disabled]::after{display:none}
+@media (prefers-reduced-motion:reduce){.gl::before,.gl::after{animation:none!important}}
 </style>
 </helmet>
 <div style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background:#C9BEA8">
@@ -76,7 +76,7 @@ button:disabled::before,button:disabled::after{display:none}
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
       <div style="position:absolute;left:50%;top:0;height:100%;display:flex;align-items:center;transform:translateX(-50%);opacity:{{ hOp }};pointer-events:{{ hPE }};transition:opacity .45s" onKeyDown="{{ hKey }}">
         <sc-if value="{{ hPillOn }}" hint-placeholder-val="{{ true }}">
-          <button onClick="{{ hOpenBar }}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 20px;border:0;border-radius:20px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#3B403B">
+          <button class="gl" onClick="{{ hOpenBar }}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 20px;border:0;border-radius:20px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#3B403B">
             <span style="position:relative;display:block;flex:none;width:16px;height:15px">
               <span style="position:absolute;left:2.5px;top:1.5px;width:11px;height:11px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span>
               <span style="position:absolute;left:3px;top:7px;width:10px;height:8px;border:1.5px solid currentColor;border-top:0"></span>
@@ -114,7 +114,7 @@ button:disabled::before,button:disabled::after{display:none}
                 <sc-for list="{{ precoOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
               </select>
             </label>
-            <button onClick="{{ hBuscar }}" style="display:flex;align-items:center;gap:12px;margin-left:4px;padding:0 18px 0 20px;border:0;border-radius:8px;background:#C8102E;color:#FFFFFF;cursor:pointer;font-size:13.5px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#A80D26"><span>Buscar</span><span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            <button class="gl" onClick="{{ hBuscar }}" style="display:flex;align-items:center;gap:12px;margin-left:4px;padding:0 18px 0 20px;border:0;border-radius:8px;background:#C8102E;color:#FFFFFF;cursor:pointer;font-size:13.5px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#A80D26"><span>Buscar</span><span style="font-family:'IBM Plex Mono',monospace">→</span></button>
             <button onClick="{{ hClose }}" aria-label="Fechar busca" style="width:38px;margin-left:2px;border:0;border-radius:8px;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .3s" style-hover="background:rgba(41,45,41,.07)">×</button>
           </div>
         </sc-if>
@@ -253,7 +253,7 @@ button:disabled::before,button:disabled::after{display:none}
                       <span>Filtros</span>
                       <sc-if value="{{ hasExtra }}" hint-placeholder-val="{{ false }}"><span style="min-width:18px;height:18px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:#A64B36;color:#F1E9D7;font-family:'IBM Plex Mono',monospace;font-size:10px">{{ extraCount }}</span></sc-if>
                     </button>
-                    <button onClick="{{ onBuscar }}" onMouseEnter="{{ btnIn }}" onMouseLeave="{{ btnOut }}" style="display:flex;align-items:center;gap:16px;padding:0 22px 0 26px;border:0;border-radius:11px;background:{{ btnBg }};color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;white-space:nowrap;transition:background .3s">
+                    <button class="gl" onClick="{{ onBuscar }}" onMouseEnter="{{ btnIn }}" onMouseLeave="{{ btnOut }}" style="display:flex;align-items:center;gap:16px;padding:0 22px 0 26px;border:0;border-radius:11px;background:{{ btnBg }};color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;white-space:nowrap;transition:background .3s">
                       <span>{{ buscarLabel }}</span>
                       <span style="font-family:'IBM Plex Mono',monospace;transform:translateX({{ btnArrowX }});transition:transform .4s cubic-bezier(.2,.7,0,1)">→</span>
                     </button>
@@ -277,7 +277,7 @@ button:disabled::before,button:disabled::after{display:none}
                         </span>
                         <sc-if value="{{ hasExtra }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:#A64B36;color:#F1E9D7;font-family:'IBM Plex Mono',monospace;font-size:10px">{{ extraCount }}</span></sc-if>
                       </button>
-                      <button onClick="{{ onBuscar }}" aria-label="Buscar" style="width:52px;height:44px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:16px">→</button>
+                      <button class="gl" onClick="{{ onBuscar }}" aria-label="Buscar" style="width:52px;height:44px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:16px">→</button>
                     </div>
                     <div style="height:1px;margin:8px 4px;background:rgba(41,45,41,.13)"></div>
                     <label style="display:flex;flex-direction:column;gap:4px;height:46px;padding:2px 8px 0">
@@ -405,8 +405,8 @@ button:disabled::before,button:disabled::after{display:none}
               </sc-for>
             </div>
             <sc-if value="{{ b.multi }}">
-              <button class="rbtn rnav" onClick="{{ b.prev }}" aria-label="Imóvel anterior" style="position:absolute;z-index:5;left:{{ b.navX }}px;top:{{ b.navTop }}px;width:{{ b.navS }}px;height:{{ b.navS }}px;margin-top:-{{ b.navH }}px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(41,45,41,.9);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:18px" style-hover="background:#292D29"><span aria-hidden="true">←</span></button>
-              <button class="rbtn rnav" onClick="{{ b.next }}" aria-label="Próximo imóvel" style="position:absolute;z-index:5;right:{{ b.navX }}px;top:{{ b.navTop }}px;width:{{ b.navS }}px;height:{{ b.navS }}px;margin-top:-{{ b.navH }}px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(41,45,41,.9);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:18px" style-hover="background:#292D29"><span aria-hidden="true">→</span></button>
+              <button class="rbtn rnav gl" onClick="{{ b.prev }}" aria-label="Imóvel anterior" style="position:absolute;z-index:5;left:{{ b.navX }}px;top:{{ b.navTop }}px;width:{{ b.navS }}px;height:{{ b.navS }}px;margin-top:-{{ b.navH }}px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(41,45,41,.9);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:18px" style-hover="background:#292D29"><span aria-hidden="true">←</span></button>
+              <button class="rbtn rnav gl" onClick="{{ b.next }}" aria-label="Próximo imóvel" style="position:absolute;z-index:5;right:{{ b.navX }}px;top:{{ b.navTop }}px;width:{{ b.navS }}px;height:{{ b.navS }}px;margin-top:-{{ b.navH }}px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(41,45,41,.9);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:18px" style-hover="background:#292D29"><span aria-hidden="true">→</span></button>
             </sc-if>
           </div>
 
@@ -426,7 +426,7 @@ button:disabled::before,button:disabled::after{display:none}
             <div style="display:flex;flex-direction:column;align-items:flex-start;gap:20px;flex:0 1 auto">
               <div style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(44px,5vw,72px);line-height:.9;letter-spacing:.01em">{{ b.f.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.06em">{{ b.f.per }}</span></div>
               <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px">
-                <button class="rbtn" onClick="{{ b.f.onOpen }}" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 22px;border:0;border-radius:24px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap" style-hover="background:#3B403B">Anúncio completo <span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
+                <button class="rbtn gl" onClick="{{ b.f.onOpen }}" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 22px;border:0;border-radius:24px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap" style-hover="background:#3B403B">Anúncio completo <span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
                 <button class="rbtn" onClick="{{ b.f.onContact }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0;border:0;background:none;color:#292D29;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap"><span style="flex:none;width:8px;height:8px;border-radius:50%;background:#A64B36" aria-hidden="true"></span>{{ b.f.contactLabel }}</button>
               </div>
             </div>
@@ -438,7 +438,7 @@ button:disabled::before,button:disabled::after{display:none}
         <div style="padding:64px 0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;border-bottom:1px solid rgba(41,45,41,.28)">
           <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:44px;line-height:.9">NENHUM IMÓVEL COM ESSES FILTROS.</span>
           <span style="font-size:15px;opacity:.78">{{ emptyHint }}</span>
-          <button onClick="{{ clearFilters }}" style="height:48px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500">Limpar filtros</button>
+          <button class="gl" onClick="{{ clearFilters }}" style="height:48px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500">Limpar filtros</button>
         </div>
       </sc-if>
 
@@ -461,7 +461,7 @@ button:disabled::before,button:disabled::after{display:none}
                   <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;line-height:1"><span>{{ p.bairroUp }}</span><span style="white-space:nowrap">{{ p.priceFmt }}</span></div>
                   <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;opacity:.8">{{ p.specLine }}</span>
                 </div>
-                <button onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
+                <button class="gl" onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
                         <span style="position:relative;display:block;width:12px;height:16px;background:{{ p.favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .3s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#3A3832;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ p.favInner }};transition:opacity .3s"></span></span>
                       </button>
               </article>
@@ -536,7 +536,7 @@ button:disabled::before,button:disabled::after{display:none}
               <input value="{{ cName }}" onChange="{{ onCName }}" placeholder="Nome" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
               <input value="{{ cInfo }}" onChange="{{ onCInfo }}" placeholder="Telefone ou e-mail" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
               <textarea value="{{ cMsg }}" onChange="{{ onCMsg }}" rows="3" style="padding:16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;resize:vertical;font-size:15px;line-height:1.5;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29"></textarea>
-              <button onClick="{{ sendContact }}" style="align-self:flex-start;display:flex;align-items:center;gap:16px;height:48px;margin-top:8px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;transition:background .3s" style-hover="background:#3B403B">Enviar mensagem <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+              <button class="gl" onClick="{{ sendContact }}" style="align-self:flex-start;display:flex;align-items:center;gap:16px;height:48px;margin-top:8px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;transition:background .3s" style-hover="background:#3B403B">Enviar mensagem <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
             </sc-if>
             <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;align-items:flex-start;gap:16px;padding:16px;border-radius:10px;background:rgba(41,45,41,.07);font-size:15px;line-height:1.5">
@@ -552,7 +552,7 @@ button:disabled::before,button:disabled::after{display:none}
 
   <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div ref="{{ R.mnav }}" style="position:fixed;left:50%;bottom:16px;z-index:60;display:flex;gap:4px;padding:4px;border-radius:16px;background:rgba(236,228,210,.76);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,252,242,.6);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 48px -20px rgba(30,32,28,.45);transform:translate(-50%,120px);opacity:0;pointer-events:none;transition:transform .6s cubic-bezier(.2,.7,0,1),opacity .4s">
-      <button onClick="{{ mnavSearch }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500"><span style="position:relative;display:block;flex:none;width:18px;height:17px"><span style="position:absolute;left:3px;top:2px;width:12px;height:12px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span><span style="position:absolute;left:3.5px;top:8px;width:11px;height:9px;border:1.5px solid currentColor;border-top:0"></span><span style="position:absolute;left:7.5px;top:12px;width:3px;height:5px;background:currentColor"></span></span>Buscar</button>
+      <button class="gl" onClick="{{ mnavSearch }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500"><span style="position:relative;display:block;flex:none;width:18px;height:17px"><span style="position:absolute;left:3px;top:2px;width:12px;height:12px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span><span style="position:absolute;left:3.5px;top:8px;width:11px;height:9px;border:1.5px solid currentColor;border-top:0"></span><span style="position:absolute;left:7.5px;top:12px;width:3px;height:5px;background:currentColor"></span></span>Buscar</button>
       <button onClick="{{ mnavFilters }}" style="position:relative;display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:transparent;cursor:pointer;font-size:14px;font-weight:500">
         <span style="display:flex;flex-direction:column;gap:5px;width:17px">
           <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:1px;width:6px;height:6px;background:#E9E1CD;border:1.5px solid #292D29"></span></span>

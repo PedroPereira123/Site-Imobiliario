@@ -95,20 +95,20 @@ body{margin:0;background:#C9BEA8}
 .dock .btn{flex:1 1 auto}
 }
 @media (prefers-reduced-motion:reduce){.rev,.pin,.fin,.hh,.dlg{animation:fade 160ms linear both !important;animation-delay:0ms !important}.btn:active:not([disabled]),.tile:active,.segb:active{transform:none}.tile .tmark{transform:none}.cad progress::-webkit-progress-value{transition:none}}
-/* Botões: borda luminosa animada (glow-card) — só em hover/foco, tokens Capital SP */
+/* Botões preenchidos (classe .gl): borda luminosa animada (glow-card) em hover/foco, tokens Capital SP */
 @property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
 @keyframes glspin{to{--gl:560deg}}
-button,.btn,a[data-glow]{position:relative}
-button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
-button::before,.btn::before,a[data-glow]::before{inset:-2px;padding:4px;filter:blur(6px)}
-button:focus-visible::after,.btn:focus-visible::after,a[data-glow]:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
-button:focus-visible::before,.btn:focus-visible::before,a[data-glow]:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
+.gl{position:relative}
+.gl::before,.gl::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.gl::before{inset:-2px;padding:4px;filter:blur(6px)}
+.gl:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
 @media (hover:hover) and (pointer:fine){
-button:hover::after,.btn:hover::after,a[data-glow]:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
-button:hover::before,.btn:hover::before,a[data-glow]:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
+.gl:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
 }
-button:disabled::before,button:disabled::after{display:none}
-@media (prefers-reduced-motion:reduce){button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{animation:none!important}}
+.gl:disabled::before,.gl:disabled::after,.gl[disabled]::before,.gl[disabled]::after{display:none}
+@media (prefers-reduced-motion:reduce){.gl::before,.gl::after{animation:none!important}}
 </style>
 </helmet>
 <div class="cad">
@@ -521,7 +521,7 @@ button:disabled::before,button:disabled::after{display:none}
               <p style="margin:0;font-size:17px;line-height:1.6;max-width:56ch;color:#E3D8C2">Baixe sua ficha e encaminhe o documento para nossa equipe pelo WhatsApp para dar continuidade ao processo cadastral.</p>
             </div>
             <div class="pair" style="display:flex;flex-wrap:wrap;gap:12px">
-              <button class="btn bp" onClick="{{ doDownload }}">Baixar ficha cadastral<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">↓</span></button>
+              <button class="btn bp gl" onClick="{{ doDownload }}">Baixar ficha cadastral<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">↓</span></button>
               <a class="btn" href="{{ waHref }}" target="_blank" rel="noopener" style="border-color:#EFE6D2;color:#EFE6D2">Abrir WhatsApp<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></a>
             </div>
             <sc-if value="{{ dl }}" hint-placeholder-val="{{ false }}">
@@ -543,7 +543,7 @@ button:disabled::before,button:disabled::after{display:none}
             <sc-if value="{{ noBack }}" hint-placeholder-val="{{ false }}"><span class="mono nn" style="padding-left:12px;font-size:10.5px;letter-spacing:.16em">Etapa {{ stepNo }} / 06</span></sc-if>
             <span style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end;flex:1 1 auto">
               <sc-if value="{{ hasNextNote }}" hint-placeholder-val="{{ false }}"><span class="nn" style="font-size:13px;max-width:36ch;text-align:right">{{ nextNote }}</span></sc-if>
-              <button class="btn bp" disabled="{{ nextDisabled }}" onClick="{{ next }}">{{ nextLabel }}<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
+              <button class="btn bp gl" disabled="{{ nextDisabled }}" onClick="{{ next }}">{{ nextLabel }}<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
             </span>
           </div>
         </sc-if>
@@ -559,7 +559,7 @@ button:disabled::before,button:disabled::after{display:none}
         <span id="cf-d" style="font-size:15px;line-height:1.55">{{ confirmMsg }}</span>
         <span class="pair" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
           <button class="btn bo" onClick="{{ confirmNo }}">Manter</button>
-          <button class="btn bp" onClick="{{ confirmYes }}">Descartar</button>
+          <button class="btn bp gl" onClick="{{ confirmYes }}">Descartar</button>
         </span>
       </div>
     </div>
