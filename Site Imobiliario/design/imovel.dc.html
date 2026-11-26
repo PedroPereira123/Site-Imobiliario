@@ -35,6 +35,17 @@ input::placeholder{color:rgba(41,45,41,.45)}
 }
 .gl:disabled::before,.gl:disabled::after,.gl[disabled]::before,.gl[disabled]::after{display:none}
 @media (prefers-reduced-motion:reduce){.gl::before,.gl::after{animation:none!important}}
+.hshadow{text-shadow:0 1px 3px rgba(22,22,19,.8),0 2px 10px rgba(22,22,19,.6),0 6px 36px rgba(22,22,19,.65)}
+.hshadow button,.hshadow a{text-shadow:none}
+.sch{opacity:0;pointer-events:none;will-change:opacity,transform}
+.ft{display:flex;flex-direction:column;gap:6px;padding:12px 12px 10px;border-radius:10px;background:rgba(41,45,41,.07);box-shadow:inset 0 0 0 1px rgba(41,45,41,.1);transition:opacity .45s cubic-bezier(.23,1,.32,1),transform .45s cubic-bezier(.23,1,.32,1)}
+.sb[data-on='0'] .ft{opacity:0;transform:translateY(14px)}
+.sb[data-on='1'] .ft{transition-delay:calc(var(--d,0) * 55ms)}
+@media (hover:hover) and (pointer:fine){.ft:hover{transform:translateY(-4px);transition-delay:0ms!important}}
+@media (prefers-reduced-motion:reduce){.sb .ft{transform:none!important}}
+.vcard{transition:transform 220ms cubic-bezier(.23,1,.32,1)}
+@media (hover:hover) and (pointer:fine){.vcard:hover{transform:translateY(-4px)}}
+.rail::-webkit-scrollbar{display:none}
 </style>
 </helmet>
 <div ref="{{ R.root }}" style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background-color:#C9BEA8;background-size:256px 256px,720px 720px">
@@ -50,7 +61,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
       </a>
       <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
         <span style="width:1px;height:24px;background:currentColor;opacity:.3"></span>
-        <a href="{{ backHref }}" style="display:flex;align-items:center;gap:8px;height:40px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:inherit">← RESULTADOS DA BUSCA</a>
+        <a href="{{ backHref }}" aria-label="Voltar aos resultados da busca" title="Voltar aos resultados da busca" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;color:inherit;box-shadow:inset 0 0 0 1px {{ hdrPillBd }};transition:background .2s" style-hover="background:{{ hdrPill }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg></a>
       </sc-if>
     </div>
     <sc-if value="{{ hdrCtx }}" hint-placeholder-val="{{ false }}">
@@ -63,11 +74,11 @@ input::placeholder{color:rgba(41,45,41,.45)}
     <sc-if value="{{ hdrDefault }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex;align-items:center;gap:24px">
         <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.75">REF. {{ p.code }}</span>
-          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;height:40px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:inherit">FALAR COM CORRETOR →</a>
+          <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:10px;height:36px;padding:0 18px;border-radius:999px;background:{{ hdrPill }};box-shadow:inset 0 0 0 1px {{ hdrPillBd }};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:500;letter-spacing:.2em;white-space:nowrap;transition:background-color .4s,box-shadow .4s"><span style="width:6px;height:6px;background:#A64B36" aria-hidden="true"></span>{{ p.code }}</span>
+          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:36px;padding:0 18px;border-radius:999px;background:{{ hdrPill }};box-shadow:inset 0 0 0 1px {{ hdrPillBd }};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.18em;white-space:nowrap;color:inherit;transition:background-color .4s,box-shadow .4s" style-hover="box-shadow:inset 0 0 0 1px currentColor">FALAR COM CORRETOR</a>
         </sc-if>
         <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
-          <a href="{{ backHref }}" style="display:flex;align-items:center;height:44px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:inherit">← BUSCA</a>
+          <a href="{{ backHref }}" aria-label="Voltar aos resultados da busca" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;color:inherit;box-shadow:inset 0 0 0 1px {{ hdrPillBd }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg></a>
         </sc-if>
       </div>
     </sc-if>
@@ -81,9 +92,9 @@ input::placeholder{color:rgba(41,45,41,.45)}
           <image-slot id="{{ p.slot0 }}" shape="rect" placeholder="{{ p.heroPh }}"></image-slot>
         </div>
       </div>
-      <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.55) 0%,rgba(22,22,19,0) 22%,rgba(41,45,41,0) 44%,rgba(41,45,41,.78) 80%,#292D29 100%)"></div>
-      <button class="gl" onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);top:clamp(104px,15vh,136px);height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.62)">{{ p.photoCount }} — VER GALERIA</button>
-      <div ref="{{ rv }}" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:clamp(40px,7vh,72px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px;pointer-events:none">
+      <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.55) 0%,rgba(22,22,19,0) 22%,rgba(41,45,41,.12) 22%,rgba(41,45,41,.58) 46%,rgba(41,45,41,.84) 68%,#292D29 100%)"></div>
+      <button class="gl" onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);top:clamp(104px,15vh,136px);height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.62)">VER GALERIA</button>
+      <div ref="{{ rv }}" class="hshadow" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:clamp(40px,7vh,72px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px;pointer-events:none">
         <div style="min-width:0;flex:1 1 560px">
           <div ref="{{ R.heroKick }}" style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em"><span style="width:8px;height:8px;background:#EFE6D2"></span>IMÓVEL EM DESTAQUE — {{ p.code }}</div>
           <div style="overflow:hidden;margin-top:16px;padding-top:.04em">
@@ -114,7 +125,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
           <image-slot id="{{ p.slot0 }}" shape="rect" placeholder="{{ p.heroPh }}"></image-slot>
         </div>
         <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.55) 0%,rgba(22,22,19,0) 30%)"></div>
-        <button class="gl" onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);bottom:16px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">{{ p.photoCount }} — VER GALERIA</button>
+        <button class="gl" onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);bottom:16px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">VER GALERIA</button>
       </div>
       <div style="padding:clamp(32px,5vh,48px) clamp(24px,4vw,64px) clamp(16px,3vh,32px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px">
         <div style="min-width:0;flex:1 1 520px">
@@ -140,7 +151,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
     </section>
   </sc-if>
 
-  <section data-screen-label="02 Galeria" style="position:relative;background:{{ galBg }};color:#EFE6D2;padding:{{ galPadT }} 0 clamp(200px,28vh,280px)">
+  <section data-screen-label="02 Galeria" style="position:relative;background:{{ galBg }};color:#EFE6D2;padding:{{ galPadT }} 0 clamp(280px,40vh,420px)">
     <div style="max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px">
         <div>
@@ -157,10 +168,9 @@ input::placeholder{color:rgba(41,45,41,.45)}
       <sc-if value="{{ galGrid }}" hint-placeholder-val="{{ true }}">
         <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:clamp(180px,17vw,300px);grid-auto-flow:dense;gap:16px;margin-top:40px">
           <sc-for list="{{ gMosaic }}" as="t" hint-placeholder-count="6">
-            <div ref="{{ rv }}" style="position:relative;grid-column:{{ t.col }};grid-row:{{ t.row }};overflow:hidden;background:#3A3D39">
+            <div ref="{{ rv }}" onClick="{{ t.openTile }}" style="position:relative;grid-column:{{ t.col }};grid-row:{{ t.row }};overflow:hidden;background:#3A3D39;cursor:zoom-in">
               <image-slot id="{{ t.id }}" shape="rect" placeholder="{{ t.ph }}"></image-slot>
               <span style="position:absolute;left:0;bottom:0;padding:8px 12px;background:#292D29;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">{{ t.n }}</span>
-              <button class="gl" onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.65)">AMPLIAR</button>
             </div>
           </sc-for>
         </div>
@@ -169,10 +179,9 @@ input::placeholder{color:rgba(41,45,41,.45)}
       <sc-if value="{{ galTrack }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;gap:16px;margin:32px calc(-1 * clamp(24px,4vw,64px)) 0;padding:0 clamp(24px,4vw,64px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:clamp(24px,4vw,64px);scrollbar-width:none">
           <sc-for list="{{ gAll }}" as="t" hint-placeholder-count="2">
-            <div style="position:relative;flex:0 0 calc(100vw - 80px);aspect-ratio:4/5;scroll-snap-align:start;overflow:hidden;background:#3A3D39">
+            <div onClick="{{ t.openTile }}" style="position:relative;flex:0 0 calc(100vw - 80px);aspect-ratio:4/5;scroll-snap-align:start;overflow:hidden;background:#3A3D39;cursor:zoom-in">
               <image-slot id="{{ t.id }}" shape="rect" placeholder="{{ t.ph }}"></image-slot>
               <span style="position:absolute;left:0;bottom:0;padding:8px 12px;background:#292D29;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">{{ t.n }}</span>
-              <button class="gl" onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:40px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
             </div>
           </sc-for>
         </div>
@@ -181,171 +190,127 @@ input::placeholder{color:rgba(41,45,41,.45)}
       <sc-if value="{{ galPlanta }}" hint-placeholder-val="{{ false }}">
         <div style="position:relative;height:clamp(360px,40vw,640px);margin-top:40px;overflow:hidden;background:#E3D8C2;color:#292D29">
           <image-slot id="{{ planta.id }}" shape="rect" fit="contain" placeholder="{{ planta.ph }}"></image-slot>
-          <button class="gl" onClick="{{ planta.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(41,45,41,.12);color:#292D29;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
         </div>
       </sc-if>
+    </div>
+  </section>
 
-      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
-        <span style="opacity:.62">{{ galNote }}</span>
-        <button class="gl" onClick="{{ openGallery }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font:inherit;letter-spacing:inherit;transition:background .2s" style-hover="background:rgba(239,230,210,.18)">VER EM TELA CHEIA →</button>
+  <section ref="{{ R.ed }}" data-screen-label="02 O imóvel" style="position:relative">
+    <div style="padding:0 clamp(24px,4vw,64px)">
+      <div style="max-width:1680px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-top:16px;border-top:2px solid #292D29;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">
+        <span>02 — O IMÓVEL, AMBIENTE POR AMBIENTE</span>
+        <span style="font-size:10px;letter-spacing:.2em;opacity:.6">{{ story.hint }}</span>
       </div>
     </div>
-  </section>
-
-  <section data-screen-label="02 Identificação" style="padding:clamp(40px,6vh,64px) clamp(24px,4vw,64px) 0">
-    <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:stretch;border-top:2px solid #292D29;border-bottom:1px solid rgba(41,45,41,.25)">
-      <sc-for list="{{ cells }}" as="c" hint-placeholder-count="6">
-        <div style="flex:1 1 120px;min-width:0;padding:16px 24px 16px 0;display:flex;flex-direction:column;justify-content:space-between;gap:8px">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ c.l }}</span>
-          <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:700;font-size:{{ c.size }};line-height:1">{{ c.v }}</span>
-        </div>
-      </sc-for>
-      <div style="flex:2 1 260px;min-width:0;padding:16px 0;display:flex;flex-direction:column;justify-content:space-between;gap:8px">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ p.priceLabel }} · {{ p.finUp }}</span>
-        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:40px;line-height:1">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px">{{ p.per }}</span></span>
-      </div>
-    </div>
-  </section>
-
-  <section ref="{{ R.ed }}" data-screen-label="03 O imóvel" style="padding:clamp(88px,14vh,160px) clamp(24px,4vw,64px)">
-    <div style="max-width:1680px;margin:0 auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(16px,2vw,32px)">
-      <div ref="{{ rv }}" style="grid-column:{{ edTextCol }};min-width:0">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">02 — O IMÓVEL</div>
-        <h2 style="margin:16px 0 0;max-width:14ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(40px,4.8vw,80px);line-height:.88;text-wrap:balance">{{ p.secaoUp }}</h2>
-        <div style="margin-top:40px;display:flex;flex-direction:column;gap:16px;max-width:58ch">
-          <sc-for list="{{ p.paras }}" as="t" hint-placeholder-count="2">
-            <p style="margin:0;font-size:17px;line-height:1.65;text-wrap:pretty">{{ t }}</p>
-          </sc-for>
-        </div>
-        <div style="margin-top:32px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.62">REF. {{ p.code }} · {{ p.tipoUp }} · {{ p.bairroUp }}</div>
-      </div>
-      <sc-if value="{{ hasSidePhoto }}" hint-placeholder-val="{{ true }}">
-        <figure ref="{{ rv }}" style="grid-column:{{ edPhotoCol }};margin:{{ edPhotoMargin }};display:flex;flex-direction:column;gap:8px">
-          <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:#B9AE97">
-            <image-slot id="{{ side.id }}" shape="rect" placeholder="{{ side.ph }}"></image-slot>
-            <button class="gl" onClick="{{ side.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
-          </div>
-          <figcaption style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;opacity:.62">FOTO {{ side.n }} / {{ p.nPad }}</figcaption>
-        </figure>
-      </sc-if>
-    </div>
-  </section>
-
-
-  <section data-screen-label="05 Características" style="background:linear-gradient(180deg,rgba(227,216,194,0) 0,rgba(227,216,194,.6) 200px,rgba(227,216,194,.6) calc(100% - 200px),rgba(227,216,194,0) 100%);padding:clamp(120px,16vh,200px) clamp(24px,4vw,64px)">
-    <div style="max-width:1680px;margin:0 auto">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">03 — CARACTERÍSTICAS</div>
-      <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,80px);line-height:.85">{{ featTitle }}</h2>
-      <sc-if value="{{ hasDest }}" hint-placeholder-val="{{ true }}">
-        <div ref="{{ rv }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:32px;margin-top:48px">
-          <sc-for list="{{ dest }}" as="d" hint-placeholder-count="3">
-            <div style="display:flex;flex-direction:column;gap:16px;padding-top:16px;border-top:2px solid #292D29">
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">{{ d.n }}</span>
-              <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:700;font-size:clamp(26px,2.4vw,36px);line-height:1;text-wrap:balance">{{ d.t }}</span>
-            </div>
-          </sc-for>
-        </div>
-      </sc-if>
-      <sc-if value="{{ hasGroups }}" hint-placeholder-val="{{ true }}">
-        <div ref="{{ rv }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px 32px;margin-top:72px">
-          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
-            <div style="display:flex;flex-direction:column">
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62;padding-bottom:12px">{{ g.tUp }}</span>
-              <sc-for list="{{ g.i }}" as="it" hint-placeholder-count="3">
-                <span style="padding:12px 0;border-top:1px solid rgba(41,45,41,.16);font-size:15px;line-height:1.4">{{ it }}</span>
-              </sc-for>
-            </div>
-          </sc-for>
-        </div>
-      </sc-if>
-    </div>
-  </section>
-
-  <section data-screen-label="06 Localização" style="padding:clamp(80px,12vh,144px) clamp(24px,4vw,64px)">
-    <div style="max-width:1680px;margin:0 auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:48px clamp(16px,2vw,32px)">
-      <div ref="{{ rv }}" style="grid-column:{{ locTextCol }};min-width:0;display:flex;flex-direction:column">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">04 — LOCALIZAÇÃO</div>
-        <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,6.4vw,112px);line-height:.84;text-wrap:balance">{{ p.bairroUp }}</h2>
-        <span style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.7">SÃO PAULO — SP</span>
-        <p style="margin:32px 0 0;max-width:52ch;font-size:16px;line-height:1.65;text-wrap:pretty">{{ locCtx }}</p>
-        <sc-if value="{{ hasPois }}" hint-placeholder-val="{{ true }}">
-          <div style="margin-top:32px;display:flex;flex-direction:column">
-            <sc-for list="{{ pois }}" as="o" hint-placeholder-count="3">
-              <div style="display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid rgba(41,45,41,.16)">
-                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;opacity:.62;padding-top:3px">{{ o.tUp }}</span>
-                <span style="font-size:15px;line-height:1.4">{{ o.n }}</span>
+    <div ref="{{ R.story }}" style="position:relative;height:{{ story.h }}">
+      <div style="position:sticky;top:0;height:100vh;overflow:hidden">
+        <div style="position:relative;max-width:1680px;height:100%;margin:0 auto;padding:{{ story.pad }};box-sizing:border-box;display:flex;flex-direction:{{ story.dir }};gap:{{ story.gap }}">
+          <div style="position:relative;flex:{{ story.txtFlex }};min-width:0;min-height:0">
+            <sc-for list="{{ caps }}" as="c" hint-placeholder-count="5">
+              <div class="sb sch" data-on="{{ c.on }}" ref="{{ c.txtRef }}" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:{{ story.jc }};gap:{{ story.tg }}px;overflow:hidden">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em">{{ c.kick }}</span>
+                <h2 style="margin:0;max-width:16ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ story.tfs }};line-height:.9;text-wrap:balance">{{ c.titleUp }}</h2>
+                <div style="display:flex;flex-direction:column;gap:12px;max-width:54ch">
+                  <sc-for list="{{ c.paras }}" as="t" hint-placeholder-count="1"><p style="margin:0;font-size:{{ story.pfs }}px;line-height:1.6;text-wrap:pretty">{{ t }}</p></sc-for>
+                </div>
+                <sc-if value="{{ c.isIntro }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid;grid-template-columns:repeat({{ story.fcols }},minmax(0,1fr));gap:8px;max-width:{{ story.fmax }}">
+                    <sc-for list="{{ facts }}" as="f" hint-placeholder-count="8">
+                      <div class="ft" style="--d:{{ f.d }}">
+                        <span aria-hidden="true" style="display:block;width:24px;height:24px;background:#A64B36;-webkit-mask:{{ f.mask }};mask:{{ f.mask }}"></span>
+                        <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:700;font-size:{{ f.size }};line-height:1">{{ f.v }}</span>
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;opacity:.65">{{ f.l }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ c.isLoc }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;max-width:54ch">
+                    <sc-for list="{{ pois }}" as="o" hint-placeholder-count="3">
+                      <div style="display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:9px 0;border-top:1px solid rgba(41,45,41,.16)">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;opacity:.62;padding-top:3px">{{ o.tUp }}</span>
+                        <span style="font-size:14px;line-height:1.4">{{ o.n }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
               </div>
             </sc-for>
           </div>
-        </sc-if>
-        <div style="margin-top:24px;display:flex;align-items:flex-start;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;line-height:1.6">
-          <span style="flex:none;width:8px;height:8px;margin-top:5px;background:#294D63"></span>
-          <span>LOCALIZAÇÃO APROXIMADA. O ENDEREÇO EXATO É INFORMADO PELO CORRETOR NO AGENDAMENTO DA VISITA.</span>
-        </div>
-      </div>
-      <sc-if value="{{ hasMap }}" hint-placeholder-val="{{ true }}">
-        <div ref="{{ rv }}" style="grid-column:{{ locMapCol }};position:relative;height:clamp(380px,44vw,640px);overflow:hidden;background:#B9AE97">
-          <iframe src="{{ mapSrc }}" title="Mapa da localização aproximada" loading="lazy" style="display:block;width:100%;height:100%;border:0"></iframe>
-          <span style="position:absolute;left:12px;top:12px;padding:8px 12px;border-radius:8px;background:rgba(227,216,194,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;pointer-events:none">ÁREA APROXIMADA — RAIO DE {{ locR }} M</span>
-        </div>
-      </sc-if>
-    </div>
-  </section>
-
-  <section ref="{{ R.fin }}" data-screen-label="07 Valores" style="padding:0 clamp(24px,4vw,64px) clamp(88px,14vh,160px)">
-    <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:40px clamp(16px,2vw,32px);padding-top:32px;border-top:2px solid #292D29">
-      <div style="grid-column:{{ finLeftCol }};min-width:0">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">05 — VALORES</div>
-        <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,80px);line-height:.85">{{ finTitle }}</h2>
-        <p style="margin:24px 0 0;max-width:40ch;font-size:15px;line-height:1.6;opacity:.8;text-wrap:pretty">{{ finNote }}</p>
-      </div>
-      <div style="grid-column:{{ finRightCol }};min-width:0;display:flex;flex-direction:column">
-        <sc-for list="{{ finRows }}" as="r" hint-placeholder-count="3">
-          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px;padding:{{ r.pad }};border-bottom:1px solid rgba(41,45,41,.18)">
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <span style="font-size:15px;font-weight:600">{{ r.l }}</span>
-              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;opacity:.6">{{ r.sub }}</span>
-            </div>
-            <span style="font-family:{{ r.font }};font-weight:{{ r.weight }};font-size:{{ r.size }};line-height:1;opacity:{{ r.op }}">{{ r.v }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.04em">{{ r.per }}</span></span>
+          <div style="position:relative;flex:{{ story.phFlex }};min-width:0;min-height:0;order:{{ story.phOrder }}">
+            <sc-for list="{{ caps }}" as="c" hint-placeholder-count="5">
+              <div class="sch" ref="{{ c.phRef }}" style="position:absolute;inset:0;overflow:hidden;background:#B9AE97">
+                <sc-if value="{{ c.isMap }}" hint-placeholder-val="{{ false }}">
+                  <iframe src="{{ mapSrc }}" title="Mapa da localização aproximada" loading="lazy" style="display:block;width:100%;height:100%;border:0"></iframe>
+                  <span style="position:absolute;left:12px;top:12px;padding:8px 12px;border-radius:8px;background:rgba(227,216,194,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;pointer-events:none">ÁREA APROXIMADA — RAIO DE {{ locR }} M</span>
+                </sc-if>
+                <sc-if value="{{ c.isPhoto }}" hint-placeholder-val="{{ true }}">
+                  <image-slot id="{{ c.slotId }}" shape="rect" placeholder="{{ c.ph }}"></image-slot>
+                </sc-if>
+                <span style="position:absolute;right:0;top:0;padding:8px 12px;background:#292D29;color:#EFE6D2;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">{{ c.n }} / {{ story.total }}</span>
+              </div>
+            </sc-for>
           </div>
-        </sc-for>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px">
-          <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-          <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+          <div class="rail" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);top:{{ story.railTop }};display:flex;gap:6px 22px;overflow-x:auto;scrollbar-width:none;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
+            <sc-for list="{{ rail }}" as="r" hint-placeholder-count="5">
+              <button onClick="{{ r.go }}" aria-label="Ir para {{ r.label }}" style="flex:none;height:32px;padding:0;border:0;border-bottom:2px solid {{ r.bd }};background:none;color:inherit;cursor:pointer;font:inherit;letter-spacing:inherit;opacity:{{ r.op }};transition:opacity .25s,border-color .25s;white-space:nowrap">{{ r.n }} {{ r.label }}</button>
+            </sc-for>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section ref="{{ R.closing }}" data-screen-label="08 Encerramento" style="position:relative;min-height:clamp(560px,88vh,960px);display:flex;align-items:flex-end;overflow:hidden;background:linear-gradient(180deg,rgba(41,45,41,0) 0,#292D29 40%);color:#EFE6D2">
-    <sc-if value="{{ hasClosingPhoto }}" hint-placeholder-val="{{ true }}">
-      <div style="position:absolute;inset:0;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 40%);mask-image:linear-gradient(180deg,transparent 0,#000 40%)">
-        <image-slot id="{{ closing.id }}" shape="rect" placeholder="{{ closing.ph }}"></image-slot>
+  <section ref="{{ R.fin }}" data-screen-label="03 Valores" style="position:relative;padding:clamp(72px,12vh,140px) clamp(24px,4vw,64px) clamp(56px,8vh,96px)">
+    <div style="max-width:1680px;margin:0 auto">
+      <div ref="{{ rv }}" style="padding-top:16px;border-top:2px solid #292D29">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">03 — VALORES</div>
+        <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(56px,9vw,150px);line-height:.84">GOSTOU?</h2>
+        <p style="margin:24px 0 0;max-width:52ch;font-size:clamp(16px,1.3vw,19px);line-height:1.55;text-wrap:pretty">{{ val.hook }}</p>
       </div>
-      <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.2) 0%,rgba(22,22,19,.1) 35%,rgba(22,22,19,.82) 100%)"></div>
-    </sc-if>
-    <div style="position:relative;width:100%;padding:clamp(96px,14vh,160px) clamp(24px,4vw,64px) clamp(48px,8vh,96px);pointer-events:none">
-      <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">06 — VISITA</div>
-        <h2 style="margin:16px 0 0;max-width:16ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,7vw,128px);line-height:.86;text-wrap:balance">{{ p.closingUp }}</h2>
-        <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">
-          <span>{{ p.tipoUp }}</span><span>{{ p.finUp }}</span><span>{{ p.priceFmt }}{{ p.per }}</span>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;pointer-events:auto">
-          <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:56px;padding:0 28px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:16px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-          <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:16px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">Conversar pelo WhatsApp</a>
-        </div>
-        <p style="margin:16px 0 0;max-width:72ch;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.6;opacity:.8">MENSAGEM PRONTA: “{{ waMsg }}”</p>
-        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:48px;padding-top:16px;border-top:1px solid rgba(239,230,210,.3);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;pointer-events:auto">
-          <span>REF. {{ p.code }} · CAPITAL SP IMÓVEIS · CRECI 00000-J (EXEMPLO)</span>
-          <a href="{{ backHref }}" style="display:flex;align-items:center;height:40px;color:#EFE6D2">← VOLTAR AOS RESULTADOS</a>
-        </div>
+      <div ref="{{ R.closing }}" style="display:grid;grid-template-columns:{{ val.cols }};gap:16px;align-items:stretch;margin-top:clamp(32px,5vh,56px)">
+        <sc-for list="{{ val.cards }}" as="v" hint-placeholder-count="3">
+          <article ref="{{ rv }}" class="vcard" style="order:{{ v.order }};display:flex;flex-direction:column;padding:clamp(22px,2.2vw,32px);border-radius:14px;background:{{ v.bg }};color:{{ v.fg }};box-shadow:{{ v.shadow }}">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:28px">
+              <h3 style="margin:0;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:11px;letter-spacing:.24em">{{ v.nameUp }}</h3>
+              <sc-if value="{{ v.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="padding:5px 10px;border-radius:999px;background:#A64B36;color:#F4EDE0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em">{{ v.badge }}</span></sc-if>
+            </div>
+            <div style="margin-top:24px;font-family:{{ v.font }};font-weight:{{ v.weight }};font-size:{{ v.size }};line-height:.95;letter-spacing:.005em;opacity:{{ v.op }}">{{ v.price }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.04em">{{ v.per }}</span></div>
+            <sc-if value="{{ v.hasFeats }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:22px;padding-top:20px;border-top:1px solid {{ v.line }}">
+                <p style="margin:0 0 12px;font-size:12.5px;font-weight:600;opacity:.85">{{ v.featHead }}</p>
+                <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ v.feats }}" as="ft" hint-placeholder-count="4">
+                    <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.4"><span aria-hidden="true" style="flex:none;display:block;width:16px;height:16px;margin-top:1px;background:#A64B36;-webkit-mask:{{ val.chk }};mask:{{ val.chk }}"></span>{{ ft }}</li>
+                  </sc-for>
+                </ul>
+              </div>
+            </sc-if>
+            <sc-if value="{{ v.hasSub }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:22px;padding-top:20px;border-top:1px solid {{ v.line }}">
+                <h3 style="margin:0;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:11px;letter-spacing:.24em">IPTU</h3>
+                <div style="margin-top:16px;font-family:{{ v.subFont }};font-weight:{{ v.subWeight }};font-size:{{ v.subSize }};line-height:.95;opacity:{{ v.subOp }}">{{ v.subPrice }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.04em">{{ v.subPer }}</span></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ v.cta }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:auto;padding-top:28px;display:flex;flex-wrap:wrap;gap:8px">
+                <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+                <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(239,230,210,.14);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">WhatsApp</a>
+              </div>
+            </sc-if>
+          </article>
+        </sc-for>
+      </div>
+      <p style="margin:20px 0 0;max-width:72ch;font-size:13px;line-height:1.6;opacity:.7;text-wrap:pretty">{{ finNote }}</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:48px;padding-top:16px;border-top:1px solid rgba(41,45,41,.3);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
+        <span>REF. {{ p.code }} · CAPITAL SP IMÓVEIS · CRECI 00000-J (EXEMPLO)</span>
+        <a href="{{ backHref }}" style="display:flex;align-items:center;height:40px;color:#292D29">← VOLTAR AOS RESULTADOS</a>
       </div>
     </div>
   </section>
 
   <sc-if value="{{ hasRec }}" hint-placeholder-val="{{ true }}">
-    <section data-screen-label="09 Recomendações" style="background:linear-gradient(180deg,#292D29 0,rgba(41,45,41,0) 240px,rgba(41,45,41,0) calc(100% - 200px),#292D29 100%);padding:clamp(200px,26vh,260px) clamp(24px,4vw,64px) clamp(160px,22vh,220px)">
+    <section data-screen-label="09 Recomendações" style="background:linear-gradient(180deg,rgba(41,45,41,0) 0,rgba(41,45,41,0) calc(100% - 200px),#292D29 100%);padding:clamp(72px,10vh,120px) clamp(24px,4vw,64px) clamp(160px,22vh,220px)">
       <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
           <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(28px,3vw,44px);line-height:.9">{{ recTitle }}</h3>
@@ -512,6 +477,13 @@ class Component extends DCLogic {
         'Edifício entregue em 2019, com portaria 24 horas, academia e rooftop com churrasqueira. Unidade desocupada e disponível para visita.'
       ],
       areaTotal: 118, suites: 2, banh: 3, andar: '8º', iptu: { v: 3960, per: 'ano' }, photos: 8, planta: true,
+      caps: [
+        { g: 'SALA', kick: 'DIFERENCIAL 01 · SALA', t: 'Sala aberta para a varanda', f: 2, p: ['Sala de estar e jantar em um único ambiente, sem paredes entre as áreas, que recebe a luz da manhã pela face leste. A unidade está desocupada, e o espaço livre ajuda a imaginar o seu próprio arranjo.', 'A varanda tem fechamento em vidro e fica integrada à sala: aberta, amplia o ambiente; fechada, vira uma extensão protegida da chuva e do ruído da rua.'] },
+        { g: 'AMBIENTES', kick: 'AMBIENTES', t: 'Cozinha integrada e serviço à parte', f: 3, p: ['A cozinha se integra à sala por uma bancada, e a área de serviço fica separada, fora do campo de visão de quem recebe. Para as visitas, há um lavabo social.'] },
+        { g: 'SUÍTES', kick: 'DIFERENCIAL 02 · SUÍTE 1 DE 2', t: 'A primeira suíte', f: 4, p: ['As duas suítes ficam na ala oposta à sala, longe do movimento social. A primeira tem armários planejados e banheiro privativo.'] },
+        { g: 'SUÍTES', kick: 'DIFERENCIAL 02 · SUÍTE 2 DE 2', t: 'A segunda suíte', f: 5, p: ['A segunda repete a proposta: armários planejados e banheiro próprio, com a mesma privacidade da primeira.'] }
+      ],
+      locDest: 'A estação Fradique Coutinho, da Linha 4-Amarela, fica a duas quadras do edifício.',
       dest: ['Varanda integrada com fechamento em vidro', 'Duas suítes com armários planejados', 'Duas quadras da estação Fradique Coutinho'],
       grupos: [
         { t: 'Ambientes', i: ['Sala de estar e jantar integradas', 'Varanda com fechamento em vidro', 'Cozinha americana', 'Área de serviço', '2 suítes', 'Lavabo'] },
@@ -529,6 +501,12 @@ class Component extends DCLogic {
         'O edifício tem controle de acesso, portaria 24 horas e duas linhas de elevadores. Uma vaga de garagem privativa.'
       ],
       areaTotal: 112, banh: 1, config: '2 salas + copa', andar: '14º', iptu: { v: 420, per: 'mês' }, photos: 5,
+      caps: [
+        { g: 'SALAS', kick: 'DIFERENCIAL 01 · SALAS PRIVATIVAS', t: 'Recepção e duas salas de vidro', f: 2, p: ['A planta começa pela recepção e se divide em duas salas privativas, com divisórias de vidro que separam as equipes e mantêm a luz do andar.'] },
+        { g: 'SALAS', kick: 'DIFERENCIAL 02 · SEM OBRA', t: 'Pronta para ocupar', f: 3, p: ['Piso elevado, forro modular e ar-condicionado em todas as salas deixam o espaço pronto para ocupar, sem obra e sem prazo de adaptação.'] },
+        { g: 'APOIO', kick: 'AMBIENTES', t: 'Copa, banheiro e vaga', f: 4, p: ['A copa e o banheiro completam a planta de duas salas com copa. Uma vaga de garagem privativa acompanha o conjunto.'] }
+      ],
+      locDest: 'A Avenida Paulista fica a uma quadra, e o acesso a pé ao eixo da avenida é parte do dia a dia.',
       dest: ['Uma quadra da Avenida Paulista', 'Ar-condicionado em todas as salas', 'Piso elevado e forro modular'],
       grupos: [
         { t: 'Ambientes', i: ['Recepção', '2 salas privativas', 'Copa', 'Banheiro'] },
@@ -544,6 +522,12 @@ class Component extends DCLogic {
         'No térreo ficam a sala, com pé-direito alto, a cozinha e a lavanderia. No pavimento superior, três dormitórios, sendo uma suíte, e um banheiro social. O terraço coberto nos fundos é acessado pela cozinha.'
       ],
       areaTotal: 200, areaTotalLabel: 'TERRENO', suites: 1, banh: 3, photos: 4,
+      caps: [
+        { g: 'SALA', kick: 'DIFERENCIAL 01 · SALA', t: 'Sala de pé-direito alto', f: 1, p: ['No térreo, a sala tem pé-direito alto e dá amplitude à casa. Cozinha e lavanderia ficam no mesmo pavimento, o que mantém a rotina da casa num só nível.'] },
+        { g: 'TERRAÇO', kick: 'DIFERENCIAL 02 · TERRAÇO', t: 'Terraço coberto nos fundos', f: 2, p: ['O terraço coberto é acessado pela cozinha e funciona como extensão dela: dá para cozinhar, comer e receber sem depender do tempo.'] },
+        { g: 'DORMITÓRIOS', kick: 'AMBIENTES', t: 'Três dormitórios no andar de cima', f: 3, p: ['No pavimento superior ficam três dormitórios, sendo uma suíte, e um banheiro social.'] }
+      ],
+      extra: 'A casa aceita animais de estimação.',
       dest: ['Pé-direito alto na sala', 'Terraço coberto nos fundos', 'Aceita animais de estimação'],
       grupos: [
         { t: 'Ambientes', i: ['Sala com pé-direito alto', 'Cozinha', '3 dormitórios, sendo 1 suíte', 'Terraço coberto', 'Lavanderia'] },
@@ -559,6 +543,12 @@ class Component extends DCLogic {
         'A edícula nos fundos tem acesso independente pela rua lateral e pode funcionar como escritório ou ateliê. Garagem coberta para quatro carros.'
       ],
       areaTotal: 600, areaTotalLabel: 'TERRENO', suites: 4, banh: 6, iptu: { v: 18400, per: 'ano' }, photos: 7, planta: true,
+      caps: [
+        { g: 'LIVING', kick: 'DIFERENCIAL 01 · LIVING', t: 'Living de pé-direito duplo aberto ao jardim', f: 2, p: ['O living ocupa a ala central, com pé-direito duplo e caixilhos de piso a teto que abrem integralmente para o jardim, e a divisa entre a sala e o quintal praticamente desaparece.'] },
+        { g: 'AMBIENTES', kick: 'AMBIENTES', t: 'Jantar, cozinha e escritório', f: 3, p: ['A sala de jantar e a cozinha completam a ala social. Há ainda um escritório, para quem trabalha em casa.'] },
+        { g: 'SUÍTES', kick: 'AMBIENTES', t: 'Quatro suítes na ala íntima', f: 4, p: ['As quatro suítes ficam reunidas na ala íntima, separadas da área social por um corredor com iluminação zenital.'] },
+        { g: 'EDÍCULA', kick: 'DIFERENCIAL 03 · EDÍCULA', t: 'Edícula com acesso independente', f: 5, p: ['A edícula nos fundos tem acesso independente pela rua lateral e pode funcionar como escritório ou ateliê.'] }
+      ],
       dest: ['Living com pé-direito duplo', 'Caixilhos de piso a teto para o jardim', 'Edícula com acesso independente'],
       grupos: [
         { t: 'Ambientes', i: ['Living com pé-direito duplo', 'Sala de jantar', 'Cozinha', '4 suítes', 'Escritório', 'Edícula'] },
@@ -571,11 +561,11 @@ class Component extends DCLogic {
   el = {};
   revealEls = new Set();
   rv = el => { if (el) this.revealEls.add(el); };
-  R = Object.fromEntries(['root', 'header', 'hero', 'heroBox', 'heroPhoto', 'heroKick', 'heroTitle', 'heroMeta', 'heroCta', 'ed', 'fin', 'closing', 'lbBox', 'lbFrame'].map(k => [k, el => { this.el[k] = el; }]));
+  R = Object.fromEntries(['root', 'header', 'hero', 'heroBox', 'heroPhoto', 'heroKick', 'heroTitle', 'heroMeta', 'heroCta', 'ed', 'story', 'fin', 'closing', 'lbBox', 'lbFrame'].map(k => [k, el => { this.el[k] = el; }]));
   days = (() => { const out = [], d0 = new Date(); for (let k = 1; out.length < 6 && k < 12; k++) { const d = new Date(d0); d.setDate(d0.getDate() + k); if (d.getDay() !== 0) out.push(d); } return out; })();
   state = {
     vw: typeof window !== 'undefined' ? window.innerWidth : 1440,
-    scrolled: false, dockShow: false, lb: null, galTab: 'fotos',
+    scrolled: false, dockShow: false, lb: null, galTab: 'fotos', story: 0,
     visita: false, day: null, period: null, vName: '', vPhone: '', vSent: false,
     favs: (() => { try { return JSON.parse(localStorage.getItem('csp-favs')) || []; } catch (e) { return []; } })(),
     toast: '', toastOn: false
@@ -592,7 +582,7 @@ class Component extends DCLogic {
 
   applyFotos() {
     document.querySelectorAll('image-slot').forEach(el => {
-      const f = this.FOTOS[el.id];
+      const f = this.FOTOS[el.id.replace(/~.*$/, '')];
       if (f) {
         if (el.getAttribute('src') !== f.s) {
           el.setAttribute('src', f.s); el.dataset.auto = '1';
@@ -625,6 +615,7 @@ class Component extends DCLogic {
     if (!this.reduce) this.setupReveal();
     if (st) setTimeout(() => this.applyState(st), 400);
     this.tick();
+    setTimeout(() => this.storyTick(), 50);
   }
   componentWillUnmount() {
     removeEventListener('scroll', this.onScroll);
@@ -634,6 +625,7 @@ class Component extends DCLogic {
   }
   componentDidUpdate() {
     this.applyFotos();
+    this.storyTick();
     const ps = this._prev || this.state, s = this.state;
     this._prev = Object.assign({}, s);
     const lock = s.lb != null || s.visita;
@@ -697,6 +689,39 @@ class Component extends DCLogic {
       el.style.transform = `translateY(${((1 - inP) * 28 - (1 - outP) * 16).toFixed(1)}px)`;
     });
   }
+  // ---- História do imóvel: palco fixo que troca de capítulo conforme a rolagem ----
+  sEls = { txt: [], ph: [] };
+  sCb = { txt: [], ph: [] };
+  sRef(kind, i) { return this.sCb[kind][i] || (this.sCb[kind][i] = el => { this.sEls[kind][i] = el; }); }
+  storyTick() {
+    const w = this.el.story, K = this.K || 0;
+    if (!w || K < 1) return;
+    const r = w.getBoundingClientRect(), vh = innerHeight;
+    const t = Math.max(0, Math.min(1, -r.top / Math.max(1, r.height - vh)));
+    const pos = K > 1 ? t * (K - 1) : 0;
+    for (let i = 0; i < K; i++) {
+      const d = pos - i, ad = Math.abs(d), o = Math.max(0, Math.min(1, 1 - (ad - 0.18) / 0.32));
+      const tx = this.sEls.txt[i], ph = this.sEls.ph[i];
+      if (tx) {
+        tx.style.opacity = o.toFixed(3);
+        tx.style.transform = this.reduce ? 'none' : `translateY(${(-d * 44).toFixed(1)}px)`;
+        tx.style.pointerEvents = o > 0.6 ? 'auto' : 'none';
+        tx.dataset.on = o > 0.6 ? '1' : '0';
+      }
+      if (ph) {
+        ph.style.opacity = o.toFixed(3);
+        ph.style.transform = this.reduce ? 'none' : `scale(${(1 + Math.min(ad, 1) * 0.05).toFixed(4)})`;
+        ph.style.pointerEvents = o > 0.6 ? 'auto' : 'none';
+      }
+    }
+    const act = Math.round(pos);
+    if (act !== this.state.story) this.setState({ story: act });
+  }
+  goChap(i) {
+    const w = this.el.story, K = this.K || 1; if (!w) return;
+    const top = w.getBoundingClientRect().top + scrollY, span = Math.max(1, w.offsetHeight - innerHeight);
+    scrollTo({ top: top + (K > 1 ? i / (K - 1) : 0) * span + 2, behavior: this.reduce ? 'auto' : 'smooth' });
+  }
   applyState(st) {
     const top = el => el ? el.getBoundingClientRect().top + scrollY : 0;
     if (st === 'gallery') { this.lbOrigin = null; this.setState({ lb: 1 }); }
@@ -709,6 +734,7 @@ class Component extends DCLogic {
 
   tick() {
     this.runReveal();
+    this.storyTick();
     const hero = this.el.hero, box = this.el.heroBox; if (!hero || !box) return;
     const vh = innerHeight;
     const scrolled = box.getBoundingClientRect().bottom < 72;
@@ -758,7 +784,7 @@ class Component extends DCLogic {
     if (p.andar) cells.push({ l: 'ANDAR', v: p.andar });
     cells.forEach(c => { c.size = c.v.length > 8 ? '22px' : '30px'; });
 
-    const tile = i => ({ id: sid(i), ph: phName(i), n: pad2(i + 1), open: e => this.openLb(i, e) });
+    const tile = i => ({ id: sid(i), ph: phName(i), n: pad2(i + 1), open: e => { if (e && e.stopPropagation) e.stopPropagation(); this.openLb(i, e); }, openTile: e => { this.lbOrigin = e && e.currentTarget && e.currentTarget.getBoundingClientRect ? e.currentTarget.getBoundingClientRect() : null; this.setState({ lb: i }); } });
     const sideIdx = N >= 2 ? 1 : null;
     const sideList = [1, 2].filter(i => i < N);
     const gSide = sideList.map((i, k) => Object.assign(tile(i), { row: sideList.length === 1 ? '1 / span 2' : String(k + 1) }));
@@ -788,14 +814,79 @@ class Component extends DCLogic {
       r.weight = r.muted ? '400' : '800'; r.op = r.muted ? 0.6 : 1; r.pad = r.primary ? '24px 0' : '16px 0';
     });
     const finNote = buy
-      ? 'Condomínio cobrado mensalmente e IPTU anual, conforme informado pelo proprietário. Valores sujeitos a confirmação na proposta.'
+      ? 'Condomínio cobrado mensalmente e IPTU em valor mensal, conforme informado pelo proprietário. Valores sujeitos a confirmação na proposta.'
       : pacote ? 'Pacote calculado com os encargos informados. Não inclui consumo de água, luz e gás.'
         : 'Pacote mensal indisponível: o IPTU deste imóvel ainda não foi informado pelo proprietário.';
-
     const poisSrc = (p.loc && p.loc.pois) || [];
     const rec0 = this.RAW.filter(r => r[0] !== p.code && r[1] === p.mode && r[2] === p.tipo);
     const recRaw = rec0.length >= 3 ? rec0.slice(0, 3) : rec0.concat(this.RAW.filter(r => r[0] !== p.code && r[1] === p.mode && r[2] !== p.tipo)).slice(0, 3);
     const tipoPl = { 'Casa térrea': 'CASAS TÉRREAS', 'Sobrado': 'SOBRADOS', 'Apartamento': 'APARTAMENTOS', 'Comercial': 'IMÓVEIS COMERCIAIS' }[p.tipo] || 'IMÓVEIS';
+    // ---- História por ambientes ----
+    const listPt = arr => arr.length <= 1 ? (arr[0] || '') : arr.slice(0, -1).join(', ') + ' e ' + arr[arr.length - 1];
+    const svg = body => `url('data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + body + '</svg>')}') center / contain no-repeat`;
+    const ICON = {
+      area: '<path d="M3 3h18v18H3z"/><path d="M3 9h5M3 15h5M9 3v5M15 3v5"/>',
+      total: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+      bed: '<path d="M3 18V7M3 14h18v4M21 14v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11" r="1.5"/>',
+      suite: '<path d="M3 18V7M3 14h18v4M21 14v-3a3 3 0 0 0-3-3h-7v6"/><path d="M7 3v3M5.5 4.5h3"/>',
+      bath: '<path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/>',
+      car: '<path d="M5 16v-4l2-5h10l2 5v4M3 16h18M7 19v-3M17 19v-3"/><circle cx="8" cy="13" r=".8"/><circle cx="16" cy="13" r=".8"/>',
+      floor: '<path d="M5 21V4h9v17M14 9h5v12M3 21h18M8 8h3M8 12h3M8 16h3"/>',
+      plan: '<path d="M3 3h18v18H3zM3 12h18M12 12v9"/>'
+    };
+    const iconFor = l => /TOTAL|TERRENO/.test(l) ? 'total' : /SUÍTE/.test(l) ? 'suite' : /DORMIT/.test(l) ? 'bed' : /BANH/.test(l) ? 'bath' : /VAGA/.test(l) ? 'car' : /ANDAR/.test(l) ? 'floor' : /CONFIG/.test(l) ? 'plan' : 'area';
+    const facts = cells.map((c, i) => ({ v: c.v, l: c.l, mask: svg(ICON[iconFor(c.l)]), d: i, size: mob ? (c.v.length > 4 ? '15px' : '20px') : (c.v.length > 8 ? '17px' : '24px') }));
+
+    const raw = [];
+    raw.push({ g: 'O IMÓVEL', kick: `${p.tipo.toUpperCase()} · ${fin.toUpperCase()}`, t: p.secao || 'Sobre o imóvel', f: 1, p: [(p.paras && p.paras[0]) || p.desc], intro: true });
+    if (p.caps) p.caps.forEach(c => raw.push(c));
+    else if (p.paras && p.paras.length > 1) p.paras.slice(1).forEach((tx, i) => raw.push({ g: 'AMBIENTES', kick: 'AMBIENTES', t: i === 0 ? 'Como o espaço se organiza' : 'Mais detalhes', f: 2 + i, p: [tx] }));
+    else if (p.feats.length) raw.push({ g: 'CARACTERÍSTICAS', kick: 'CARACTERÍSTICAS', t: 'O que o imóvel oferece', f: 2, p: ['Entre as características do imóvel: ' + listPt(p.feats.map(x => x.toLowerCase())) + '.'] });
+    const infraG = (p.grupos || []).filter(g => /Infra|Lazer|Segur/.test(g.t));
+    if (infraG.length) {
+      const lead = { 'Infraestrutura': 'Na infraestrutura', 'Lazer': 'Para o lazer', 'Segurança': 'Em segurança' };
+      const cond = p.tipo === 'Apartamento' || p.tipo === 'Comercial';
+      raw.push({ g: cond ? 'EDIFÍCIO' : 'ESTRUTURA', kick: 'INFRAESTRUTURA', t: cond ? 'O edifício' : 'Estrutura da casa', f: N - 1, p: [infraG.map(g => `${lead[g.t] || g.t}: ${listPt(g.i.map(x => x.charAt(0).toLowerCase() + x.slice(1)))}.`).join(' ') + (p.extra ? ' ' + p.extra : '')] });
+    }
+    const locCtxTxt = (p.loc ? p.loc.ctx : `${p.tipo} localizado em ${p.bairro}, São Paulo. O corretor detalha o entorno e o endereço no agendamento da visita.`) + (p.locDest ? ' ' + p.locDest : '');
+    raw.push({ g: 'LOCALIZAÇÃO', kick: 'LOCALIZAÇÃO · SÃO PAULO — SP', t: p.bairro, f: 1, p: [locCtxTxt, 'Localização aproximada: o endereço exato é informado pelo corretor no agendamento da visita.'], loc: true });
+    const K = raw.length; this.K = K;
+    const caps = raw.map((c, i) => ({
+      n: pad2(i + 1), kick: c.kick, titleUp: String(c.t).toUpperCase(), paras: c.p, isIntro: !!c.intro, isLoc: !!c.loc,
+      on: i === 0 ? '1' : '0', isMap: !!c.loc && !!p.loc, isPhoto: !(c.loc && p.loc),
+      slotId: sid((c.f || 0) % N) + '~c', ph: phName((c.f || 0) % N),
+      txtRef: this.sRef('txt', i), phRef: this.sRef('ph', i)
+    }));
+    const groups = []; raw.forEach((c, i) => { const last = groups[groups.length - 1]; if (!last || last.label !== c.g) groups.push({ label: c.g, first: i, last: i }); else last.last = i; });
+    const rail = groups.map((g, k) => { const on = s.story >= g.first && s.story <= g.last; return { n: pad2(k + 1), label: g.label, go: () => this.goChap(g.first), op: on ? 1 : 0.45, bd: on ? '#A64B36' : 'transparent' }; });
+    const story = {
+      total: pad2(K), hint: K > 1 ? (mob ? 'ROLE PARA PERCORRER OS AMBIENTES' : 'ROLE PARA PERCORRER OS AMBIENTES · OU USE O ÍNDICE') : '',
+      h: `calc(100vh + ${(K - 1) * (mob ? 70 : 80)}vh)`,
+      railTop: mob ? '72px' : '76px', jc: mob ? 'flex-start' : 'center', pad: mob ? '112px 24px 100px' : '128px clamp(24px,4vw,64px) 96px', dir: mob ? 'column' : 'row', gap: mob ? '16px' : 'clamp(24px,4vw,72px)',
+      txtFlex: mob ? '1 1 0' : '0 0 42%', phFlex: mob ? '0 0 27vh' : '1 1 0', phOrder: mob ? -1 : 0,
+      tg: mob ? 8 : 18, tfs: mob ? 'clamp(26px,7.4vw,34px)' : 'clamp(36px,4.4vw,72px)', pfs: mob ? 13.5 : 17,
+      fcols: mob ? 4 : 4, fmax: mob ? '100%' : '560px'
+    };
+    const monthlyIptu = iptuK ? (p.iptu.per === 'ano' ? Math.round(p.iptu.v / 12) : p.iptu.v) : null;
+    const condoFeats = (p.grupos || []).filter(g => /Infra|Lazer|Segur/.test(g.t)).flatMap(g => g.i).slice(0, 5);
+    const propFeats = [
+      `${p.area} m² ${isCom ? 'privativos' : 'úteis'}`,
+      p.dorms ? `${p.dorms} ${p.dorms > 1 ? 'dormitórios' : 'dormitório'}${p.suites ? ` (${p.suites} ${p.suites > 1 ? 'suítes' : 'suíte'})` : ''}` : null,
+      p.banh ? `${p.banh} ${p.banh > 1 ? 'banheiros' : 'banheiro'}` : null,
+      p.vagas ? `${p.vagas} ${p.vagas > 1 ? 'vagas' : 'vaga'} de garagem` : 'Sem vaga de garagem',
+      p.andar ? `${p.andar} andar` : null
+    ].filter(Boolean).concat((p.dest || []).slice(0, 2));
+    const base0 = { op: 1, weight: '800', font: "'Big Shoulders Display','Big Shoulders',sans-serif", line: 'rgba(41,45,41,.16)', bg: '#E3D8C2', fg: '#292D29', shadow: 'inset 0 0 0 1px rgba(41,45,41,.14)' };
+    const vCards = [
+      Object.assign({}, base0, { nameUp: 'CONDOMÍNIO', order: 1, size: 'clamp(34px,3.2vw,48px)', price: p.condo ? 'R$ ' + fmt(p.condo) : 'Sem condomínio', per: p.condo ? ' /mês' : '', hasFeats: !!(p.condo && condoFeats.length), featHead: 'O que o condomínio oferece', feats: condoFeats, cta: false, hasBadge: false,
+        hasSub: true, subPrice: iptuK ? 'R$ ' + fmt(monthlyIptu) : 'Não informado', subPer: iptuK ? ' /mês' : '', subSize: iptuK ? 'clamp(34px,3.2vw,48px)' : '20px', subFont: iptuK ? "'Big Shoulders Display','Big Shoulders',sans-serif" : 'Archivo,sans-serif', subWeight: iptuK ? '800' : '400', subOp: iptuK ? 1 : 0.6 }),
+      Object.assign({}, base0, { nameUp: buy ? 'VENDA' : 'LOCAÇÃO', order: mob ? 0 : 2, size: 'clamp(46px,4.6vw,68px)', price: priceFmt, per: buy ? '' : ' /mês', hasFeats: true, featHead: 'O imóvel', feats: propFeats, cta: true, hasBadge: false, hasSub: false, bg: '#292D29', fg: '#EFE6D2', line: 'rgba(239,230,210,.2)', shadow: '0 0 0 3px rgba(166,75,54,.45),0 30px 50px -30px rgba(30,32,28,.6)' })
+    ];
+    if (pacote) vCards[1].feats = [`Pacote mensal: R$ ${fmt(pacote)} (aluguel + condomínio + IPTU)`].concat(vCards[1].feats);
+    const val = {
+      hook: `Imagine a sua rotina neste ${p.tipo.toLowerCase()} em ${p.bairro}. Confira os valores e agende uma visita, sem compromisso, para ver de perto.`,
+      cols: mob ? '1fr' : 'minmax(0,1fr) minmax(0,1.2fr)', cards: vCards, chk: svg('<path d="M4 12.5l5 5L20 6.5"/>')
+    };
     const isFav = s.favs.includes(p.code);
     const useHdr = !mob && (pr.dockMode ?? 'Dock inferior') === 'Faixa no cabeçalho';
     const dockOn = s.dockShow && !useHdr && s.lb == null && !s.visita;
@@ -817,26 +908,27 @@ class Component extends DCLogic {
         paras: p.paras || [p.desc]
       },
       backHref, waHref: wa(waMsg), waMsg,
+      caps, facts, rail, story, val,
+      hdrPill: s.scrolled ? 'rgba(41,45,41,.07)' : 'rgba(239,230,210,.16)', hdrPillBd: s.scrolled ? 'rgba(41,45,41,.24)' : 'rgba(239,230,210,.4)',
       hdrColor: s.scrolled ? '#292D29' : (adjacent && !s.scrolled ? '#EFE6D2' : '#EFE6D2'),
       hdrBg: s.scrolled ? 'rgba(220,209,186,.86)' : 'rgba(220,209,186,0)', hdrBlur: s.scrolled ? 'blur(14px)' : 'none',
       hdrH: s.scrolled ? '64px' : (mob ? '72px' : '88px'),
       hdrCtx: useHdr && s.dockShow, hdrDefault: !(useHdr && s.dockShow),
       heroOverlay: !adjacent, heroAdjacent: adjacent,
-      galBg: adjacent ? 'linear-gradient(180deg,rgba(41,45,41,0) 0,#292D29 220px,#292D29 calc(100% - 280px),rgba(41,45,41,0) 100%)' : 'linear-gradient(180deg,#292D29 0,#292D29 calc(100% - 280px),rgba(41,45,41,0) 100%)',
+      galBg: adjacent ? 'linear-gradient(180deg,rgba(41,45,41,0) 0,#292D29 220px,#292D29 calc(100% - clamp(280px,40vh,420px)),rgba(41,45,41,0) 100%)' : 'linear-gradient(180deg,#292D29 0,#292D29 calc(100% - clamp(280px,40vh,420px)),rgba(41,45,41,0) 100%)',
       galPadT: adjacent ? 'clamp(200px,26vh,260px)' : 'clamp(48px,8vh,96px)',
       openGallery: e => this.openLb(0, null), openVisita: () => this.setState({ visita: true, vSent: false }),
       cells,
       edTextCol: mob ? '1 / -1' : sideIdx != null ? (tab ? '1 / span 7' : '1 / span 6') : (tab ? '1 / -1' : '3 / span 8'),
       edPhotoCol: mob ? '1 / -1' : (tab ? '8 / span 5' : '8 / span 5'), edPhotoMargin: mob ? '48px 0 0' : '128px 0 0',
       hasSidePhoto: sideIdx != null, side: sideIdx != null ? tile(sideIdx) : {},
-      galTitle: `${pad2(N)} ${N === 1 ? 'FOTO' : 'FOTOS'}${p.planta ? ' + PLANTA' : ''}`,
+      galTitle: s.galTab === 'planta' ? 'PLANTA' : `${pad2(N)} ${N === 1 ? 'FOTO' : 'FOTOS'}`,
       hasPlanta: !!p.planta,
       galTabs: [['fotos', 'Fotos'], ['planta', 'Planta']].map(([k, l]) => seg(l, s.galTab === k, () => this.setState({ galTab: k }), true)),
       galGrid: !mob && s.galTab === 'fotos', galTrack: mob && s.galTab === 'fotos', galPlanta: s.galTab === 'planta',
       gMosaic,
       gAll: Array.from({ length: N }, (_, i) => tile(i)),
       planta: { id: sid(0) + '-planta', ph: `Planta baixa — ${p.tipo}, ${p.bairro}`, open: () => this.showToast('PLANTA EM TELA CHEIA NA PRÓXIMA ETAPA') },
-      galNote: `${pad2(N)} ${N === 1 ? 'FOTO' : 'FOTOS'} DO IMÓVEL${p.planta ? ' · PLANTA DISPONÍVEL' : ''} · SEM VÍDEO OU TOUR`,
       featTitle: (p.dest && p.dest.length) ? 'DIFERENCIAIS' : 'CARACTERÍSTICAS',
       hasDest: !!(p.dest && p.dest.length), dest: (p.dest || []).map((t, i) => ({ t, n: pad2(i + 1) })),
       groups: (p.grupos || (p.feats.length ? [{ t: 'Características', i: p.feats }] : [])).map(g => ({ tUp: g.t.toUpperCase(), i: g.i })),
