@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Property Match · Capital SP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./catalogo.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;background:#DCD1BA;color:#292D29;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;min-width:0}
+a{color:#292D29;text-decoration:none}
+button,input,textarea{font-family:inherit;color:inherit}
+input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
+:focus-visible{outline:2px solid #A64B36;outline-offset:3px}
+.mono{font-family:'IBM Plex Mono',monospace}
+.bs{font-family:'Big Shoulders Display','Big Shoulders',sans-serif}
+.press{transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease,color 150ms ease,box-shadow 150ms ease}
+.press:active{transform:scale(.97)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* cabeçalho (mesma linguagem da busca e do anúncio) */
+.ah{position:sticky;top:0;z-index:40;height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 clamp(16px,3vw,40px);background:rgba(220,209,186,.82);backdrop-filter:blur(18px) saturate(1.15);-webkit-backdrop-filter:blur(18px) saturate(1.15);border-bottom:1px solid rgba(41,45,41,.14)}
+.tabs{display:flex;align-items:center;gap:4px;padding:4px;border-radius:12px;background:rgba(239,231,214,.7);box-shadow:inset 0 0 0 1px rgba(41,45,41,.14)}
+.tabs button,.tabs a{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border:0;border-radius:9px;background:transparent;cursor:pointer;font-size:13.5px;font-weight:500;white-space:nowrap}
+.tabs [aria-current="page"]{background:#292D29;color:#EFE6D2}
+.cnt{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:5px;background:#A64B36;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px}
+.kick{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.24em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border:0;border-radius:10px;cursor:pointer;font-size:14.5px;font-weight:600}
+.btn.pri{background:#A64B36;color:#fff}
+.btn.ink{background:#292D29;color:#EFE6D2}
+.btn.lin{background:transparent;box-shadow:inset 0 0 0 1.5px #292D29}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.op{min-height:40px;padding:0 14px;border:1px solid rgba(41,45,41,.24);border-radius:8px;background:transparent;cursor:pointer;font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.op[aria-pressed="true"]{background:#292D29;color:#EFE6D2;border-color:#292D29}
+.op .dot{width:10px;height:10px;flex:none}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.sw{display:inline-flex;align-items:center;gap:10px;padding:0;border:0;background:none;cursor:pointer;font-size:13.5px;font-weight:500;text-align:left}
+.sw i{position:relative;flex:none;width:38px;height:22px;border-radius:4px;background:rgba(41,45,41,.22);transition:background-color 150ms ease}
+.sw i::after{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:2px;background:#F4EDDD;transition:transform 180ms cubic-bezier(.23,1,.32,1)}
+.sw[aria-checked="true"] i{background:#A64B36}
+.sw[aria-checked="true"] i::after{transform:translateX(16px)}
+.inp{height:46px;width:100%;padding:0 12px;border:1px solid rgba(41,45,41,.24);border-radius:8px;background:#F4EDDD;font-size:16px;outline:none}
+.inp:focus{border-color:#A64B36}
+/* introdução */
+.intro{min-height:calc(100svh - 68px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,5vw,80px);align-items:center;max-width:1320px;margin:0 auto;padding:clamp(28px,6vh,72px) clamp(20px,4vw,56px)}
+.demo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.6vw,20px)}
+.dtile{display:flex;flex-direction:column;gap:14px}
+.dstage{position:relative;aspect-ratio:3/4;border-top:2px solid #292D29;padding-top:16px;overflow:hidden}
+.dcard{position:absolute;left:10%;right:10%;top:22px;bottom:8%;border-radius:6px;overflow:hidden;background:#EFE7D6;box-shadow:0 0 0 1.5px #292D29,0 18px 30px -18px rgba(30,32,28,.7)}
+.dcard img{width:100%;height:68%;object-fit:cover;display:block}
+.dcard b{display:block;padding:8px 10px 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-size:clamp(13px,1.5vw,20px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dghost{position:absolute;left:14%;right:14%;top:34px;bottom:6%;border-radius:6px;background:#CFC4AB;box-shadow:0 0 0 1.5px rgba(41,45,41,.35)}
+.dt1 .dcard{animation:swR 3.2s cubic-bezier(.45,0,.2,1) infinite}
+.dt2 .dcard{animation:swL 3.2s cubic-bezier(.45,0,.2,1) infinite .5s}
+.dt3 .tap{animation:tap 2.4s ease-in-out infinite}
+@keyframes swR{0%,25%{transform:none}55%,70%{transform:translateX(9%) rotate(7deg)}100%{transform:none}}
+@keyframes swL{0%,25%{transform:none}55%,70%{transform:translateX(-9%) rotate(-7deg)}100%{transform:none}}
+@keyframes tap{0%,40%{transform:scale(1);opacity:.9}55%{transform:scale(.8);opacity:1}70%,100%{transform:scale(1);opacity:.9}}
+.dstamp{position:absolute;top:24px;padding:1px 6px;border:3px solid currentColor;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(11px,1.4vw,18px);letter-spacing:.06em;background:rgba(239,231,214,.9)}
+.tap{position:absolute;left:50%;top:38%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:3px solid #A64B36;background:rgba(166,75,54,.18)}
+/* preferências */
+.pf{max-width:1120px;margin:0 auto;padding:clamp(24px,5vh,56px) clamp(20px,4vw,56px) 140px}
+.pgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 clamp(24px,4vw,64px)}
+.pg{padding:22px 0;border-top:1px solid rgba(41,45,41,.18)}
+.pg h3{margin:0 0 4px;font-size:16px;font-weight:600}
+.pg p.h{margin:0 0 12px;font-size:13px;line-height:1.45;opacity:.7}
+.band{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:36px;padding:14px 0 10px;border-top:3px solid #292D29}
+.band h2{margin:0;text-transform:uppercase;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1}
+.pfoot{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;justify-content:center;gap:16px;padding:14px clamp(16px,3vw,40px) calc(14px + env(safe-area-inset-bottom));background:rgba(220,209,186,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(41,45,41,.16)}
+.imp{display:flex;gap:12px;align-items:flex-start;margin-top:20px;padding:14px 16px;border-left:4px solid #A64B36;background:rgba(239,231,214,.75);font-size:14px;line-height:1.5}
+/* descoberta */
+.dk{display:grid;grid-template-columns:280px minmax(0,1fr) 280px;gap:clamp(20px,3vw,40px);max-width:1440px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 24px}
+.side{display:flex;flex-direction:column;gap:18px;padding-top:6px}
+.sbox{padding-top:12px;border-top:2px solid #292D29}
+.sbox ul{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;font-size:13.5px;line-height:1.4}
+.sbox li{display:flex;gap:8px}
+.sbox li::before{content:'';flex:none;width:6px;height:6px;margin-top:7px;background:#A64B36}
+.center{display:flex;flex-direction:column;align-items:center;gap:14px}
+.stage{position:relative;width:100%;max-width:460px;height:min(620px,calc(100svh - 68px - 220px));min-height:420px;margin-bottom:30px}
+.card{position:absolute;inset:0;display:flex;flex-direction:column;border-radius:8px;overflow:hidden;background:#EFE7D6;box-shadow:0 0 0 1.5px #292D29,0 24px 44px -24px rgba(30,32,28,.75);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.card.top{z-index:3;cursor:grab;will-change:transform}
+.card.top.drag{cursor:grabbing}
+.bk1,.bk2{transform-origin:50% 100%}
+.bk1{z-index:2;transform:translateY(14px) scale(.955);filter:brightness(.94)}
+.bk2{z-index:1;transform:translateY(28px) scale(.91);filter:brightness(.88)}
+.cph{position:relative;flex:1 1 62%;min-height:0;background:#CFC4AB;overflow:hidden}
+.cph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.segs{position:absolute;left:12px;right:12px;top:12px;display:flex;gap:4px;z-index:2}
+.segs>span{flex:1;height:4px;background:rgba(244,237,221,.45)}
+.segs>span.on{background:#F4EDDD}
+.phn{position:absolute;top:50%;z-index:2;width:38px;height:38px;margin-top:-19px;border:0;border-radius:6px;background:rgba(244,237,221,.9);cursor:pointer;font-size:18px;line-height:1}
+.phn.l{left:10px}.phn.r{right:10px}
+.ctag{position:absolute;left:12px;bottom:12px;z-index:2;display:flex;gap:6px;flex-wrap:wrap}
+.ctag>span{padding:5px 9px;border-radius:4px;background:rgba(244,237,221,.94);font-size:11.5px;font-weight:600}
+.ctag>span.ink{background:#292D29;color:#EFE6D2}
+.meter{position:absolute;right:12px;bottom:12px;z-index:2;display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:4px;background:rgba(41,45,41,.86);color:#EFE6D2;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.blk{display:flex;gap:2px}
+.blk i{width:6px;height:10px;background:rgba(239,230,210,.3)}
+.blk i.on{background:#D9876F}
+.stamp{position:absolute;top:44px;z-index:4;padding:4px 12px;border:4px solid currentColor;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(28px,7vw,40px);letter-spacing:.06em;background:rgba(239,231,214,.88);opacity:0;pointer-events:none}
+.stamp.like{left:18px;color:#A64B36;transform:rotate(-10deg)}
+.stamp.nope{right:18px;color:#292D29;transform:rotate(10deg)}
+.cinfo{flex:none;display:flex;flex-direction:column;gap:6px;padding:14px 16px 16px}
+.why{display:flex;flex-direction:column;gap:3px;margin-top:4px;padding-top:8px;border-top:1px solid rgba(41,45,41,.16);font-size:12.5px;line-height:1.35}
+.why>span{display:flex;gap:6px}
+.why>span.w::before{content:'+';color:#A64B36;font-weight:700}
+.why.warn>span.w::before{content:'!'}
+.ctl{display:flex;align-items:flex-end;justify-content:center;gap:clamp(10px,3vw,22px)}
+.cb{display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;border:0;background:none;cursor:pointer}
+.cb b{display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:10px;box-shadow:inset 0 0 0 1.5px #292D29;background:rgba(239,231,214,.7);font-size:20px;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease}
+.cb.big b{width:66px;height:66px;font-size:26px}
+.cb.nope b{background:#292D29;color:#EFE6D2;box-shadow:none}
+.cb.like b{background:#A64B36;color:#fff;box-shadow:none}
+.cb.vis b{box-shadow:inset 0 0 0 2px #A64B36;color:#A64B36;background:#F4EDDD;font-size:13px;font-weight:700;letter-spacing:.04em}
+.cb.vis[aria-pressed="true"] b{background:#A64B36;color:#fff}
+.cal{position:relative;display:block;width:20px;height:19px;border:2px solid currentColor;border-top-width:5px;border-radius:2px}
+.cal::after{content:'+';position:absolute;left:0;right:0;top:-3px;text-align:center;font-style:normal;font-size:14px;font-weight:700;line-height:14px}
+.center.small .stage{height:min(560px,calc(100svh - 68px - 300px))}
+.rot{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:8px;background:#292D29;color:#EFE6D2}
+.rot .th{display:flex;gap:6px}
+.rot .th span{position:relative;width:44px;height:44px;border-radius:4px;overflow:hidden;background:#3A3E39;box-shadow:inset 0 0 0 1px rgba(239,230,210,.25)}
+.rot .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ask{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;border-left:3px solid #A64B36;background:rgba(244,237,221,.8);font-size:13px;line-height:1.4}
+.vrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(41,45,41,.12);font-size:14px}
+.pk{flex:none;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:4px;box-shadow:inset 0 0 0 1.5px #292D29;font-weight:700;font-size:14px}
+.pk.on{background:#A64B36;color:#fff;box-shadow:none}
+.vrow b.n{flex:none;display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:4px;background:#292D29;color:#EFE6D2;font-family:'IBM Plex Mono',monospace;font-size:12px}
+.vrow img{flex:none;width:52px;height:40px;object-fit:cover;border-radius:4px}
+.xbtn{flex:none;width:34px;height:34px;border:0;border-radius:6px;background:rgba(41,45,41,.08);cursor:pointer}
+.mbar{display:none}
+@media (max-width:900px){.mbar{display:flex}}
+.cb:active b{transform:scale(.94)}
+.cb[disabled]{opacity:.35;cursor:not-allowed}
+.cb small{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em}
+.rsn{position:absolute;left:-6px;right:-6px;bottom:-6px;z-index:6;padding:14px;border-radius:8px;background:rgba(239,231,214,.9);backdrop-filter:blur(16px) saturate(1.1);-webkit-backdrop-filter:blur(16px) saturate(1.1);box-shadow:0 0 0 1.5px #292D29,0 20px 40px -20px rgba(30,32,28,.7);animation:rIn 260ms cubic-bezier(.23,1,.32,1)}
+@keyframes rIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.aftc{position:absolute;left:8px;right:8px;top:8px;z-index:6;display:flex;align-items:center;gap:8px;padding:8px 8px 8px 12px;border-radius:8px;background:rgba(41,45,41,.88);color:#EFE6D2;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:rIn 220ms cubic-bezier(.23,1,.32,1)}
+.rsn .op{min-height:34px;padding:0 10px;font-size:12.5px}
+.state{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:28px;border-radius:8px;background:#EFE7D6;box-shadow:0 0 0 1.5px #292D29}
+.keys{font-size:11px;opacity:.6;text-align:center}
+.mob{display:none}
+/* detalhes */
+.ov{position:fixed;inset:0;z-index:80;background:rgba(30,32,28,.42)}
+.dt{position:fixed;right:0;top:0;bottom:0;z-index:81;width:min(520px,100vw);overflow:auto;background:#EFE7D6;box-shadow:-20px 0 60px -30px rgba(30,32,28,.6);animation:dtIn 360ms cubic-bezier(.32,.72,0,1)}
+@keyframes dtIn{from{transform:translateX(100%)}to{transform:none}}
+.gal{position:relative;aspect-ratio:4/3;background:#CFC4AB}
+.gal img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.crit{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.4}
+.crit li{display:flex;gap:10px;align-items:flex-start}
+.crit .k{flex:none;display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:4px;font-size:12px;font-weight:700}
+.k.y{background:#A64B36;color:#fff}.k.n{background:#292D29;color:#EFE6D2}.k.u{box-shadow:inset 0 0 0 1.5px rgba(41,45,41,.4)}
+.row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(41,45,41,.12);font-size:14.5px}
+/* seus matches */
+.mt{max-width:1440px;margin:0 auto;padding:clamp(24px,4vh,48px) clamp(16px,3vw,40px) 120px}
+.mgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:clamp(24px,3vw,48px);align-items:start;margin-top:24px}
+.mtabs{display:flex;gap:0;border-bottom:2px solid #292D29;overflow-x:auto}
+.mtabs button{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 16px;border:0;background:none;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap;opacity:.6}
+.mtabs button[aria-selected="true"]{opacity:1;background:#292D29;color:#EFE6D2}
+.mlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;margin-top:20px}
+.mc{display:flex;flex-direction:column;border-radius:8px;overflow:hidden;background:#EFE7D6;box-shadow:0 0 0 1px rgba(41,45,41,.22)}
+.mc .im{position:relative;aspect-ratio:4/3;background:#CFC4AB}
+.mc .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mc .bd{display:flex;flex-direction:column;gap:6px;padding:12px 14px 14px;flex:1}
+.lnk{padding:0;border:0;background:none;cursor:pointer;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(41,45,41,.35)}
+.lnk:hover{color:#A64B36}
+.cmpck{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.sum{position:sticky;top:88px;display:flex;flex-direction:column;gap:18px}
+.dlg{position:fixed;left:50%;top:50%;z-index:91;width:min(620px,calc(100vw - 24px));max-height:calc(100svh - 32px);overflow:auto;transform:translate(-50%,-50%);padding:24px;border-radius:10px;background:#EFE7D6;box-shadow:0 0 0 1.5px #292D29,0 40px 80px -30px rgba(30,32,28,.7)}
+.dlgov{position:fixed;inset:0;z-index:90;background:rgba(30,32,28,.45)}
+.ficha{margin:0;padding:16px;border-radius:6px;background:#F7F2E6;box-shadow:inset 0 0 0 1px rgba(41,45,41,.18);font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.6;white-space:pre-wrap;max-height:42vh;overflow:auto}
+.ctab{width:100%;border-collapse:collapse;font-size:13.5px}
+.ctab th,.ctab td{padding:9px 8px;border-bottom:1px solid rgba(41,45,41,.14);text-align:left;vertical-align:top}
+.ctab th{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;font-weight:500;opacity:.7}
+.cbar{position:fixed;left:50%;bottom:20px;z-index:35;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;border-radius:10px;background:#292D29;color:#EFE6D2;box-shadow:0 20px 40px -16px rgba(30,32,28,.8)}
+.toast{position:fixed;left:50%;top:84px;z-index:95;transform:translateX(-50%);padding:12px 18px;border-radius:8px;background:#292D29;color:#EFE6D2;font-size:14px;box-shadow:0 16px 30px -14px rgba(30,32,28,.7)}
+@media (max-width:1180px){.dk{grid-template-columns:minmax(0,1fr) 260px}.side.l{display:none}}
+@media (max-width:900px){
+  .dk{grid-template-columns:1fr;padding-top:12px}
+  .side{display:none}
+  .mob{display:flex}
+  .intro{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:1fr}
+  .mgrid{grid-template-columns:1fr}
+  .sum{position:static}
+  .hidem{display:none !important}
+  .stage{height:min(600px,calc(100svh - 68px - 230px))}
+}
+@media (max-width:560px){.demo{grid-template-columns:1fr 1fr 1fr}.dcard b{font-size:15px}.tabs button,.tabs a{padding:0 10px}.tlab{display:none}}
+@media (prefers-reduced-motion:reduce){.dt1 .dcard,.dt2 .dcard,.dt3 .tap,.dt,.rsn,.aftc{animation:none}.press,.sw i,.sw i::after,.cb b{transition:none}}
+</style>
+</helmet>
+<div ref="{{ R.root }}" style="min-height:100vh;font-family:Archivo,sans-serif;color:#292D29;background:#DCD1BA">
+
+  <header class="ah">
+    <div style="display:flex;align-items:center;gap:14px">
+      <a href="Capital%20SP%20Home%20v3.dc.html" aria-label="Capital SP Imóveis, página inicial" style="display:flex;align-items:center;gap:12px">
+        <span style="position:relative;display:block;width:24px;height:24px;border:2px solid currentColor"><span style="position:absolute;right:-2px;bottom:-2px;width:11px;height:11px;background:#A64B36"></span></span>
+        <span class="hidem" style="display:flex;flex-direction:column;line-height:1"><span class="bs" style="font-weight:800;font-size:20px;letter-spacing:.05em">CAPITAL SP</span><span class="mono" style="font-size:8.5px;letter-spacing:.42em;margin-top:3px">IMÓVEIS</span></span>
+      </a>
+      <span class="hidem" style="width:1px;height:28px;background:rgba(41,45,41,.25)"></span>
+      <span class="kick hidem" style="font-size:10px">PROPERTY MATCH</span>
+    </div>
+    <nav class="tabs" aria-label="Property Match">
+      <button onClick="{{ goDeck }}" aria-current="{{ curDeck }}" aria-label="Descobrir"><span aria-hidden="true">◧</span><span class="tlab">Descobrir</span></button>
+      <button onClick="{{ goMatches }}" aria-current="{{ curMatches }}" aria-label="{{ matchesAria }}"><span class="tlab">Seus matches</span><span class="cnt" aria-hidden="true">{{ nSel }}</span></button>
+      <button onClick="{{ goPrefs }}" aria-current="{{ curPrefs }}" aria-label="Preferências"><span aria-hidden="true">⚙</span><span class="tlab">Preferências</span></button>
+      <a class="hidem" href="Capital%20SP%20Busca.dc.html">Busca</a>
+    </nav>
+  </header>
+
+  <div class="sr" aria-live="polite">{{ live }}</div>
+
+  <sc-if value="{{ vLoading }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:560px;margin:0 auto;padding:18vh 24px;text-align:center">
+      <p class="kick" style="margin:0">PROPERTY MATCH</p>
+      <p style="margin:14px 0 0;font-size:16px">{{ loadingMsg }}</p>
+      <sc-if value="{{ catEmpty }}"><a class="btn ink press" href="Capital%20SP%20Home%20v3.dc.html" style="margin-top:20px">Voltar ao início</a></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- 1 · introdução -->
+  <sc-if value="{{ vIntro }}" hint-placeholder-val="{{ true }}">
+    <section class="intro" aria-labelledby="pm-t">
+      <div>
+        <p class="kick" style="margin:0;color:#A64B36">■ PROPERTY MATCH · CAPITAL SP</p>
+        <h1 id="pm-t" class="bs" style="margin:18px 0 0;font-weight:900;font-size:clamp(56px,6.2vw,104px);line-height:.9;letter-spacing:.005em">UM IMÓVEL<br>POR VEZ.</h1>
+        <p style="margin:22px 0 0;max-width:44ch;font-size:17px;line-height:1.55;text-wrap:pretty">Avalie os imóveis do nosso catálogo um a um. Os que você marcar como “quero visitar” vão para a sua lista, e você envia ao corretor de 1 a 5 de uma vez para agendar as visitas. A cada escolha, a ordem dos próximos se ajusta ao que importa para você. Sem cadastro para começar.</p>
+        <sc-if value="{{ hasImport }}"><div class="imp"><span style="flex:none;width:10px;height:10px;margin-top:6px;background:#A64B36"></span><span>{{ importMsg }}</span></div></sc-if>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:28px">
+          <button class="btn pri press" onClick="{{ introNext }}">{{ introCta }} →</button>
+          <sc-if value="{{ canSkipIntro }}"><button class="btn lin press" onClick="{{ goDeck }}">Ir direto aos imóveis</button></sc-if>
+        </div>
+      </div>
+      <div class="demo" aria-label="Como funciona">
+        <div class="dtile dt1">
+          <div class="dstage" aria-hidden="true"><div class="dghost"></div><div class="dcard"><img src="{{ demo1 }}" alt=""><b>R$ 640 mil</b><span class="dstamp" style="left:8px;color:#A64B36;transform:rotate(-10deg)">VISITAR</span></div></div>
+          <p class="kick" style="margin:0;font-size:10px">→ DIREITA</p><p style="margin:0;font-size:14px;line-height:1.4"><b>Quero visitar.</b> Arraste para a direita ou toque em ✓. Vai para a sua lista de visitas.</p>
+        </div>
+        <div class="dtile dt2">
+          <div class="dstage" aria-hidden="true"><div class="dghost"></div><div class="dcard"><img src="{{ demo2 }}" alt=""><b>R$ 3.200/mês</b><span class="dstamp" style="right:8px;transform:rotate(10deg)">DESCARTAR</span></div></div>
+          <p class="kick" style="margin:0;font-size:10px">← ESQUERDA</p><p style="margin:0;font-size:14px;line-height:1.4"><b>Descartar.</b> Arraste para a esquerda ou toque em ✕. Diga o motivo, se quiser.</p>
+        </div>
+        <div class="dtile dt3">
+          <div class="dstage" aria-hidden="true"><div class="dghost"></div><div class="dcard"><img src="{{ demo3 }}" alt=""><b>Ver detalhes</b></div><span class="tap"></span></div>
+          <p class="kick" style="margin:0;font-size:10px">TOQUE · ⓘ</p><p style="margin:0;font-size:14px;line-height:1.4"><b>Detalhes.</b> Toque na foto. Isso não conta como escolha nem descarte.</p>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- 2 · preferências -->
+  <sc-if value="{{ vPrefs }}" hint-placeholder-val="{{ false }}">
+    <main class="pf" aria-labelledby="pf-t">
+      <p class="kick" style="margin:0;color:#A64B36">■ PASSO 1 DE 2 · PREFERÊNCIAS</p>
+      <h1 id="pf-t" class="bs" style="margin:12px 0 0;font-weight:900;font-size:clamp(44px,6vw,80px);line-height:.92">O QUE VOCÊ PROCURA</h1>
+      <sc-if value="{{ hasImport }}"><div class="imp"><span style="flex:none;width:10px;height:10px;margin-top:6px;background:#A64B36"></span><span>{{ importMsg }}</span></div></sc-if>
+
+      <div class="band"><h2>Indispensáveis</h2><span class="kick" style="font-size:10px">DEFINEM QUAIS IMÓVEIS APARECEM</span></div>
+      <div class="pgrid">
+        <div class="pg"><h3>Finalidade</h3><p class="h">Compra ou locação.</p><div class="opts"><sc-for list="{{ pModes }}" as="o" hint-placeholder-count="2"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div></div>
+        <div class="pg"><h3>Faixa de preço</h3><p class="h">{{ priceHint }}</p>
+          <div class="opts"><sc-for list="{{ pPrices }}" as="o" hint-placeholder-count="4"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px"><label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Mínimo (R$)<input class="inp" inputmode="numeric" value="{{ pminV }}" onChange="{{ onPmin }}" placeholder="Sem mínimo"></label><label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Máximo (R$)<input class="inp" inputmode="numeric" value="{{ pmaxV }}" onChange="{{ onPmax }}" placeholder="Sem máximo"></label></div>
+        </div>
+        <div class="pg"><h3>Tipo de imóvel</h3><p class="h">Nenhum marcado = todos os tipos.</p><div class="opts"><sc-for list="{{ pTipos }}" as="o" hint-placeholder-count="4"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div></div>
+        <div class="pg"><h3>Dormitórios e vagas</h3><p class="h">Quantidade mínima.</p>
+          <div class="mono" style="font-size:10.5px;letter-spacing:.14em;margin-bottom:8px">DORMITÓRIOS</div><div class="opts"><sc-for list="{{ pDorms }}" as="o" hint-placeholder-count="5"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div>
+          <div class="mono" style="font-size:10.5px;letter-spacing:.14em;margin:14px 0 8px">VAGAS DE GARAGEM</div><div class="opts"><sc-for list="{{ pVagas }}" as="o" hint-placeholder-count="4"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div>
+        </div>
+        <div class="pg"><h3>Metragem</h3><p class="h">Área em m², como cadastrada pelo corretor.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Mínima<input class="inp" inputmode="numeric" value="{{ aminV }}" onChange="{{ onAmin }}" placeholder="Sem mínimo"></label><label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Máxima<input class="inp" inputmode="numeric" value="{{ amaxV }}" onChange="{{ onAmax }}" placeholder="Sem máximo"></label></div></div>
+        <div class="pg"><h3>Características indispensáveis</h3><p class="h">Só aparecem imóveis com todas as marcadas.</p><div class="opts"><sc-for list="{{ pFeats }}" as="o" hint-placeholder-count="6"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div></div>
+      </div>
+
+      <div class="band"><h2>Onde</h2><span class="kick" style="font-size:10px">VOCÊ ESCOLHE SE É EXIGÊNCIA OU PREFERÊNCIA</span></div>
+      <div class="pgrid">
+        <div class="pg"><h3>Bairros e regiões de interesse</h3><p class="h">{{ bairrosHint }}</p>
+          <button class="sw" role="switch" aria-checked="{{ bHard }}" onClick="{{ togBHard }}" style="margin-bottom:14px"><i></i>Somente nestes bairros (indispensável)</button>
+          <div class="opts"><sc-for list="{{ pBairros }}" as="o" hint-placeholder-count="10"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}" style="min-height:36px;font-size:13px">{{ o.l }}</button></sc-for></div>
+        </div>
+        <div class="pg"><h3>Proximidade de metrô e trem</h3><p class="h">{{ linhasHint }}</p>
+          <button class="sw" role="switch" aria-checked="{{ lHard }}" onClick="{{ togLHard }}" style="margin-bottom:14px"><i></i>Somente bairros atendidos (indispensável)</button>
+          <div class="opts"><sc-for list="{{ pLinhas }}" as="o" hint-placeholder-count="7"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}"><span class="dot" style="background:{{ o.c }}"></span>{{ o.l }}</button></sc-for></div>
+          <p style="margin:12px 0 0;font-size:12.5px;line-height:1.45;opacity:.7">Proximidade calculada pelo bairro atendido pela linha. A Linha 2-Verde na Zona Leste ainda está em obras.</p>
+        </div>
+      </div>
+
+      <div class="band"><h2>O que mais importa</h2><span class="kick" style="font-size:10px">FLEXÍVEL · MUDA A ORDEM, NÃO EXCLUI</span></div>
+      <div class="pg" style="border-top:0">
+        <p class="h" style="max-width:70ch">Escolha quantas quiser. Quando há dado cadastrado pelo corretor, a prioridade pesa na ordem e na compatibilidade. As marcadas “sem dado” ainda não têm informação no catálogo: elas vão para a ficha do corretor, sem virar nota para nenhum imóvel.</p>
+        <div class="opts"><sc-for list="{{ pPrios }}" as="o" hint-placeholder-count="9"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}<sc-if value="{{ o.nd }}"><span class="mono" style="font-size:9.5px;letter-spacing:.1em;opacity:.65">SEM DADO</span></sc-if></button></sc-for></div>
+      </div>
+
+      <sc-if value="{{ hasRules }}">
+        <div class="band"><h2>Regras dos seus descartes</h2><span class="kick" style="font-size:10px">VOCÊ CONFIRMOU AO DESCARTAR</span></div>
+        <div class="pg" style="border-top:0"><p class="h">Imóveis que batem com estas regras ficam fora das rodadas enquanto houver outras opções.</p><div class="opts"><sc-for list="{{ rules }}" as="r" hint-placeholder-count="1"><span class="op" style="cursor:default">{{ r.l }}<button class="xbtn" onClick="{{ r.rm }}" aria-label="Remover regra" style="width:26px;height:26px">✕</button></span></sc-for></div></div>
+      </sc-if>
+      <sc-if value="{{ hasRelax }}">
+        <div class="imp" style="border-left-color:#292D29"><span><b>Nenhum imóvel atende a todos os indispensáveis.</b> {{ relaxMsg }}<span style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"><sc-for list="{{ relax }}" as="r" hint-placeholder-count="3"><button class="op" onClick="{{ r.go }}">{{ r.l }}</button></sc-for></span></span></div>
+      </sc-if>
+    </main>
+    <div class="pfoot">
+      <span style="font-size:14px"><b class="bs" style="font-size:26px;font-weight:800">{{ nElig }}</b> {{ eligLabel }}</span>
+      <button class="btn pri press" onClick="{{ startDeck }}" disabled="{{ noElig }}">{{ startCta }} →</button>
+      <sc-if value="{{ smallCat }}"><a class="lnk" href="{{ listHref }}">Ver os {{ nElig }} em lista</a></sc-if>
+    </div>
+  </sc-if>
+
+  <!-- 3 · descoberta -->
+  <sc-if value="{{ vDeck }}" hint-placeholder-val="{{ false }}">
+    <div class="dk">
+      <aside class="side l" aria-label="Suas preferências">
+        <div class="sbox"><div class="kick" style="font-size:10px">INDISPENSÁVEIS</div><ul><sc-for list="{{ hardList }}" as="h" hint-placeholder-count="3"><li>{{ h }}</li></sc-for></ul></div>
+        <div class="sbox"><div class="kick" style="font-size:10px">PREFERÊNCIAS</div><ul><sc-for list="{{ softList }}" as="h" hint-placeholder-count="2"><li>{{ h }}</li></sc-for></ul></div>
+        <sc-if value="{{ hasRules }}"><div class="sbox"><div class="kick" style="font-size:10px">REGRAS DOS DESCARTES</div><ul><sc-for list="{{ rules }}" as="r" hint-placeholder-count="1"><li style="justify-content:space-between;align-items:center"><span>{{ r.l }}</span><button class="xbtn" onClick="{{ r.rm }}" aria-label="Remover regra" style="width:26px;height:26px">✕</button></li></sc-for></ul></div></sc-if>
+        <button class="lnk" onClick="{{ goPrefs }}" style="align-self:flex-start">Editar preferências</button>
+      </aside>
+
+      <main class="{{ centerCls }}" aria-label="Descoberta de imóveis">
+        <div class="mob" style="width:100%;max-width:460px;justify-content:space-between;align-items:center;font-size:12.5px"><span class="mono" style="letter-spacing:.1em">{{ progLabel }}</span><button class="lnk" onClick="{{ openVisit }}" style="white-space:nowrap">{{ rotShort }}</button></div>
+        <sc-if value="{{ smallCat }}"><p style="width:100%;max-width:460px;margin:0;padding:10px 12px;border-left:3px solid #A64B36;background:rgba(239,231,214,.7);font-size:13px;line-height:1.4">Só {{ nElig }} imóveis atendem aos seus requisitos. Com poucos, comparar em lista costuma ser mais rápido. <a class="lnk" href="{{ listHref }}">Ver em lista</a></p></sc-if>
+        <div ref="{{ R.deck }}" class="stage">
+          <sc-if value="{{ hasTop }}">
+            <sc-for list="{{ behind }}" as="b" hint-placeholder-count="2">
+              <div class="{{ b.cls }}" aria-hidden="true"><div class="cph"><img src="{{ b.foto }}" alt="" draggable="false"></div><div class="cinfo"><span class="bs" style="font-weight:800;font-size:30px;line-height:1">{{ b.price }}</span><span style="font-size:14px">{{ b.sub }}</span></div></div>
+            </sc-for>
+            <article ref="{{ R.top }}" class="card top" aria-roledescription="imóvel" aria-label="{{ t.aria }}">
+              <div class="cph">
+                <img src="{{ t.foto }}" alt="{{ t.alt }}" draggable="false">
+                <div class="segs" aria-hidden="true"><sc-for list="{{ t.segs }}" as="g" hint-placeholder-count="3"><span class="{{ g }}"></span></sc-for></div>
+                <button class="phn l" onClick="{{ prevPh }}" aria-label="Foto anterior">‹</button>
+                <button class="phn r" onClick="{{ nextPh }}" aria-label="Próxima foto">›</button>
+                <span ref="{{ R.stR }}" class="stamp like" aria-hidden="true">VISITAR</span>
+                <span ref="{{ R.stL }}" class="stamp nope" aria-hidden="true">DESCARTAR</span>
+                <div class="ctag"><span class="ink">{{ t.modeL }}</span><sc-if value="{{ t.badge }}"><span>{{ t.badge }}</span></sc-if><sc-if value="{{ t.saved }}"><span>✓ Na sua lista</span></sc-if></div>
+                <sc-if value="{{ t.hasPct }}"><div class="meter" title="{{ t.pctTitle }}"><span class="blk" aria-hidden="true"><sc-for list="{{ t.blocks }}" as="k" hint-placeholder-count="10"><i class="{{ k }}"></i></sc-for></span><span class="mono" style="font-size:11px;letter-spacing:.06em">{{ t.pctL }}</span></div></sc-if>
+              </div>
+              <div class="cinfo">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><span class="bs" style="font-weight:800;font-size:clamp(30px,8vw,38px);line-height:1">{{ t.price }}<span style="font-size:.5em;font-weight:700;margin-left:4px">{{ t.suf }}</span></span><span class="mono" style="font-size:10px;letter-spacing:.1em;opacity:.6">{{ t.code }}</span></div>
+                <div style="font-size:15px;font-weight:600">{{ t.tipo }} · {{ t.bairro }}</div>
+                <div class="mono" style="font-size:11.5px;letter-spacing:.04em">{{ t.facts }}</div>
+                <sc-if value="{{ t.hasExtra }}"><div style="font-size:12.5px;line-height:1.4;opacity:.8">{{ t.extra }}</div></sc-if>
+                <sc-if value="{{ t.hasWhy }}"><div class="{{ t.whyCls }}"><span class="mono" style="font-size:9.5px;letter-spacing:.16em;opacity:.65;display:block">{{ t.whyHead }}</span><sc-for list="{{ t.why }}" as="w" hint-placeholder-count="2"><span class="w">{{ w }}</span></sc-for></div></sc-if>
+              </div>
+            </article>
+          </sc-if>
+          <sc-if value="{{ isDone }}">
+            <div class="state" role="status">
+              <span class="kick" style="color:#A64B36">■ SESSÃO CONCLUÍDA</span>
+              <h2 class="bs" style="margin:0;font-weight:900;font-size:44px;line-height:.92">VOCÊ VIU TODOS OS {{ nElig }} IMÓVEIS COMPATÍVEIS.</h2>
+              <p style="margin:0;font-size:15px;line-height:1.5">{{ doneMsg }}</p>
+              <button class="btn pri press" onClick="{{ openVisit }}">{{ rotCta }}</button>
+              <button class="btn lin press" onClick="{{ goMatches }}">Ver seus matches</button>
+              <button class="btn lin press" onClick="{{ goPrefs }}">Ajustar preferências</button>
+              <sc-if value="{{ hasNopes }}"><button class="lnk" onClick="{{ reviewNopes }}" style="align-self:flex-start">Rever descartados</button></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ roundEnd }}">
+            <div class="state" role="status">
+              <span class="kick" style="color:#A64B36">■ FIM DA RODADA</span>
+              <h2 class="bs" style="margin:0;font-weight:900;font-size:44px;line-height:.92">{{ roundTitle }}</h2>
+              <p style="margin:0;font-size:15px;line-height:1.5">{{ roundMsg }}</p>
+              <button class="btn pri press" onClick="{{ openVisit }}">{{ rotCta }}</button>
+              <button class="btn lin press" onClick="{{ nextRound }}">{{ moreCta }} →</button>
+              <button class="lnk" onClick="{{ goMatches }}" style="align-self:flex-start">Ver seus matches</button>
+              <button class="lnk" onClick="{{ goPrefs }}" style="align-self:flex-start">Ajustar preferências</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ heldEnd }}">
+            <div class="state" role="status">
+              <span class="kick" style="color:#A64B36">■ OPÇÕES NO SEU PERFIL ESGOTADAS</span>
+              <h2 class="bs" style="margin:0;font-weight:900;font-size:40px;line-height:.92">VOCÊ VIU TUDO O QUE COMBINA COM O QUE INDICOU.</h2>
+              <p style="margin:0;font-size:15px;line-height:1.5">{{ heldMsg }}</p>
+              <button class="btn pri press" onClick="{{ openVisit }}">{{ rotCta }}</button>
+              <button class="btn lin press" onClick="{{ goPrefs }}">Ajustar preferências</button>
+              <button class="lnk" onClick="{{ showHeldGo }}" style="align-self:flex-start">{{ heldCta }}</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isEmpty }}">
+            <div class="state" role="status">
+              <span class="kick">■ SEM RESULTADOS</span>
+              <h2 class="bs" style="margin:0;font-weight:900;font-size:40px;line-height:.92">NENHUM IMÓVEL ATENDE AOS INDISPENSÁVEIS.</h2>
+              <p style="margin:0;font-size:15px;line-height:1.5">Afrouxe um requisito para ver opções. Nada do que você já avaliou se perde.</p>
+              <button class="btn pri press" onClick="{{ goPrefs }}">Editar preferências</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ aftMini }}">
+            <div class="aftc" role="status"><span style="flex:1;min-width:0;font-size:13px;line-height:1.3"><b>✓ Na lista de visitas</b> · {{ aftCount }}</span><button class="btn pri press" onClick="{{ aftGo }}" style="min-height:34px;padding:0 12px;font-size:12.5px">{{ aftCta }}</button><button class="xbtn" onClick="{{ aftClose }}" aria-label="Fechar aviso" style="background:rgba(239,230,210,.16);color:#EFE6D2;width:30px;height:30px">✕</button></div>
+          </sc-if>
+          <sc-if value="{{ aftOpen }}">
+            <div class="rsn" role="group" aria-label="Agendar visita">
+              <div style="display:flex;align-items:center;gap:12px"><span style="flex:none;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:6px;background:#A64B36;color:#fff;font-weight:700">✓</span><span style="font-size:14px;line-height:1.35"><b>{{ aftTitle }}</b><br><span style="opacity:.75">{{ aftSub }}</span></span></div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"><button class="btn pri press" onClick="{{ aftGo }}" style="min-height:40px;font-size:13.5px">{{ aftCta }}</button><button class="btn lin press" onClick="{{ aftClose }}" style="min-height:40px;font-size:13.5px">Continuar escolhendo</button></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ rsOpen }}">
+            <div class="rsn" role="group" aria-label="Motivo do descarte (opcional)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px"><b style="font-size:14px">{{ rsTitle }}</b><span class="mono" style="font-size:9.5px;letter-spacing:.14em;opacity:.65">OPCIONAL</span></div>
+              <div class="opts" style="gap:6px"><sc-for list="{{ rsOpts }}" as="o" hint-placeholder-count="10"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div>
+              <sc-for list="{{ rsAsks }}" as="q" hint-placeholder-count="0"><div class="ask"><span style="flex:1 1 220px">{{ q.l }}</span><sc-if value="{{ q.open }}"><button class="btn ink press" onClick="{{ q.yes }}" style="min-height:34px;padding:0 12px;font-size:12.5px">Sim, esconder</button><button class="btn lin press" onClick="{{ q.no }}" style="min-height:34px;padding:0 12px;font-size:12.5px">Não</button></sc-if></div></sc-for>
+              <sc-if value="{{ rsOther }}"><input class="inp" style="margin-top:10px;height:40px;font-size:14px" value="{{ rsOtherV }}" onChange="{{ onRsOther }}" placeholder="Conte em poucas palavras" maxlength="140" aria-label="Outro motivo"></sc-if>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px"><span style="font-size:11.5px;line-height:1.35;opacity:.7">Ajusta suas próximas sugestões. Não altera os dados do imóvel.</span><button class="btn ink press" onClick="{{ rsClose }}" style="min-height:38px;padding:0 14px;font-size:13px">{{ rsDone }}</button></div>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="ctl" role="toolbar" aria-label="Ações do imóvel">
+          <button class="cb" onClick="{{ undo }}" disabled="{{ noUndo }}" aria-label="Desfazer última ação (Z)"><b>↶</b><small>DESFAZER</small></button>
+          <button class="cb big nope" onClick="{{ doNope }}" disabled="{{ noTop }}" aria-label="Descartar (seta para a esquerda)"><b>✕</b><small>DESCARTAR</small></button>
+          <button class="cb" onClick="{{ openDet }}" disabled="{{ noTop }}" aria-label="Ver detalhes (seta para cima)"><b>i</b><small>DETALHES</small></button>
+          <button class="cb big like" onClick="{{ doLike }}" disabled="{{ noTop }}" aria-label="Quero visitar (seta para a direita)"><b>✓</b><small>QUERO VISITAR</small></button>
+        </div>
+        <p class="keys hidem" style="margin:0">Teclado: ← descartar · → quero visitar · ↑ detalhes · Z desfazer</p>
+      </main>
+
+      <aside class="side r" aria-label="Sua sessão">
+        <div class="rot" aria-label="Sua lista de visitas">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="kick" style="font-size:10px">SUA LISTA DE VISITAS</span><span class="mono" style="font-size:11px">{{ nSel }}</span></div>
+          <sc-if value="{{ rotHas }}"><div class="th"><sc-for list="{{ rotThumbs }}" as="r" hint-placeholder-count="2"><span title="{{ r.t }}"><img src="{{ r.foto }}" alt=""></span></sc-for></div></sc-if>
+          <span style="font-size:12.5px;line-height:1.4;opacity:.8">{{ rotHint }}</span>
+          <button class="btn pri press" onClick="{{ openVisit }}" style="min-height:42px">{{ rotCta }}</button>
+        </div>
+        <div class="sbox"><div class="kick" style="font-size:10px">SESSÃO</div>
+          <div style="display:flex;gap:18px;margin-top:10px"><sc-for list="{{ stats }}" as="x" hint-placeholder-count="3"><div><div class="bs" style="font-weight:800;font-size:34px;line-height:1">{{ x.n }}</div><div class="mono" style="font-size:9.5px;letter-spacing:.12em;margin-top:4px">{{ x.l }}</div></div></sc-for></div>
+          <p style="margin:12px 0 0;font-size:12.5px;opacity:.7">{{ progLabel }}</p>
+        </div>
+        <div class="sbox"><div class="kick" style="font-size:10px">O QUE ESTAMOS APRENDENDO</div>
+          <ul><sc-for list="{{ learnList }}" as="h" hint-placeholder-count="2"><li>{{ h }}</li></sc-for></ul>
+        </div>
+        <button class="btn lin press" onClick="{{ goMatches }}">Ver seus matches <span class="cnt">{{ nSel }}</span></button>
+      </aside>
+    </div>
+  </sc-if>
+
+  <!-- 4 · seus matches -->
+  <sc-if value="{{ vMatches }}" hint-placeholder-val="{{ false }}">
+    <main class="mt" aria-labelledby="mt-t">
+      <p class="kick" style="margin:0;color:#A64B36">■ PROPERTY MATCH</p>
+      <h1 id="mt-t" class="bs" style="margin:10px 0 0;font-weight:900;font-size:clamp(48px,7vw,96px);line-height:.9">SEUS MATCHES</h1>
+      <p style="margin:12px 0 0;font-size:15px;opacity:.8">{{ mtSub }}</p>
+      <div class="acts">
+        <button class="btn pri press" onClick="{{ openVisit }}">{{ rotCta }}</button>
+        <button class="btn ink press" onClick="{{ goDeck }}">Continuar descobrindo</button>
+        <button class="btn lin press" onClick="{{ openFicha }}">Conversar com um corretor</button>
+        <button class="btn lin press" onClick="{{ share }}">Compartilhar seleção</button>
+        <button class="btn lin press" onClick="{{ goPrefs }}">Editar preferências</button>
+      </div>
+      <div class="mgrid">
+        <section aria-label="Imóveis avaliados">
+          <div class="mtabs" role="tablist"><sc-for list="{{ mTabs }}" as="x" hint-placeholder-count="4"><button role="tab" aria-selected="{{ x.on }}" onClick="{{ x.go }}">{{ x.l }} <span class="mono" style="font-size:11px">{{ x.n }}</span></button></sc-for></div>
+          <sc-if value="{{ mEmpty }}"><p style="margin:24px 0 0;font-size:15px;line-height:1.5;max-width:52ch">{{ mEmptyMsg }}</p></sc-if>
+          <div class="mlist">
+            <sc-for list="{{ mItems }}" as="m" hint-placeholder-count="3">
+              <article class="mc">
+                <button class="im" onClick="{{ m.det }}" aria-label="{{ m.detL }}" style="padding:0;border:0;cursor:pointer"><img src="{{ m.foto }}" alt="" loading="lazy"><sc-if value="{{ m.hasPct }}"><span class="meter" style="right:8px;bottom:8px;padding:5px 8px"><span class="mono" style="font-size:10.5px">{{ m.pctL }}</span></span></sc-if></button>
+                <div class="bd">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span class="bs" style="font-weight:800;font-size:26px;line-height:1">{{ m.price }}</span><span class="mono" style="font-size:9.5px;opacity:.6">{{ m.code }}</span></div>
+                  <span style="font-size:14px;font-weight:600">{{ m.sub }}</span>
+                  <span class="mono" style="font-size:11px">{{ m.facts }}</span>
+                  <sc-if value="{{ m.hasNote }}"><span style="font-size:12.5px;line-height:1.4;opacity:.8">{{ m.note }}</span></sc-if>
+                  <div style="display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:auto;padding-top:10px">
+                    <a class="lnk" href="{{ m.href }}">Anúncio completo</a>
+                    <sc-for list="{{ m.acts }}" as="a" hint-placeholder-count="1"><button class="lnk" onClick="{{ a.go }}">{{ a.l }}</button></sc-for>
+                    <label class="cmpck"><input type="checkbox" checked="{{ m.cmp }}" onChange="{{ m.togCmp }}" disabled="{{ m.cmpDis }}">Comparar</label>
+                    <sc-if value="{{ m.canVis }}"><button class="op" onClick="{{ m.togVis }}" aria-pressed="{{ m.inVis }}" disabled="{{ m.visDis }}" style="min-height:32px;padding:0 10px;font-size:12.5px">{{ m.visL }}</button></sc-if>
+                  </div>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+          <p style="margin:28px 0 0;font-size:13.5px"><a class="lnk" href="Capital%20SP%20Busca.dc.html">Explorar o catálogo completo na busca →</a></p>
+        </section>
+        <aside class="sum" aria-label="Resumo das preferências">
+          <div class="sbox"><div class="kick" style="font-size:10px">O QUE VOCÊ PEDIU</div><ul><sc-for list="{{ statedList }}" as="h" hint-placeholder-count="4"><li>{{ h }}</li></sc-for></ul></div>
+          <div class="sbox"><div class="kick" style="font-size:10px">O QUE IDENTIFICAMOS</div><ul><sc-for list="{{ learnList }}" as="h" hint-placeholder-count="3"><li>{{ h }}</li></sc-for></ul></div>
+          <sc-if value="{{ hasRules }}"><div class="sbox"><div class="kick" style="font-size:10px">REGRAS DOS DESCARTES</div><ul><sc-for list="{{ rules }}" as="r" hint-placeholder-count="1"><li style="justify-content:space-between;align-items:center"><span>{{ r.l }}</span><button class="xbtn" onClick="{{ r.rm }}" aria-label="Remover regra" style="width:26px;height:26px">✕</button></li></sc-for></ul></div></sc-if>
+          <div><dc-import name="Corretor" tom="claro" compacto="{{ true }}" hint-size="100%,92px"></dc-import></div>
+          <button class="btn ink press" onClick="{{ openFicha }}">Ver ficha de atendimento</button>
+        </aside>
+      </div>
+    </main>
+    <sc-if value="{{ cmpBar }}"><div class="cbar"><span style="font-size:14px">{{ cmpN }} para comparar</span><button class="btn pri press" onClick="{{ openCmp }}" style="min-height:40px">Comparar</button><button class="lnk" onClick="{{ clearCmp }}" style="color:#EFE6D2">Limpar</button></div></sc-if>
+  </sc-if>
+
+  <!-- detalhes (não conta como decisão) -->
+  <sc-if value="{{ detOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="ov" onClick="{{ closeDet }}"></div>
+    <aside class="dt" role="dialog" aria-modal="true" aria-label="{{ dd.aria }}">
+      <div class="gal">
+        <img src="{{ dd.foto }}" alt="{{ dd.alt }}">
+        <button class="phn l" onClick="{{ dPrev }}" aria-label="Foto anterior">‹</button><button class="phn r" onClick="{{ dNext }}" aria-label="Próxima foto">›</button>
+        <span class="mono" style="position:absolute;left:12px;bottom:12px;padding:4px 8px;border-radius:4px;background:rgba(41,45,41,.85);color:#EFE6D2;font-size:11px">{{ dd.cnt }}</span>
+        <button ref="{{ R.detClose }}" onClick="{{ closeDet }}" aria-label="Fechar detalhes" style="position:absolute;right:12px;top:12px;width:42px;height:42px;border:0;border-radius:8px;background:rgba(244,237,221,.94);cursor:pointer;font-size:18px">✕</button>
+      </div>
+      <div style="padding:20px 22px 32px;display:flex;flex-direction:column;gap:16px">
+        <div><span class="kick" style="font-size:10px">{{ dd.kick }}</span><h2 class="bs" style="margin:8px 0 0;font-weight:800;font-size:34px;line-height:1">{{ dd.title }}</h2><p style="margin:6px 0 0;font-size:14px;opacity:.8">{{ dd.addr }}</p></div>
+        <div><sc-for list="{{ dd.rows }}" as="r" hint-placeholder-count="4"><div class="row"><span style="opacity:.8">{{ r.l }}</span><b style="font-weight:600">{{ r.v }}</b></div></sc-for></div>
+        <p style="margin:0;font-size:14.5px;line-height:1.55">{{ dd.desc }}</p>
+        <sc-if value="{{ dd.hasFeats }}"><div><div class="kick" style="font-size:10px;margin-bottom:8px">CARACTERÍSTICAS CADASTRADAS</div><div class="opts"><sc-for list="{{ dd.feats }}" as="f" hint-placeholder-count="2"><span class="op" style="cursor:default;min-height:32px">{{ f }}</span></sc-for></div></div></sc-if>
+        <sc-if value="{{ dd.hasLines }}"><div><div class="kick" style="font-size:10px;margin-bottom:8px">TRANSPORTE NO BAIRRO</div><div class="opts"><sc-for list="{{ dd.lines }}" as="l" hint-placeholder-count="2"><span class="op" style="cursor:default;min-height:32px"><span class="dot" style="background:{{ l.c }}"></span>{{ l.l }}</span></sc-for></div></div></sc-if>
+        <sc-if value="{{ dd.hasCrit }}"><div><div class="kick" style="font-size:10px;margin-bottom:10px">{{ dd.critHead }}</div><ul class="crit"><sc-for list="{{ dd.crit }}" as="c" hint-placeholder-count="3"><li><span class="{{ c.k }}" aria-hidden="true">{{ c.s }}</span><span><span class="sr">{{ c.sr }}</span>{{ c.l }}</span></li></sc-for></ul><p style="margin:10px 0 0;font-size:12px;line-height:1.45;opacity:.65">Calculado só com dados cadastrados pelo corretor. Itens sem dado não contam contra o imóvel.</p></div></sc-if>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a class="btn pri press" href="{{ dd.href }}">Ver anúncio completo →</a>
+          <button class="btn lin press" onClick="{{ dd.fav }}" aria-pressed="{{ dd.isFav }}">{{ dd.favL }}</button>
+          <button class="btn ink press" onClick="{{ closeDet }}">Voltar ao Property Match</button>
+        </div>
+        <p class="mono" style="margin:0;font-size:9.5px;letter-spacing:.12em;opacity:.55">IMÓVEL DE DEMONSTRAÇÃO · FOTOS ILUSTRATIVAS · LOCALIZAÇÃO APROXIMADA</p>
+      </div>
+    </aside>
+  </sc-if>
+
+  <!-- comparar -->
+  <sc-if value="{{ cmpOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dlgov" onClick="{{ closeCmp }}"></div>
+    <div class="dlg" role="dialog" aria-modal="true" aria-label="Comparar imóveis" style="width:min(900px,calc(100vw - 24px))">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px"><h2 class="bs" style="margin:0;font-weight:800;font-size:32px">COMPARAR</h2><button class="btn lin press" onClick="{{ closeCmp }}" style="min-height:40px">Fechar</button></div>
+      <div style="overflow-x:auto"><table class="ctab"><thead><tr><th></th><sc-for list="{{ cmpCols }}" as="c" hint-placeholder-count="2"><th>{{ c }}</th></sc-for></tr></thead><tbody><sc-for list="{{ cmpRows }}" as="r" hint-placeholder-count="8"><tr><th>{{ r.l }}</th><sc-for list="{{ r.v }}" as="v" hint-placeholder-count="2"><td>{{ v }}</td></sc-for></tr></sc-for></tbody></table></div>
+    </div>
+  </sc-if>
+
+  <!-- ficha de atendimento -->
+  <sc-if value="{{ fichaOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dlgov" onClick="{{ closeFicha }}"></div>
+    <div class="dlg" role="dialog" aria-modal="true" aria-label="Ficha de atendimento">
+      <h2 class="bs" style="margin:0;font-weight:800;font-size:32px;line-height:1">FICHA DE ATENDIMENTO</h2>
+      <p style="margin:8px 0 16px;font-size:14px;line-height:1.5">Resume o que você já nos contou, para o corretor começar sem repetir perguntas. Seus dados de contato são opcionais: preencha só se quiser que eles constem na ficha.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px">
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Nome<input class="inp" value="{{ cNome }}" onChange="{{ onCNome }}" autocomplete="name"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Telefone<input class="inp" value="{{ cTel }}" onChange="{{ onCTel }}" inputmode="tel" autocomplete="tel"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px">E-mail<input class="inp" value="{{ cEmail }}" onChange="{{ onCEmail }}" inputmode="email" autocomplete="email"></label>
+      </div>
+      <pre class="ficha" style="margin-top:14px" aria-label="Prévia da ficha">{{ fichaTxt }}</pre>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">
+        <a class="btn pri press" href="{{ fichaWa }}" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+        <button class="btn lin press" onClick="{{ copyFicha }}">Copiar ficha</button>
+        <button class="btn lin press" onClick="{{ dlFicha }}">Baixar .txt</button>
+        <button class="btn lin press" onClick="{{ closeFicha }}">Fechar</button>
+      </div>
+      <p style="margin:12px 0 0;font-size:12px;line-height:1.45;opacity:.7">O WhatsApp abre com a mensagem pronta e nada é enviado até você confirmar lá. O site ainda não registra contatos em sistema da imobiliária.</p>
+    </div>
+  </sc-if>
+
+  <!-- agendar visitas em lote -->
+  <sc-if value="{{ visitOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dlgov" onClick="{{ closeVisit }}"></div>
+    <div class="dlg" role="dialog" aria-modal="true" aria-label="Agendar visitas">
+      <sc-if value="{{ vPick }}">
+        <h2 class="bs" style="margin:0;font-weight:800;font-size:34px;line-height:1">ESCOLHA ATÉ {{ rotMax }} PARA VISITAR</h2>
+        <p style="margin:8px 0 12px;font-size:14px;line-height:1.5">{{ vPickSub }}</p>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span class="mono" style="font-size:10.5px;letter-spacing:.14em">SELECIONADOS · {{ rotN }}/{{ rotMax }}</span><sc-if value="{{ vCanClear }}"><button class="lnk" onClick="{{ vClear }}">Limpar seleção</button></sc-if></div>
+        <div style="max-height:52vh;overflow:auto"><sc-for list="{{ vPickList }}" as="v" hint-placeholder-count="6"><button class="vrow" onClick="{{ v.go }}" aria-pressed="{{ v.on }}" disabled="{{ v.dis }}" style="width:100%;border:0;border-bottom:1px solid rgba(41,45,41,.12);background:none;text-align:left;cursor:pointer;font:inherit;opacity:{{ v.op }}"><span class="{{ v.box }}" aria-hidden="true">{{ v.mark }}</span><img src="{{ v.foto }}" alt=""><span style="flex:1;line-height:1.35">{{ v.l }}<br><span class="mono" style="font-size:10.5px;opacity:.65">{{ v.sub }}</span></span></button></sc-for></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px"><button class="btn pri press" onClick="{{ vNext }}" disabled="{{ vNoNext }}">{{ vNextL }}</button><button class="btn lin press" onClick="{{ closeVisit }}">Fechar</button></div>
+        <p style="margin:12px 0 0;font-size:12px;line-height:1.45;opacity:.7">Os que você não enviar agora continuam na sua lista para um próximo agendamento.</p>
+      </sc-if>
+      <sc-if value="{{ vSend }}">
+      <h2 class="bs" style="margin:0;font-weight:800;font-size:34px;line-height:1">ENVIAR AO CORRETOR</h2>
+      <p style="margin:8px 0 14px;font-size:14px;line-height:1.5">Escolha de 1 a {{ rotMax }} imóveis que você quer visitar. O corretor confere se estão disponíveis e chama você para combinar dia e horário.</p>
+      <div class="mono" style="font-size:10.5px;letter-spacing:.14em;margin-bottom:4px">VOU ENVIAR · {{ rotN }}/{{ rotMax }}</div>
+      <sc-if value="{{ vNone }}"><p style="margin:8px 0;font-size:14px;line-height:1.5"><b>Nenhum imóvel escolhido.</b> Marque “Quero visitar” nos cards ou inclua abaixo os da sua lista.</p></sc-if>
+      <div><sc-for list="{{ vRot }}" as="v" hint-placeholder-count="2"><div class="vrow"><b class="n">{{ v.n }}</b><img src="{{ v.foto }}" alt=""><span style="flex:1;line-height:1.35">{{ v.l }}<br><span class="mono" style="font-size:10.5px;opacity:.65">{{ v.sub }}</span></span><button class="xbtn" onClick="{{ v.rm }}" aria-label="{{ v.rmL }}">✕</button></div></sc-for></div>
+      <sc-if value="{{ vOrderNote }}"><p style="margin:8px 0 0;font-size:12px;opacity:.65">Ordem sugerida pela localização aproximada dos imóveis.</p></sc-if>
+      <sc-if value="{{ vHasAdd }}"><div class="mono" style="font-size:10.5px;letter-spacing:.14em;margin:16px 0 4px">TAMBÉM NA SUA LISTA</div><div style="max-height:22vh;overflow:auto"><sc-for list="{{ vAdd }}" as="v" hint-placeholder-count="2"><div class="vrow"><img src="{{ v.foto }}" alt=""><span style="flex:1;line-height:1.35">{{ v.l }}</span><button class="op" onClick="{{ v.add }}" disabled="{{ v.dis }}" style="min-height:32px;font-size:12.5px">+ Incluir</button></div></sc-for></div></sc-if>
+      <div class="mono" style="font-size:10.5px;letter-spacing:.14em;margin:16px 0 8px">DIAS QUE FICAM BONS (OPCIONAL)</div>
+      <div class="opts"><sc-for list="{{ vDias }}" as="o" hint-placeholder-count="7"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}" style="min-height:36px;font-size:12.5px">{{ o.l }}</button></sc-for></div>
+      <div class="mono" style="font-size:10.5px;letter-spacing:.14em;margin:14px 0 8px">PERÍODO (OPCIONAL)</div>
+      <div class="opts"><sc-for list="{{ vPers }}" as="o" hint-placeholder-count="3"><button class="op" aria-pressed="{{ o.on }}" onClick="{{ o.go }}">{{ o.l }}</button></sc-for></div>
+      <button class="sw" role="switch" aria-checked="{{ vSame }}" onClick="{{ togSame }}" style="margin-top:14px"><i></i>Visitar todos no mesmo dia</button>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:14px">
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Seu nome<input class="inp" value="{{ cNome }}" onChange="{{ onCNome }}" autocomplete="name"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px">Telefone (opcional)<input class="inp" value="{{ cTel }}" onChange="{{ onCTel }}" inputmode="tel" autocomplete="tel"></label>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+        <sc-if value="{{ vCan }}"><a class="btn pri press" href="{{ visitWa }}" target="_blank" rel="noopener">{{ vCta }}</a></sc-if>
+        <sc-if value="{{ vCant }}"><button class="btn pri" disabled="{{ true }}">{{ vCantL }}</button></sc-if>
+        <button class="btn lin press" onClick="{{ closeVisit }}">Fechar</button>
+      </div>
+      <p style="margin:12px 0 0;font-size:12px;line-height:1.45;opacity:.7">A mensagem abre no WhatsApp com a lista e a sua ficha. Nada é agendado automaticamente: a conversa com o corretor começa ali.</p>
+      <sc-if value="{{ vCanBack }}"><button class="lnk" onClick="{{ vBack }}" style="margin-top:10px">← Trocar os imóveis escolhidos</button></sc-if>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div class="toast" role="status">{{ toast }}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+
+  // Referências de transporte (as mesmas da busca). A proximidade é por bairro atendido.
+  LINES = [
+    { id: 'l3', num: '3', name: 'Vermelha', color: '#D7362C', bairros: ['Belém', 'Tatuapé', 'Carrão', 'Penha', 'Vila Matilde', 'Vila Esperança', 'Patriarca', 'Vila Ré', 'Artur Alvim', 'Itaquera'] },
+    { id: 'l11', num: '11', name: 'Coral', color: '#EC7350', bairros: ['Tatuapé', 'Itaquera', 'José Bonifácio', 'Guaianases'] },
+    { id: 'l12', num: '12', name: 'Safira', color: '#24509E', bairros: ['Tatuapé', 'Penha', 'Jardim Penha', 'Cangaíba', 'Ermelino Matarazzo', 'São Miguel Paulista', 'Jardim Helena', 'Itaim Paulista'] },
+    { id: 'l13', num: '13', name: 'Jade', color: '#14A07E', bairros: ['Cangaíba', 'Jardim Penha'] },
+    { id: 'l15', num: '15', name: 'Prata', color: '#8C98A4', bairros: ['Vila Prudente', 'São Lucas', 'Sapopemba', 'São Mateus', 'Iguatemi'] },
+    { id: 'l2', num: '2', name: 'Verde', color: '#2E9A5A', obras: true, bairros: ['Vila Prudente', 'Água Rasa', 'Tatuapé', 'Vila Formosa', 'Carrão', 'Aricanduva', 'Penha'] },
+    { id: 'l10', num: '10', name: 'Turquesa', color: '#0F9AA0', bairros: ['Mooca'] }
+  ];
+  TIPOS = ['Apartamento', 'Sobrado', 'Casa térrea', 'Comercial'];
+  TIPO_PL = { 'Apartamento': 'apartamentos', 'Sobrado': 'sobrados', 'Casa térrea': 'casas térreas', 'Comercial': 'imóveis comerciais' };
+  FEATS = ['Perto do metrô', 'Varanda', 'Quintal', 'Pet friendly', 'Portaria 24h', 'Elevador', 'Academia', 'Piscina', 'Churrasqueira', 'Mobiliado'];
+  PRECOS = {
+    comprar: [['Até R$ 400 mil', '', 400000], ['R$ 400 a 700 mil', 400000, 700000], ['R$ 700 mil a 1 mi', 700000, 1000000], ['Acima de R$ 1 mi', 1000000, '']],
+    alugar: [['Até R$ 2.000', '', 2000], ['R$ 2.000 a 3.500', 2000, 3500], ['R$ 3.500 a 6.000', 3500, 6000], ['Acima de R$ 6.000', 6000, '']]
+  };
+  // Prioridades pessoais. "dado: false" = o catálogo ainda não tem informação para avaliar: não pontua, vai para a ficha.
+  PRIOS = [
+    { id: 'silencio', l: 'Tranquilidade e silêncio', dado: false },
+    { id: 'espaco', l: 'Espaço interno', dado: true },
+    { id: 'transporte', l: 'Facilidade de deslocamento', dado: true },
+    { id: 'local', l: 'Localização', dado: true },
+    { id: 'seguranca', l: 'Segurança', dado: true },
+    { id: 'luz', l: 'Iluminação natural', dado: false },
+    { id: 'privacidade', l: 'Privacidade', dado: false },
+    { id: 'custo', l: 'Custo-benefício', dado: true },
+    { id: 'servicos', l: 'Proximidade de comércios e serviços', dado: false }
+  ];
+  // Motivos de descarte: são percepções do cliente. Viram sinal de preferência, nunca característica do imóvel.
+  REASONS = [
+    { id: 'preco', l: 'Preço elevado' }, { id: 'pequeno', l: 'Imóvel pequeno' }, { id: 'local', l: 'Localização inadequada' },
+    { id: 'transporte', l: 'Distante do transporte' }, { id: 'planta', l: 'Distribuição interna' }, { id: 'luz', l: 'Pouca iluminação' },
+    { id: 'privacidade', l: 'Falta de privacidade' }, { id: 'barulho', l: 'Preocupação com barulho' }, { id: 'aparencia', l: 'Não gostei da aparência' }, { id: 'outro', l: 'Outro motivo' }
+  ];
+  REASON_PRIO = { luz: 'luz', privacidade: 'privacidade', barulho: 'silencio', transporte: 'transporte', pequeno: 'espaco', preco: 'custo' };
+  ROUND = 20; // imóveis por rodada
+  VISIT_MAX = 5; // imóveis por agendamento em lote
+  MIN_DECK = 8; // abaixo disso, a lista compara melhor que um por vez
+  PERIODOS = ['Manhã', 'Tarde', 'Noite', 'Fim de semana'];
+  WA = '5511976653830';
+  KEY = 'csp-match';
+  P0 = { mode: 'comprar', pmin: '', pmax: '', tipos: [], dorms: 0, vagas: 0, amin: '', amax: '', bairros: [], bairrosHard: false, linhas: [], linhasHard: false, feats: [], prios: [] };
+
+  // Catálogo compartilhado (catalogo.js): o mesmo da busca e do anúncio.
+  get CAT() { return (typeof window !== 'undefined' && window.CSP_CATALOGO) || null; }
+  get BAIRROS() { const c = this.CAT; return c ? c.BAIRROS : {}; }
+  get D() { const c = this.CAT; if (!c) return []; if (!this._D) { this._D = c.RAW.map(r => ({ code: r[0], mode: r[1], tipo: r[2], bairro: r[3], rua: r[4], lat: r[5], lng: r[6], area: r[7], dorms: r[8], banh: r[9], vagas: r[10], price: r[11], condo: r[12], iptu: r[13], feats: r[14] ? r[14].split('|') : [], badge: r[15], age: r[16], fotos: r[17], desc: r[18] })); this._by = Object.fromEntries(this._D.map(d => [d.code, d])); } return this._D; }
+  by(code) { this.D; return (this._by || {})[code] || null; }
+
+  el = {};
+  R = Object.fromEntries(['root', 'deck', 'top', 'stL', 'stR', 'detClose'].map(k => [k, el => { this.el[k] = el; }]));
+  state = {
+    ready: false, view: 'loading', intro: false, configured: false, prefs: null, dec: {}, hist: [], pin: null, favs: [],
+    imported: '', ph: 0, det: null, detPh: 0, rs: null, rsOtherOpen: false, tab: 'saved', cmp: [], cmpOpen: false,
+    ficha: false, visit: false, contato: { nome: '', tel: '', email: '' }, vSel: null, vPer: [], toast: '', live: '', aft: null, round: 0, roundSig: '', showHeld: false, rules: { cap: null, floor: null, bairros: [] }, rot: [], vStep: 'send', vDays: [], vSame: true
+  };
+
+  // ---------------- utilidades ----------------
+  norm(s) { return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  slug(s) { return this.norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+  num(v) { const n = parseInt(String(v).replace(/\D/g, ''), 10); return isNaN(n) ? '' : n; }
+  brl(n) { return 'R$ ' + Math.round(n).toLocaleString('pt-BR'); }
+  short(n, mode) { if (mode === 'alugar') return this.brl(n); return n >= 1e6 ? 'R$ ' + (n / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' mi' : 'R$ ' + Math.round(n / 1000) + ' mil'; }
+  priceL(d) { return d.mode === 'alugar' ? this.brl(d.price) + '/mês' : this.brl(d.price); }
+  facts(d) { const a = [d.area + ' m²']; if (d.dorms) a.push(d.dorms + (d.dorms === 1 ? ' dorm.' : ' dorms.')); a.push(d.banh + (d.banh === 1 ? ' banh.' : ' banhs.')); a.push(d.vagas ? d.vagas + (d.vagas === 1 ? ' vaga' : ' vagas') : 'sem vaga'); return a.join(' · '); }
+  linesOf(b) { return this.LINES.filter(l => l.bairros.includes(b)); }
+  lineL(l) { return 'Linha ' + l.num + '-' + l.name + (l.obras ? ' (em obras)' : ''); }
+  anuncioHref(code) { return 'Capital%20SP%20Anuncio.dc.html?id=' + encodeURIComponent(code); }
+  absUrl(rel) { try { return new URL(rel, location.href).href; } catch (e) { return rel; } }
+  median(a) { if (!a.length) return 0; const s = a.slice().sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+  say(live) { this.setState({ live }); }
+  flash(toast) { clearTimeout(this._tt); this.setState({ toast }); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); }
+
+  // ---------------- regras ----------------
+  hard(d, P) {
+    if (d.mode !== P.mode) return false;
+    if (P.pmin !== '' && d.price < P.pmin) return false;
+    if (P.pmax !== '' && d.price > P.pmax) return false;
+    if (P.tipos.length && !P.tipos.includes(d.tipo)) return false;
+    if (P.dorms && d.dorms < P.dorms) return false;
+    if (P.vagas && d.vagas < P.vagas) return false;
+    if (P.amin !== '' && d.area < P.amin) return false;
+    if (P.amax !== '' && d.area > P.amax) return false;
+    if (P.feats.length && !P.feats.every(f => d.feats.includes(f))) return false;
+    if (P.bairrosHard && P.bairros.length && !P.bairros.includes(d.bairro)) return false;
+    if (P.linhasHard && P.linhas.length && !this.linesOf(d.bairro).some(l => P.linhas.includes(l.id))) return false;
+    return true;
+  }
+  medians(mode) {
+    if (!this._med) this._med = {};
+    if (this._med[mode]) return this._med[mode];
+    const pool = this.D.filter(d => d.mode === mode), area = {};
+    this.TIPOS.forEach(t => { area[t] = Math.round(this.median(pool.filter(d => d.tipo === t).map(d => d.area))); });
+    return (this._med[mode] = { area, ppm: this.median(pool.map(d => d.price / d.area)) });
+  }
+  // Critérios declarados pelo cliente (flexíveis). st: 1 atende, 0 não atende, null sem dado (não conta).
+  crit(d, P) {
+    const C = [], pr = new Set(P.prios), M = this.medians(P.mode);
+    if (P.bairros.length && !P.bairrosHard) { const ok = P.bairros.includes(d.bairro); C.push({ k: 'bairro', w: pr.has('local') ? 4 : 3, st: ok ? 1 : 0, l: ok ? `Em ${d.bairro}, bairro que você escolheu` : `${d.bairro} está fora dos bairros escolhidos` }); }
+    if (P.linhas.length && !P.linhasHard) { const ls = this.linesOf(d.bairro).filter(l => P.linhas.includes(l.id)); C.push({ k: 'linha', w: 2.5, st: ls.length ? 1 : 0, l: ls.length ? `Bairro atendido pela ${this.lineL(ls[0])}` : 'Bairro fora das linhas escolhidas' }); }
+    if (pr.has('espaco')) { const m = M.area[d.tipo]; if (m) C.push({ k: 'espaco', w: 2, st: d.area >= m ? 1 : 0, l: `${d.area} m², ${d.area >= m ? 'acima' : 'abaixo'} da mediana de ${this.TIPO_PL[d.tipo]} do catálogo (${m} m²)` }); }
+    if (pr.has('transporte')) { const ops = this.linesOf(d.bairro).filter(l => !l.obras), near = d.feats.includes('Perto do metrô'); C.push({ k: 'transporte', w: 2, st: near || ops.length ? 1 : 0, l: near ? 'Perto do metrô, segundo o corretor' : ops.length ? `Bairro atendido pela ${this.lineL(ops[0])}` : 'Bairro sem estação de metrô ou trem em operação' }); }
+    if (pr.has('seguranca')) { const ok = d.feats.includes('Portaria 24h'); C.push({ k: 'seguranca', w: 1.5, st: ok ? 1 : null, l: ok ? 'Portaria 24h' : 'Segurança: sem informação cadastrada' }); }
+    if (pr.has('custo')) { const v = d.price / d.area; C.push({ k: 'custo', w: 2, st: v <= M.ppm ? 1 : 0, l: `${this.brl(v)}/m², ${v <= M.ppm ? 'abaixo' : 'acima'} da mediana do catálogo (${this.brl(M.ppm)}/m²)` }); }
+    this.PRIOS.filter(p => !p.dado && pr.has(p.id)).forEach(p => C.push({ k: p.id, w: 0, st: null, l: `${p.l}: sem dados cadastrados ainda` }));
+    return C;
+  }
+  pctUnused(C) { const k = C.filter(c => c.st !== null && c.w > 0); if (!k.length) return null; const t = k.reduce((s, c) => s + c.w, 0); return Math.round(100 * k.reduce((s, c) => s + c.w * c.st, 0) / t); }
+
+  // Aprendizado da sessão: regras determinísticas a partir de curtidas, favoritos, descartes e motivos.
+  learn(P) {
+    const s = this.state, L = { aff: {}, n: { like: 0, nope: 0, fav: 0 }, areas: [], prices: [], cap: null, floor: null, reasons: {}, boost: {}, notes: {}, badB: {} };
+    const bump = (k, v) => { L.aff[k] = (L.aff[k] || 0) + v; };
+    const add = (d, w) => { bump('b:' + d.bairro, w); bump('t:' + d.tipo, w); d.feats.forEach(f => bump('f:' + f, w * 0.6)); this.linesOf(d.bairro).filter(l => !l.obras).forEach(l => bump('l:' + l.id, w * 0.6)); };
+    Object.keys(s.dec).forEach(code => {
+      const d = this.by(code), e = s.dec[code]; if (!d || d.mode !== P.mode) return;
+      if (e.a === 'like') { add(d, 1); L.areas.push(d.area); L.prices.push(d.price); L.n.like++; return; }
+      L.n.nope++;
+      const rs = e.r || [];
+      if (!rs.length) add(d, -0.4);
+      rs.forEach(r => {
+        L.reasons[r] = (L.reasons[r] || 0) + 1;
+        if (r === 'preco') L.cap = Math.min(L.cap == null ? Infinity : L.cap, d.price * 0.97);
+        if (r === 'pequeno') L.floor = Math.max(L.floor || 0, d.area * 1.03);
+        if (r === 'local') bump('b:' + d.bairro, -2);
+        if (r === 'transporte') L.boost.transporte = (L.boost.transporte || 0) + 1;
+        if (r === 'planta') bump('t:' + d.tipo, -0.4);
+        if (this.REASON_PRIO[r]) L.notes[this.REASON_PRIO[r]] = (L.notes[this.REASON_PRIO[r]] || 0) + 1;
+      });
+    });
+    s.favs.forEach(code => { const d = this.by(code); if (d && d.mode === P.mode && !(s.dec[code] && s.dec[code].a === 'like')) { add(d, 1); L.areas.push(d.area); L.prices.push(d.price); L.n.fav++; } });
+    return L;
+  }
+  lscore(d, L) {
+    const P = [], sq = x => 2 * x / (1 + Math.abs(x)), A = k => L.aff[k] || 0;
+    const ab = A('b:' + d.bairro); if (ab) P.push({ v: 1.4 * sq(ab), l: ab > 0 ? `${d.bairro}, bairro dos imóveis que você quer visitar` : `${d.bairro} teve descartes` });
+    const at = A('t:' + d.tipo); if (at) P.push({ v: 1.0 * sq(at), l: `${d.tipo}, como os que você quer visitar` });
+    const fs = d.feats.map(f => [f, A('f:' + f)]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]);
+    if (fs.length) P.push({ v: 0.5 * fs.reduce((s, x) => s + sq(x[1]), 0), l: `Tem ${fs[0][0].toLowerCase()}, como nos que você quer visitar` });
+    const ops = this.linesOf(d.bairro).filter(l => !l.obras), bl = ops.map(l => [l, A('l:' + l.id)]).sort((a, b) => b[1] - a[1])[0];
+    if (bl && bl[1] > 0) P.push({ v: 0.7 * sq(bl[1]), l: `${this.lineL(bl[0])}, como nos que você quer visitar` });
+    if (L.boost.transporte && (ops.length || d.feats.includes('Perto do metrô'))) P.push({ v: 0.8 * L.boost.transporte, l: 'Perto de transporte, que você pediu ao descartar' });
+    if (L.areas.length >= 2) { const m = L.areas.reduce((a, b) => a + b, 0) / L.areas.length, v = 1.2 * (1 - Math.min(1, Math.abs(d.area - m) / m)) - 0.5; if (v) P.push({ v, l: `Área perto da média da sua lista (${Math.round(m)} m²)` }); }
+    if (L.prices.length >= 2) { const m = L.prices.reduce((a, b) => a + b, 0) / L.prices.length, v = 1.0 * (1 - Math.min(1, Math.abs(d.price - m) / m)) - 0.5; if (v) P.push({ v, l: `Preço perto da média da sua lista (${this.short(m, d.mode)})` }); }
+    if (L.cap != null) P.push(d.price >= L.cap ? { v: -1.5, l: '' } : { v: 0.5, l: `Abaixo de ${this.short(L.cap / 0.97, d.mode)}, valor que você achou alto` });
+    if (L.floor) P.push(d.area <= L.floor ? { v: -1.5, l: '' } : { v: 0.5, l: `Maior que ${Math.round(L.floor / 1.03)} m², tamanho que você achou pequeno` });
+    return P;
+  }
+  // Fila: elegíveis (indispensáveis) não avaliados, ordenados por pontuação ponderada. Indispensáveis vêm antes da afinidade.
+  model() {
+    const s = this.state, P = s.prefs, L = this.learn(P);
+    const elig = this.D.filter(d => this.hard(d, P));
+    const rows = elig.map(d => {
+      const C = this.crit(d, P), lp = this.lscore(d, L);
+      const stated = C.reduce((a, c) => a + (c.st === 1 ? c.w : 0), 0), learned = lp.reduce((a, p) => a + p.v, 0);
+      const why = C.filter(c => c.st === 1 && c.w > 0).map(c => ({ v: c.w, l: c.l })).concat(lp.filter(p => p.v > 0.25 && p.l)).sort((a, b) => b.v - a.v).map(x => x.l);
+      // Só regras confirmadas pelo cliente tiram imóveis da rodada (e só enquanto houver outras opções).
+      const held = [];
+      const RU = s.rules;
+      if (RU.cap && RU.cap.mode === d.mode && d.price >= RU.cap.v) held.push(`Preço a partir de ${this.short(RU.cap.v, d.mode)}: você pediu para esconder`);
+      if (RU.floor && d.area <= RU.floor.v) held.push(`Área até ${RU.floor.v} m²: você pediu para esconder`);
+      if (RU.bairros.includes(d.bairro)) held.push(`Em ${d.bairro}: você pediu para esconder este bairro`);
+      const known = C.filter(c => c.st !== null && c.w > 0), met = known.filter(c => c.st === 1).length;
+      return { d, C, held, met, known: known.length, score: stated + learned + (d.badge === 'Exclusivo' ? 0.15 : 0) - d.age * 0.001, why };
+    });
+    const R = Object.fromEntries(rows.map(r => [r.d.code, r]));
+    const queue = rows.filter(r => !s.dec[r.d.code]).sort((a, b) => (a.held.length ? 1 : 0) - (b.held.length ? 1 : 0) || b.score - a.score || (a.d.code < b.d.code ? -1 : 1));
+    if (s.pin && R[s.pin] && !s.dec[s.pin]) { const i = queue.findIndex(r => r.d.code === s.pin); if (i > 0) queue.unshift(queue.splice(i, 1)[0]); }
+    return { P, L, elig, R, queue };
+  }
+
+  // ---------------- carga, URL e armazenamento ----------------
+  readUrl(base) {
+    let p = {}; try { new URLSearchParams(location.search).forEach((v, k) => { p[k] = v; }); } catch (e) {}
+    if (!Object.keys(p).length) return null;
+    const P = Object.assign({}, this.P0, { prios: base.prios || [] }), bySlug = x => Object.keys(this.BAIRROS).find(b => this.slug(b) === x);
+    if (p.ref && this.by(p.ref)) {
+      const d = this.by(p.ref);
+      Object.assign(P, { mode: d.mode, tipos: [d.tipo], bairros: [d.bairro], bairrosHard: false, dorms: d.dorms > 1 ? d.dorms - 1 : d.dorms, pmax: Math.round(d.price * 1.3 / (d.mode === 'alugar' ? 100 : 10000)) * (d.mode === 'alugar' ? 100 : 10000) });
+      return { P, msg: `Preferências montadas a partir do imóvel ${d.code} (${d.tipo} em ${d.bairro}): mesmo tipo e finalidade, preço até 30% maior e ${d.bairro} como bairro preferido. Ajuste o que quiser.` };
+    }
+    if (p.modo === 'alugar' || p.modo === 'comprar') P.mode = p.modo;
+    const l = this.LINES.find(x => x.id === p.linha); if (l) { P.linhas = [l.id]; P.linhasHard = true; }
+    const bs = (p.bairros || p.bairro || '').split(',').map(bySlug).filter(Boolean); if (bs.length) { P.bairros = bs; P.bairrosHard = p.origem !== 'destaque'; }
+    if (p.q) { const b = Object.keys(this.BAIRROS).find(x => this.norm(x) === this.norm(p.q)); if (b && !P.bairros.includes(b)) P.bairros.push(b); }
+    const ts = (p.tipos || p.tipo || '').split(',').filter(x => this.TIPOS.includes(x)); if (ts.length) P.tipos = ts;
+    ['pmin', 'pmax', 'amin', 'amax'].forEach(k => { if (p[k]) P[k] = this.num(p[k]); });
+    ['dorms', 'vagas'].forEach(k => { if (p[k]) P[k] = this.num(p[k]) || 0; });
+    if (p.feats) P.feats = p.feats.split(',').filter(x => this.FEATS.includes(x));
+    const from = p.origem === 'destaque' ? 'do imóvel em destaque que você viu' : 'da sua busca';
+    const tail = p.origem === 'destaque' ? 'Mesmo tipo e finalidade, preço até 30% maior; o bairro, se for da Zona Leste, entra como preferência.' : 'Os bairros e a linha entram como indispensáveis; você pode transformá-los em preferência abaixo.';
+    return { P, msg: `Importamos os filtros ${from}. ${tail}` };
+  }
+  componentDidMount() {
+    if (!this.CAT) { this._catWait = setTimeout(() => this.componentDidMount(), 30); if (!this._catT0) this._catT0 = Date.now(); if (Date.now() - this._catT0 > 8000) { clearTimeout(this._catWait); this.setState({ view: 'nocat' }); } return; }
+    let st = {}, favs = [];
+    try { st = JSON.parse(localStorage.getItem(this.KEY) || '{}') || {}; } catch (e) {}
+    try { favs = JSON.parse(localStorage.getItem('csp-favs') || '[]') || []; } catch (e) {}
+    let prefs = Object.assign({}, this.P0, st.prefs || {});
+    const imp = this.readUrl(prefs);
+    if (imp) { prefs = imp.P; try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {} }
+    const hash = (typeof location !== 'undefined' && location.hash) || '';
+    let view = st.configured ? 'deck' : st.intro ? 'prefs' : 'intro';
+    if (imp) view = st.intro ? 'prefs' : 'intro';
+    if (hash === '#matches') view = 'matches';
+    this.setState({ ready: true, view, intro: !!st.intro, configured: !!st.configured, prefs, dec: st.dec || {}, hist: st.hist || [], round: st.round || 0, roundSig: st.roundSig || '', rules: Object.assign({ cap: null, floor: null, bairros: [] }, st.rules || {}), rot: (st.rot || []).filter(c => this.by(c)), contato: Object.assign({ nome: '', tel: '', email: '' }, st.contato || {}), favs, imported: imp ? imp.msg : '' });
+    try { this.reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    this.onKey = e => this.key(e);
+    this.onStore = e => { if (e.key === 'csp-favs') { try { this.setState({ favs: JSON.parse(e.newValue || '[]') || [] }); } catch (x) {} } };
+    document.addEventListener('keydown', this.onKey); window.addEventListener('storage', this.onStore);
+  }
+  componentWillUnmount() { clearTimeout(this._catWait); clearTimeout(this._tt); document.removeEventListener('keydown', this.onKey); window.removeEventListener('storage', this.onStore); }
+  componentDidUpdate() {
+    const s = this.state; this.bindDrag(); if (!s.ready) return;
+    // O runtime só passa as props anteriores: o estado anterior é guardado aqui.
+    const ps = this._ps || {}; this._ps = s;
+    if (ps.prefs !== s.prefs || ps.dec !== s.dec || ps.hist !== s.hist || ps.round !== s.round || ps.rules !== s.rules || ps.rot !== s.rot || ps.intro !== s.intro || ps.configured !== s.configured || ps.contato !== s.contato) {
+      try { localStorage.setItem(this.KEY, JSON.stringify({ v: 1, intro: s.intro, configured: s.configured, prefs: s.prefs, dec: s.dec, hist: s.hist.slice(-60), round: s.round, roundSig: s.roundSig, rules: s.rules, rot: s.rot, contato: s.contato })); } catch (e) {}
+    }
+    if (ps.favs !== s.favs) { try { localStorage.setItem('csp-favs', JSON.stringify(s.favs)); } catch (e) {} }
+    if (ps.view !== s.view) { try { history.replaceState(null, '', location.pathname + location.search + (s.view === 'matches' ? '#matches' : '')); } catch (e) {} if (typeof window !== 'undefined') window.scrollTo(0, 0); }
+    if (!ps.det && s.det && this.el.detClose) this.el.detClose.focus();
+  }
+
+  // ---------------- gestos ----------------
+  bindDrag() {
+    const el = this.el.top; if (!el || el === this._dragEl) return; this._dragEl = el;
+    let g = null;
+    el.addEventListener('pointerdown', e => { if (e.button !== 0 || this.anim || e.target.closest('button,a,input')) return; g = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId, drag: false, dx: 0, dy: 0 }; });
+    el.addEventListener('pointermove', e => {
+      if (!g || e.pointerId !== g.id) return;
+      const dx = e.clientX - g.x, dy = e.clientY - g.y;
+      if (!g.drag) { if (Math.abs(dy) > 14 && Math.abs(dy) > Math.abs(dx)) { g = null; return; } if (Math.abs(dx) < 8) return; g.drag = true; try { el.setPointerCapture(g.id); } catch (x) {} el.style.transition = 'none'; el.classList.add('drag'); }
+      g.dx = dx; g.dy = dy; this.dragTo(dx, dy);
+    });
+    const end = e => {
+      if (!g || e.pointerId !== g.id) return; const s = g; g = null; el.classList.remove('drag');
+      if (!s.drag) { if (e.type === 'pointerup') this.openDet(); return; }
+      const v = s.dx / Math.max(1, performance.now() - s.t), W = el.offsetWidth || 360;
+      if (s.dx > W * 0.3 || (v > 0.5 && s.dx > 40)) this.commit('like', s.dx, s.dy);
+      else if (s.dx < -W * 0.3 || (v < -0.5 && s.dx < -40)) this.commit('nope', s.dx, s.dy);
+      else this.springBack();
+    };
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  }
+  bk() { return this.el.deck ? this.el.deck.querySelector('.bk1') : null; }
+  dragTo(dx, dy) {
+    const el = this.el.top; if (!el) return;
+    const r = this.reduce ? 0 : Math.max(-12, Math.min(12, dx * 0.05)), p = Math.min(1, Math.abs(dx) / 120);
+    el.style.transform = `translate(${dx}px,${dy * 0.15}px) rotate(${r}deg)`;
+    if (this.el.stR) this.el.stR.style.opacity = dx > 0 ? p : 0;
+    if (this.el.stL) this.el.stL.style.opacity = dx < 0 ? p : 0;
+    const b = this.bk(); if (b && !this.reduce) { b.style.transition = 'none'; b.style.transform = `translateY(${14 - 8 * p}px) scale(${0.955 + 0.025 * p})`; }
+  }
+  springBack() {
+    const el = this.el.top; if (!el) return;
+    el.style.transition = 'transform 260ms cubic-bezier(.23,1,.32,1)'; el.style.transform = '';
+    [this.el.stR, this.el.stL].forEach(x => { if (x) { x.style.transition = 'opacity 160ms ease'; x.style.opacity = 0; } });
+    const b = this.bk(); if (b) { b.style.transition = 'transform 260ms cubic-bezier(.23,1,.32,1)'; b.style.transform = ''; }
+  }
+  resetTop(enter) {
+    const el = this.el.top;
+    [this.el.stR, this.el.stL].forEach(x => { if (x) { x.style.transition = 'none'; x.style.opacity = 0; } });
+    const b = this.bk(); if (b) { b.style.transition = 'none'; b.style.transform = ''; }
+    if (!el) return;
+    el.style.transition = 'none'; el.style.transform = ''; el.style.opacity = '';
+    if (enter && el.animate) el.animate(this.reduce ? [{ opacity: 0 }, { opacity: 1 }] : [{ transform: 'translateY(14px) scale(.955)', filter: 'brightness(.94)' }, { transform: 'none', filter: 'none' }], { duration: this.reduce ? 140 : 240, easing: 'cubic-bezier(.23,1,.32,1)' });
+  }
+  commit(a, dx, dy) {
+    if (this.anim) return; const top = this._queue && this._queue[0]; if (!top) return;
+    const el = this.el.top, code = top.d.code;
+    const fin = () => { this.anim = false; this.decide(code, a); };
+    if (!el) return fin();
+    this.anim = true;
+    const st = a === 'like' ? this.el.stR : this.el.stL; if (st) { st.style.transition = 'opacity 120ms ease'; st.style.opacity = 1; }
+    if (this.reduce) { el.style.transition = 'opacity 140ms ease'; el.style.opacity = '0'; setTimeout(fin, 150); return; }
+    const dir = a === 'like' ? 1 : -1, W = (typeof window !== 'undefined' ? window.innerWidth : 800);
+    el.style.transition = 'transform 300ms cubic-bezier(.3,.6,.2,1), opacity 300ms ease';
+    el.style.transform = `translate(${dir * (W * 0.8 + Math.abs(dx || 0))}px,${(dy || 0) * 0.15 + 24}px) rotate(${dir * 18}deg)`;
+    el.style.opacity = '0';
+    setTimeout(fin, 270);
+  }
+
+  // ---------------- ações ----------------
+  decide(code, a) {
+    const d = this.by(code), addV = false;
+    this.setState(st => ({ rot: addV ? st.rot.concat([code]) : st.rot, favs: a === 'like' && !st.favs.includes(code) ? st.favs.concat([code]) : st.favs, dec: Object.assign({}, st.dec, { [code]: { a, t: Date.now(), r: [], f: a === 'like' && !st.favs.includes(code), v: addV } }), hist: st.hist.concat([code]).slice(-60), round: st.round + 1, pin: st.pin === code ? null : st.pin, ph: 0, rs: a === 'nope' ? code : null, rsOtherOpen: false, aft: a === 'like' ? code : null, live: `${a === 'like' ? 'Na sua lista de visitas' : 'Descartado'}: ${d ? d.tipo + ' em ' + d.bairro : code}.` }), () => this.resetTop(true));
+  }
+  undo() {
+    if (this.anim) return; const h = this.state.hist; if (!h.length) return;
+    const code = h[h.length - 1], dec = Object.assign({}, this.state.dec), was = dec[code]; delete dec[code];
+    const d = this.by(code), favs = was && was.f ? this.state.favs.filter(x => x !== code) : this.state.favs, rot = was && was.v ? this.state.rot.filter(x => x !== code) : this.state.rot;
+    this.setState({ dec, favs, rot, hist: h.slice(0, -1), round: Math.max(0, this.state.round - 1), pin: code, ph: 0, rs: null, aft: null, view: 'deck', live: `Desfeito. De volta: ${d ? d.tipo + ' em ' + d.bairro : code}.` }, () => this.resetTop(true));
+  }
+  // Curtir = salvar nos favoritos (os mesmos da busca). Uma só ação positiva.
+  isSaved(code) { const e = this.state.dec[code]; return this.state.favs.includes(code) || !!(e && e.a === 'like'); }
+  save(code) { const st = this.state; this.setState({ favs: st.favs.includes(code) ? st.favs : st.favs.concat([code]), dec: Object.assign({}, st.dec, { [code]: { a: 'like', t: Date.now(), r: [], f: true } }), pin: st.pin === code ? null : st.pin, live: 'Na sua lista de visitas.' }); this.flash('Na sua lista de visitas'); }
+  unsave(code) { const st = this.state, dec = Object.assign({}, st.dec); if (dec[code] && dec[code].a === 'like') delete dec[code]; this.setState({ dec, favs: st.favs.filter(x => x !== code), rot: st.rot.filter(x => x !== code), live: 'Removido da lista de visitas.' }); this.flash('Saiu da lista de visitas e volta para a descoberta.'); }
+  openVisit() {
+    const L = this.lists().saved;
+    if (L.length <= this.VISIT_MAX) return this.setState({ visit: true, vStep: 'send', rot: L.slice(), aft: null });
+    const keep = this.state.rot.filter(c => L.includes(c)).slice(0, this.VISIT_MAX);
+    this.setState({ visit: true, vStep: 'pick', rot: keep, aft: null });
+  }
+  togRot(code) {
+    const st = this.state;
+    if (st.rot.includes(code)) return this.setState({ rot: st.rot.filter(x => x !== code) });
+    if (st.rot.length >= this.VISIT_MAX) return this.flash(`Envie até ${this.VISIT_MAX} imóveis por vez ao corretor`);
+    if (!this.isSaved(code)) this.save(code);
+    this.setState(x => ({ rot: x.rot.includes(code) ? x.rot : x.rot.concat([code]) }));
+  }
+  // Ordem sugerida: vizinho mais próximo a partir do primeiro escolhido (coordenadas aproximadas do catálogo).
+  orderRot(codes) {
+    const ds = codes.map(c => this.by(c)).filter(Boolean); if (ds.length < 3) return ds;
+    const out = [ds.shift()];
+    while (ds.length) { const a = out[out.length - 1]; let bi = 0, bd = Infinity; ds.forEach((d, i) => { const k = Math.hypot(d.lat - a.lat, (d.lng - a.lng) * 0.92); if (k < bd) { bd = k; bi = i; } }); out.push(ds.splice(bi, 1)[0]); }
+    return out;
+  }
+  answer(id, yes) {
+    const code = this.state.rs, e = this.state.dec[code], d = this.by(code); if (!e || !d) return;
+    this.setState({ dec: Object.assign({}, this.state.dec, { [code]: Object.assign({}, e, { q: Object.assign({}, e.q || {}, { [id]: yes }) }) }) });
+    if (yes) this.addRule(id, d);
+  }
+  addRule(kind, d) {
+    const R = Object.assign({}, this.state.rules);
+    if (kind === 'preco') R.cap = { v: R.cap && R.cap.mode === d.mode ? Math.min(R.cap.v, d.price) : d.price, mode: d.mode };
+    if (kind === 'pequeno') R.floor = { v: Math.max(R.floor ? R.floor.v : 0, d.area) };
+    if (kind === 'local') R.bairros = R.bairros.includes(d.bairro) ? R.bairros : R.bairros.concat([d.bairro]);
+    this.setState({ rules: R });
+  }
+  rmRule(kind, b) { const R = Object.assign({}, this.state.rules); if (kind === 'cap') R.cap = null; if (kind === 'floor') R.floor = null; if (kind === 'bairro') R.bairros = R.bairros.filter(x => x !== b); this.setState({ rules: R, showHeld: false }); this.flash('Regra removida'); }
+  ruleList(P) {
+    const R = this.state.rules, a = [];
+    if (R.cap && R.cap.mode === P.mode) a.push({ l: `Esconder imóveis a partir de ${this.short(R.cap.v, P.mode)}`, rm: () => this.rmRule('cap') });
+    if (R.floor) a.push({ l: `Esconder imóveis com até ${R.floor.v} m²`, rm: () => this.rmRule('floor') });
+    R.bairros.forEach(b => a.push({ l: `Esconder imóveis em ${b}`, rm: () => this.rmRule('bairro', b) }));
+    return a;
+  }
+  openDet(code) { const c = code || (this._queue && this._queue[0] && this._queue[0].d.code); if (c) this.setState({ det: c, detPh: this.state.view === 'deck' && !code ? this.state.ph : 0, rs: null }); }
+  closeDet() { this.setState({ det: null }); }
+  togReason(id) {
+    const code = this.state.rs, e = this.state.dec[code]; if (!e) return;
+    const r = e.r.includes(id) ? e.r.filter(x => x !== id) : e.r.concat([id]);
+    this.setState({ dec: Object.assign({}, this.state.dec, { [code]: Object.assign({}, e, { r }) }), rsOtherOpen: id === 'outro' ? r.includes('outro') : this.state.rsOtherOpen });
+  }
+  recover(code, toLike) {
+    const dec = Object.assign({}, this.state.dec);
+    if (toLike) return this.save(code);
+    delete dec[code]; this.setState({ dec, pin: code, view: 'deck', ph: 0 }, () => this.resetTop(true));
+  }
+  setP(patch) { this.setState({ prefs: Object.assign({}, this.state.prefs, patch), pin: null }); }
+  tog(arr, v) { return arr.includes(v) ? arr.filter(x => x !== v) : arr.concat([v]); }
+  key(e) {
+    const s = this.state, t = e.target, inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+    if (e.key === 'Escape') { if (s.det) return this.closeDet(); if (s.cmpOpen) return this.setState({ cmpOpen: false }); if (s.ficha) return this.setState({ ficha: false }); if (s.visit) return this.setState({ visit: false }); if (s.rs) return this.setState({ rs: null }); return; }
+    if (s.view !== 'deck' || s.det || s.ficha || s.visit || s.cmpOpen || inField || e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key.toLowerCase(), top = this._queue && this._queue[0];
+    if (k === 'arrowright' && top) { e.preventDefault(); this.commit('like'); }
+    else if (k === 'arrowleft' && top) { e.preventDefault(); this.commit('nope'); }
+    else if ((k === 'arrowup' || k === 'i') && top) { e.preventDefault(); this.openDet(); }
+    else if (k === 'z' || k === 'backspace') { e.preventDefault(); this.undo(); }
+  }
+
+  // ---------------- textos de resumo e ficha ----------------
+  hardList(P) {
+    const a = [(P.mode === 'alugar' ? 'Alugar' : 'Comprar')];
+    if (P.pmin !== '' || P.pmax !== '') a.push(P.pmin !== '' && P.pmax !== '' ? `${this.short(P.pmin, P.mode)} a ${this.short(P.pmax, P.mode)}` : P.pmax !== '' ? `Até ${this.short(P.pmax, P.mode)}` : `A partir de ${this.short(P.pmin, P.mode)}`);
+    if (P.tipos.length) a.push(P.tipos.join(', '));
+    if (P.dorms) a.push(`${P.dorms}+ dormitórios`);
+    if (P.vagas) a.push(`${P.vagas}+ vagas`);
+    if (P.amin !== '' || P.amax !== '') a.push(`Área ${P.amin !== '' ? 'de ' + P.amin : ''}${P.amax !== '' ? ' até ' + P.amax : ''} m²`.replace('Área  até', 'Área até'));
+    if (P.feats.length) a.push(P.feats.join(', '));
+    if (P.bairrosHard && P.bairros.length) a.push('Só em ' + P.bairros.join(', '));
+    if (P.linhasHard && P.linhas.length) a.push('Só bairros da ' + P.linhas.map(id => this.lineL(this.LINES.find(l => l.id === id))).join(', '));
+    return a;
+  }
+  softList(P) {
+    const a = [];
+    if (!P.bairrosHard && P.bairros.length) a.push('Bairros preferidos: ' + P.bairros.join(', '));
+    if (!P.linhasHard && P.linhas.length) a.push('Perto da ' + P.linhas.map(id => this.lineL(this.LINES.find(l => l.id === id))).join(', '));
+    if (P.prios.length) a.push('Importa: ' + this.PRIOS.filter(p => P.prios.includes(p.id)).map(p => p.l.toLowerCase()).join(', '));
+    if (!a.length) a.push('Nenhuma ainda. As suas escolhas vão preenchendo isto.');
+    return a;
+  }
+  learnList(M) {
+    const L = M.L, a = [], top = (pre, n) => Object.entries(L.aff).filter(([k, v]) => k.startsWith(pre) && v > 0.9).sort((x, y) => y[1] - x[1]).slice(0, n).map(([k]) => k.slice(2));
+    if (!L.n.like && !L.n.nope && !L.n.fav) return ['Avalie alguns imóveis: a ordem dos próximos se ajusta às suas escolhas.'];
+    const bs = top('b:', 3); if (bs.length) a.push('Bairros que você quer visitar: ' + bs.join(', '));
+    const ts = top('t:', 2); if (ts.length) a.push('Tipo: ' + ts.join(', '));
+    const fs = top('f:', 3); if (fs.length) a.push('Características recorrentes: ' + fs.map(x => x.toLowerCase()).join(', '));
+    const ls = top('l:', 2).map(id => this.LINES.find(l => l.id === id)).filter(Boolean); if (ls.length) a.push('Transporte: ' + ls.map(l => this.lineL(l)).join(', '));
+    if (L.areas.length >= 2) a.push(`Área média da sua lista: ${Math.round(L.areas.reduce((x, y) => x + y, 0) / L.areas.length)} m²`);
+    if (L.cap != null) a.push(`Preço: evitando a partir de ${this.short(L.cap / 0.97, M.P.mode)}`);
+    if (L.floor) a.push(`Espaço: priorizando acima de ${Math.round(L.floor / 1.03)} m²`);
+    if (L.boost.transporte) a.push('Transporte público ganhou peso');
+    const nd = this.PRIOS.filter(p => !p.dado && L.notes[p.id]); if (nd.length) a.push(`Você citou ${nd.map(p => p.l.toLowerCase()).join(' e ')}. O catálogo ainda não tem esse dado: fica registrado para o corretor`);
+    const bad = Object.entries(L.aff).filter(([k, v]) => k.startsWith('b:') && v <= -1.5).map(([k]) => k.slice(2)); if (bad.length) a.push('Menos destaque para ' + bad.join(', '));
+    if (!a.length) a.push(`${L.n.like} para visitar e ${L.n.nope} descartados até agora. Ainda poucos sinais para um padrão.`);
+    return a;
+  }
+  lists() {
+    const s = this.state, by = c => this.by(c);
+    const like = Object.keys(s.dec).filter(c => s.dec[c].a === 'like' && by(c)).sort((a, b) => s.dec[b].t - s.dec[a].t);
+    const nope = Object.keys(s.dec).filter(c => s.dec[c].a === 'nope' && by(c)).sort((a, b) => s.dec[b].t - s.dec[a].t);
+    const saved = Array.from(new Set(like.concat(s.favs.filter(c => by(c)))));
+    return { like, nope, saved };
+  }
+  fichaText(M) {
+    const s = this.state, P = s.prefs, c = s.contato, Ls = this.lists(), L = M.L;
+    const dt = new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+    const item = code => { const d = this.by(code); return `• ${d.code} · ${d.tipo} · ${d.bairro} · ${this.priceL(d)} · ${this.facts(d)}\n  ${this.absUrl(this.anuncioHref(d.code))}`; };
+    const sel = (arr, n) => arr.slice(0, n).map(item).join('\n') + (arr.length > n ? `\n  (+${arr.length - n} no site)` : '');
+    const reasons = Object.entries(L.reasons).sort((a, b) => b[1] - a[1]).map(([r, n]) => `${(this.REASONS.find(x => x.id === r) || {}).l} (${n})`);
+    const outros = Object.values(s.dec).filter(e => e.a === 'nope' && e.o).map(e => `"${e.o}"`);
+    const out = [
+      'FICHA DE ATENDIMENTO · PROPERTY MATCH · CAPITAL SP IMÓVEIS',
+      `Gerada em ${dt}, a partir do que o cliente informou no site.`,
+      '',
+      `Cliente: ${c.nome || 'não informado'}`,
+      `Telefone: ${c.tel || 'não informado'} · E-mail: ${c.email || 'não informado'}`,
+      '',
+      `Finalidade: ${P.mode === 'alugar' ? 'Alugar' : 'Comprar'}`,
+      `Orçamento: ${P.pmin === '' && P.pmax === '' ? 'não definido' : (P.pmin !== '' ? this.short(P.pmin, P.mode) : 'sem mínimo') + ' a ' + (P.pmax !== '' ? this.short(P.pmax, P.mode) : 'sem máximo')}`,
+      `Regiões de interesse: ${P.bairros.length ? P.bairros.join(', ') + (P.bairrosHard ? ' (exigência)' : ' (preferência)') : 'não definidas'}`,
+      `Metrô/trem: ${P.linhas.length ? P.linhas.map(id => this.lineL(this.LINES.find(l => l.id === id))).join(', ') + (P.linhasHard ? ' (exigência)' : ' (preferência)') : 'sem preferência'}`,
+      `Requisitos indispensáveis: ${this.hardList(P).slice(1).join('; ') || 'nenhum além da finalidade'}`,
+      `Preferências pessoais: ${P.prios.length ? this.PRIOS.filter(p => P.prios.includes(p.id)).map(p => p.l).join(', ') : 'não indicadas'}`,
+      `Padrões da sessão: ${this.learnList(M).join('; ').replace(/Você/g, 'O cliente').replace(/você/g, 'o cliente')}`,
+      '',
+      `QUER VISITAR (${Ls.saved.length})`, Ls.saved.length ? sel(Ls.saved, 12) : '—',
+      '',
+      `Descartados: ${Ls.nope.length}`,
+      `Motivos de descarte informados: ${reasons.length ? reasons.join(', ') : 'nenhum'}${outros.length ? '\nOutros motivos: ' + outros.slice(0, 5).join('; ') : ''}`,
+      '(Motivos são percepções do cliente, não características registradas dos imóveis.)',
+      ...(this.ruleList(P).length ? ['Regras confirmadas pelo cliente: ' + this.ruleList(P).map(r => r.l.toLowerCase()).join('; ')] : [])
+    ];
+    return out.join('\n');
+  }
+  // Mesmos filtros, na busca em lista (só os indispensáveis, que definem o conjunto).
+  listHref(P) {
+    const q = new URLSearchParams({ modo: P.mode });
+    let bs = P.bairrosHard ? P.bairros.slice() : [];
+    if (P.linhasHard && P.linhas.length) { const lb = [].concat(...P.linhas.map(id => (this.LINES.find(l => l.id === id) || { bairros: [] }).bairros)); bs = bs.length ? bs.filter(b => lb.includes(b)) : Array.from(new Set(lb)); }
+    if (bs.length) q.set('bairros', bs.map(b => this.slug(b)).join(','));
+    if (P.tipos.length === 1) q.set('tipo', P.tipos[0]);
+    ['pmin', 'pmax', 'amin', 'amax'].forEach(k => { if (P[k] !== '') q.set(k, P[k]); });
+    ['dorms', 'vagas'].forEach(k => { if (P[k]) q.set(k, P[k]); });
+    if (P.feats.length) q.set('feats', P.feats.join(','));
+    return 'Capital%20SP%20Busca.dc.html?' + q.toString();
+  }
+  visitCta(n) { return !n ? 'Agendar visitas' : n <= this.VISIT_MAX ? `Agendar visita${n > 1 ? 's' : ''} (${n})` : `Agendar visitas · escolher ${this.VISIT_MAX} de ${n}`; }
+  wa(text) { return 'https://wa.me/' + this.WA + '?text=' + encodeURIComponent(text); }
+  copy(text, ok) { const done = () => this.flash(ok); try { navigator.clipboard.writeText(text).then(done, () => this.flash('Não foi possível copiar. Selecione o texto da ficha.')); } catch (e) { this.flash('Não foi possível copiar. Selecione o texto da ficha.'); } }
+
+  // ---------------- render ----------------
+  renderVals() {
+    const s = this.state;
+    const nav = v => ({ goDeck: () => this.setState({ view: s.configured ? 'deck' : 'prefs', det: null }), goMatches: () => this.setState({ view: 'matches', det: null, rs: null }), goPrefs: () => this.setState({ view: 'prefs', det: null, rs: null }) });
+    const base = Object.assign({ R: this.R, live: s.live, hasToast: !!s.toast, toast: s.toast, vLoading: !s.ready, loadingMsg: s.view === 'nocat' ? 'Não foi possível carregar o catálogo de imóveis.' : 'Carregando o catálogo…', catEmpty: s.view === 'nocat',
+      vIntro: false, vPrefs: false, vDeck: false, vMatches: false, detOpen: false, cmpOpen: false, fichaOpen: false, visitOpen: false, nSel: 0,
+      curDeck: 'false', curMatches: 'false', curPrefs: 'false' }, nav());
+    if (!s.ready) return base;
+    if (!this.D.length) return Object.assign(base, { vLoading: true, catEmpty: true, loadingMsg: 'O catálogo está vazio no momento. Volte mais tarde ou fale com a equipe.' });
+
+    const M = this.model(), P = M.P; this._queue = [];
+    const Ls = this.lists(), nSel = Ls.saved.length;
+    const decided = Object.keys(s.dec).filter(c => { const d = this.by(c); return d && this.hard(d, P); }).length;
+    const v = Object.assign(base, { nSel, matchesAria: `Seus matches, ${nSel} para visitar`, curDeck: s.view === 'deck' ? 'page' : 'false', curMatches: s.view === 'matches' ? 'page' : 'false', curPrefs: s.view === 'prefs' ? 'page' : 'false',
+      hasImport: !!s.imported, importMsg: s.imported, nElig: M.elig.length });
+    const rules = this.ruleList(P), rotN = s.rot.length;
+    Object.assign(v, { rules, hasRules: rules.length > 0, rotN, rotMax: this.VISIT_MAX,
+      rotHas: Ls.saved.length > 0, rotThumbs: Ls.saved.slice(0, 5).map(c => this.by(c)).map(d => ({ foto: d.fotos[0], t: `${d.tipo} em ${d.bairro}` })),
+      rotHint: !Ls.saved.length ? 'Marque “Quero visitar” nos imóveis que quer ver de perto e envie ao corretor de uma vez.' : Ls.saved.length <= this.VISIT_MAX ? `${Ls.saved.length === 1 ? '1 imóvel' : Ls.saved.length + ' imóveis'} na lista. Envie todos ao corretor de uma vez.` : `${Ls.saved.length} imóveis na lista. Ao agendar, você escolhe até ${this.VISIT_MAX} para enviar.`,
+      rotCta: this.visitCta(Ls.saved.length), rotShort: `Visitas ${Ls.saved.length}`,
+      openVisit: () => this.openVisit(),
+      centerCls: M.elig.length > 0 && M.elig.length < this.MIN_DECK ? 'center small' : 'center', smallCat: M.elig.length > 0 && M.elig.length < this.MIN_DECK, listHref: this.listHref(P) });
+    const chip = (l, on, go, extra) => Object.assign({ l, on: on ? 'true' : 'false', go }, extra || {});
+
+    if (s.view === 'intro') {
+      const f = i => (this.D[i] || this.D[0]).fotos[0];
+      Object.assign(v, { vIntro: true, demo1: f(3), demo2: f(10), demo3: f(25), introCta: s.imported ? 'Revisar filtros importados' : 'Configurar preferências', canSkipIntro: s.configured && !s.imported,
+        introNext: () => this.setState({ intro: true, view: 'prefs' }) });
+    }
+
+    if (s.view === 'prefs') {
+      const pr = this.PRECOS[P.mode];
+      const relax = [];
+      if (!M.elig.length) {
+        const tryP = (patch, l) => { const Q = Object.assign({}, P, patch), n = this.D.filter(d => this.hard(d, Q)).length; if (n) relax.push({ n, l: `${l} → ${n}`, go: () => this.setP(patch) }); };
+        if (P.pmin !== '' || P.pmax !== '') tryP({ pmin: '', pmax: '' }, 'Sem faixa de preço');
+        if (P.tipos.length) tryP({ tipos: [] }, 'Qualquer tipo');
+        if (P.dorms) tryP({ dorms: 0 }, 'Qualquer nº de dormitórios');
+        if (P.vagas) tryP({ vagas: 0 }, 'Qualquer nº de vagas');
+        if (P.amin !== '' || P.amax !== '') tryP({ amin: '', amax: '' }, 'Qualquer metragem');
+        P.feats.forEach(f => tryP({ feats: P.feats.filter(x => x !== f) }, `Sem exigir ${f.toLowerCase()}`));
+        if (P.bairrosHard && P.bairros.length) tryP({ bairrosHard: false }, 'Bairros como preferência');
+        if (P.linhasHard && P.linhas.length) tryP({ linhasHard: false }, 'Linhas como preferência');
+        relax.sort((a, b) => b.n - a.n);
+      }
+      Object.assign(v, { vPrefs: true,
+        pModes: [['comprar', 'Comprar'], ['alugar', 'Alugar']].map(([k, l]) => chip(l, P.mode === k, () => this.setP({ mode: k, pmin: '', pmax: '' }))),
+        priceHint: P.mode === 'alugar' ? 'Aluguel mensal, sem condomínio e IPTU.' : 'Valor de venda.',
+        pPrices: pr.map(([l, a, b]) => chip(l, P.pmin === a && P.pmax === b, () => this.setP(P.pmin === a && P.pmax === b ? { pmin: '', pmax: '' } : { pmin: a, pmax: b }))),
+        pminV: P.pmin === '' ? '' : P.pmin.toLocaleString('pt-BR'), pmaxV: P.pmax === '' ? '' : P.pmax.toLocaleString('pt-BR'),
+        onPmin: e => this.setP({ pmin: this.num(e.target.value) }), onPmax: e => this.setP({ pmax: this.num(e.target.value) }),
+        pTipos: this.TIPOS.map(t => chip(t, P.tipos.includes(t), () => this.setP({ tipos: this.tog(P.tipos, t) }))),
+        pDorms: [0, 1, 2, 3, 4].map(n => chip(n ? n + '+' : 'Qualquer', P.dorms === n, () => this.setP({ dorms: n }))),
+        pVagas: [0, 1, 2, 3].map(n => chip(n ? n + '+' : 'Qualquer', P.vagas === n, () => this.setP({ vagas: n }))),
+        aminV: P.amin === '' ? '' : String(P.amin), amaxV: P.amax === '' ? '' : String(P.amax),
+        onAmin: e => this.setP({ amin: this.num(e.target.value) }), onAmax: e => this.setP({ amax: this.num(e.target.value) }),
+        pFeats: this.FEATS.map(f => chip(f, P.feats.includes(f), () => this.setP({ feats: this.tog(P.feats, f) }))),
+        bHard: P.bairrosHard ? 'true' : 'false', togBHard: () => this.setP({ bairrosHard: !P.bairrosHard }),
+        bairrosHint: P.bairrosHard ? 'Exigência: só aparecem imóveis nos bairros marcados.' : 'Preferência: imóveis nos bairros marcados sobem na fila, os outros continuam aparecendo.',
+        pBairros: Object.keys(this.BAIRROS).map(b => chip(b, P.bairros.includes(b), () => this.setP({ bairros: this.tog(P.bairros, b) }))),
+        lHard: P.linhasHard ? 'true' : 'false', togLHard: () => this.setP({ linhasHard: !P.linhasHard }),
+        linhasHint: P.linhasHard ? 'Exigência: só bairros atendidos pelas linhas marcadas.' : 'Preferência: bairros atendidos pelas linhas marcadas sobem na fila.',
+        pLinhas: this.LINES.map(l => chip(`${l.num}-${l.name}${l.obras ? ' (obras)' : ''}`, P.linhas.includes(l.id), () => this.setP({ linhas: this.tog(P.linhas, l.id) }), { c: l.color })),
+        pPrios: this.PRIOS.map(p => chip(p.l, P.prios.includes(p.id), () => this.setP({ prios: this.tog(P.prios, p.id) }), { nd: !p.dado })),
+        hasRelax: !M.elig.length, relax: relax.slice(0, 4), relaxMsg: relax.length ? 'Ao afrouxar um deles:' : 'Nenhum requisito sozinho resolve: desmarque dois ou mais (por exemplo, tipo e características).',
+        eligLabel: M.elig.length === 1 ? 'imóvel atende aos indispensáveis' : 'imóveis atendem aos indispensáveis', noElig: !M.elig.length,
+        startCta: decided ? 'Continuar descobrindo' : 'Começar a descobrir',
+        startDeck: () => { if (!M.elig.length) return; const sig = JSON.stringify(P), fresh = sig !== s.roundSig; this.setState(Object.assign({ configured: true, intro: true, view: 'deck', imported: '', ph: 0 }, fresh ? { round: 0, roundSig: sig, showHeld: false } : {}), () => this.resetTop(true)); }
+      });
+    }
+
+    if (s.view === 'deck') {
+      const q = M.queue, first = q[0];
+      const roundEnd = !!first && s.round >= this.ROUND, heldEnd = !!first && !roundEnd && first.held.length > 0 && !s.showHeld;
+      const top = roundEnd || heldEnd ? null : first; this._queue = top ? q : [];
+      const nHeld = q.filter(r => r.held.length).length, left = Math.min(this.ROUND - s.round, q.length - (s.showHeld ? 0 : nHeld));
+      const card = r => { const d = r.d; return { foto: d.fotos[0], price: d.mode === 'alugar' ? this.brl(d.price) : this.short(d.price, d.mode), sub: `${d.tipo} · ${d.bairro}` }; };
+      Object.assign(v, { vDeck: true, hasTop: !!top, noTop: !top, isDone: !first && M.elig.length > 0, roundEnd, heldEnd, isEmpty: !M.elig.length, noUndo: !s.hist.length,
+        progLabel: top ? `${s.round + 1} de ${s.round + left} nesta rodada · ${M.elig.length} compatíveis` : `${s.round} avaliados nesta rodada · ${decided} de ${M.elig.length} no total`,
+        roundTitle: `RODADA CONCLUÍDA: ${s.round} IMÓVEIS.`,
+        roundMsg: `Você marcou ${Ls.saved.length} para visitar e descartou ${M.L.n.nope} até agora. A próxima rodada já vem reordenada pelo que você mostrou.${nHeld ? ` ${nHeld} imóveis ficam fora pelas regras que você criou ao descartar.` : ''}`,
+        moreCta: `Mais ${Math.min(this.ROUND, q.length - (s.showHeld ? 0 : nHeld)) || Math.min(this.ROUND, q.length)} imóveis`, nextRound: () => this.setState({ round: 0, ph: 0 }, () => this.resetTop(true)),
+        heldMsg: `Restam ${nHeld} imóveis compatíveis com os indispensáveis, mas eles batem com uma regra que você criou ao descartar: ${(first && first.held[0] || '').replace(/^./, c => c.toLowerCase())}.`,
+        heldCta: `Ver esses ${nHeld} mesmo assim`, showHeldGo: () => this.setState({ showHeld: true, ph: 0 }, () => this.resetTop(true)),
+        behind: q.slice(1, 3).map((r, i) => Object.assign(card(r), { cls: 'card bk' + (i + 1) })).reverse(),
+        hardList: this.hardList(P), softList: this.softList(P), learnList: this.learnList(M),
+        stats: [{ n: Ls.saved.length, l: 'QUERO VISITAR' }, { n: M.L.n.nope, l: 'DESCARTES' }],
+        doneMsg: `Você marcou ${Ls.saved.length} para visitar e descartou ${M.L.n.nope}. ${Ls.saved.length ? 'Envie ao corretor os que quer ver: de 1 a ' + this.VISIT_MAX + ' por vez.' : 'Ajuste as preferências para ver outras opções.'}`,
+        hasNopes: Ls.nope.length > 0, reviewNopes: () => this.setState({ view: 'matches', tab: 'nope' }),
+        undo: () => this.undo(), doLike: () => this.commit('like'), doNope: () => this.commit('nope'), openDet: () => this.openDet(),
+        rsOpen: false, aftOpen: false, aftMini: false });
+      if (s.aft && !s.rs && this.by(s.aft)) {
+        const d = this.by(s.aft), n = Ls.saved.length;
+        const first = Ls.saved.length <= 1;
+        Object.assign(v, { aftOpen: first, aftMini: !first, aftCount: `${Ls.saved.length} ${Ls.saved.length === 1 ? 'imóvel' : 'imóveis'}`, aftTitle: `${d.tipo} em ${d.bairro} está na sua lista de visitas.`,
+          aftSub: n <= this.VISIT_MAX ? `Quer agendar agora? Você pode mandar ${n === 1 ? 'só este' : 'os ' + n} ou continuar escolhendo.` : `Sua lista tem ${n}. Ao agendar, você escolhe até ${this.VISIT_MAX} para enviar.`,
+          aftCta: n > this.VISIT_MAX ? `Agendar (escolher ${this.VISIT_MAX} de ${n})` : this.visitCta(n), aftGo: () => this.openVisit(), aftClose: () => this.setState({ aft: null }) });
+      }
+      if (top) {
+        const d = top.d, n = d.fotos.length, ph = Math.min(s.ph, n - 1), ln = this.linesOf(d.bairro);
+        const extra = [d.feats.slice(0, 3).join(' · '), ln.length ? ln.map(l => 'Linha ' + l.num + (l.obras ? ' (obras)' : '')).join(', ') : ''].filter(Boolean).join('  ·  ');
+        const lrn = M.L.n.like + M.L.n.nope + M.L.n.fav;
+        v.t = { code: d.code, foto: d.fotos[ph], alt: `${d.tipo} em ${d.bairro}, foto ${ph + 1} de ${n}`, segs: d.fotos.map((_, i) => i === ph ? 'on' : ''),
+          price: d.mode === 'alugar' ? this.brl(d.price) : this.brl(d.price), suf: d.mode === 'alugar' ? '/MÊS' : '', modeL: d.mode === 'alugar' ? 'ALUGUEL' : 'VENDA', badge: d.badge || '',
+          tipo: d.tipo, bairro: d.bairro, facts: this.facts(d), hasExtra: !!extra, extra,
+          saved: this.isSaved(d.code), hasPct: top.known > 0, pctL: `ATENDE ${top.met} DE ${top.known}`, blocks: Array.from({ length: top.known }, (_, i) => i < top.met ? 'on' : ''), pctTitle: 'Preferências que você declarou e que o imóvel atende, segundo os dados cadastrados',
+          hasWhy: top.held.length > 0 || top.why.length > 0, why: top.held.length ? top.held.slice(0, 2) : top.why.slice(0, 2), whyCls: top.held.length ? 'why warn' : 'why', whyHead: top.held.length ? 'ATENÇÃO · FORA DO QUE VOCÊ INDICOU' : lrn ? `POR QUE AGORA · AJUSTADO POR ${lrn} ${lrn === 1 ? 'ESCOLHA' : 'ESCOLHAS'}` : 'POR QUE ESTE IMÓVEL',
+          aria: `${d.tipo} em ${d.bairro}, ${this.priceL(d)}, ${this.facts(d)}${top.known ? `, atende ${top.met} de ${top.known} preferências` : ''}` };
+        v.prevPh = () => this.setState({ ph: (ph - 1 + n) % n }); v.nextPh = () => this.setState({ ph: (ph + 1) % n });
+      }
+      if (s.rs && s.dec[s.rs]) {
+        const e = s.dec[s.rs], d = this.by(s.rs);
+        Object.assign(v, { rsOpen: true, rsTitle: `Por que descartou ${d.tipo.toLowerCase()} em ${d.bairro}?`,
+          rsOpts: this.REASONS.map(r => chip(r.l, e.r.includes(r.id), () => this.togReason(r.id))),
+          rsOther: s.rsOtherOpen || e.r.includes('outro'), rsOtherV: e.o || '', onRsOther: ev => { const val = ev.target.value.slice(0, 140); this.setState(st => ({ dec: Object.assign({}, st.dec, { [st.rs]: Object.assign({}, st.dec[st.rs], { o: val }) }) })); },
+          rsAsks: ['preco', 'pequeno', 'local'].filter(id => e.r.includes(id) && !(e.q && e.q[id] === false)).map(id => {
+            const ans = e.q && e.q[id] === true;
+            const l = id === 'preco' ? (ans ? `Pronto: imóveis a partir de ${this.short(d.price, d.mode)} ficam fora das rodadas. Dá para desfazer em Preferências.` : `Esconder imóveis a partir de ${this.short(d.price, d.mode)} nas próximas rodadas?`)
+              : id === 'pequeno' ? (ans ? `Pronto: imóveis com até ${d.area} m² ficam fora das rodadas.` : `Esconder imóveis com até ${d.area} m²?`)
+              : (ans ? `Pronto: imóveis em ${d.bairro} ficam fora das rodadas.` : `Esconder imóveis em ${d.bairro}?`);
+            return { l, open: !ans, yes: () => this.answer(id, true), no: () => this.answer(id, false) };
+          }),
+          rsDone: e.r.length ? 'Pronto' : 'Pular', rsClose: () => this.setState({ rs: null }) });
+      }
+    }
+
+    if (s.view === 'matches') {
+      const tabs = [['saved', 'Quero visitar', Ls.saved], ['nope', 'Descartados', Ls.nope], ['sug', 'Sugestões', M.queue.slice(0, 8).map(r => r.d.code)]];
+      const cur = tabs.find(t => t[0] === s.tab) || tabs[0];
+      const item = code => {
+        const d = this.by(code), r = M.R[code], e = s.dec[code], acts = [];
+        if (cur[0] === 'saved') acts.push({ l: 'Tirar da lista', go: () => this.unsave(code) });
+        if (cur[0] === 'nope') { acts.push({ l: 'Recuperar', go: () => this.recover(code) }); acts.push({ l: 'Quero visitar', go: () => this.recover(code, true) }); }
+        if (cur[0] === 'sug') acts.push({ l: 'Avaliar agora', go: () => this.setState({ pin: code, view: 'deck', ph: 0 }, () => this.resetTop(true)) });
+        let note = '';
+        if (cur[0] === 'nope') note = e && e.r && e.r.length ? 'Motivo: ' + e.r.map(id => (this.REASONS.find(x => x.id === id) || {}).l).join(', ') + (e.o ? ` ("${e.o}")` : '') : 'Sem motivo informado';
+        else if (!r) note = d.mode !== P.mode ? `Para ${d.mode === 'alugar' ? 'alugar' : 'comprar'} · fora da finalidade atual` : 'Fora dos indispensáveis atuais';
+        else if (cur[0] === 'sug' && r.why.length) note = r.why[0];
+        else if (cur[0] === 'saved' && !e) note = 'Favoritado na busca ou em outra página';
+        const inCmp = s.cmp.includes(code);
+        return { code, foto: d.fotos[0], price: d.mode === 'alugar' ? this.brl(d.price) + '/mês' : this.short(d.price, d.mode), sub: `${d.tipo} · ${d.bairro}`, facts: this.facts(d), hasPct: !!r && r.known > 0, pctL: r ? `${r.met}/${r.known}` : '',
+          canVis: false, inVis: s.rot.includes(code) ? 'true' : 'false', visL: s.rot.includes(code) ? '✓ Vai no envio' : '+ Incluir no envio', visDis: !s.rot.includes(code) && s.rot.length >= this.VISIT_MAX, togVis: () => this.togRot(code),
+          hasNote: !!note, note, href: this.anuncioHref(code), acts, det: () => this.openDet(code), detL: `Detalhes de ${d.tipo} em ${d.bairro}`,
+          cmp: inCmp, cmpDis: !inCmp && s.cmp.length >= 3, togCmp: () => this.setState({ cmp: inCmp ? s.cmp.filter(x => x !== code) : s.cmp.concat([code]).slice(0, 3) }) };
+      };
+      const stated = this.hardList(P).concat(this.softList(P).filter(x => !x.startsWith('Nenhuma')));
+      Object.assign(v, { vMatches: true,
+        mtSub: `${Ls.saved.length} para visitar · ${Ls.nope.length} descartados · ${M.queue.length} ainda por avaliar`,
+        mTabs: tabs.map(t => ({ l: t[1], n: t[2].length, on: t[0] === cur[0] ? 'true' : 'false', go: () => this.setState({ tab: t[0] }) })),
+        mItems: cur[2].map(item), mEmpty: !cur[2].length,
+        mEmptyMsg: { saved: 'Nenhum imóvel na lista ainda. Arraste para a direita (ou toque em ✓) nos que quer visitar. Os favoritos da busca também aparecem aqui.', nope: 'Nenhum descarte. Bom sinal.', sug: 'Sem sugestões novas: você já avaliou todos os imóveis compatíveis. Ajuste as preferências para ver outros.' }[cur[0]],
+        statedList: stated, learnList: this.learnList(M),
+        cmpBar: s.cmp.length >= 2, cmpN: s.cmp.length, openCmp: () => this.setState({ cmpOpen: true }), clearCmp: () => this.setState({ cmp: [] }),
+        openFicha: () => this.setState({ ficha: true }),
+        share: () => {
+          const pick = Ls.saved.slice(0, 15);
+          if (!pick.length) return this.flash('Marque imóveis para visitar antes de compartilhar');
+          const txt = 'Minha seleção na Capital SP Imóveis:\n\n' + pick.map(c => { const d = this.by(c); return `${d.tipo} em ${d.bairro} · ${this.priceL(d)}\n${this.absUrl(this.anuncioHref(c))}`; }).join('\n\n');
+          if (navigator.share) navigator.share({ title: 'Minha seleção · Capital SP', text: txt }).catch(() => {}); else this.copy(txt, 'Seleção copiada. Cole onde quiser compartilhar.');
+        } });
+    }
+
+    if (s.det && this.by(s.det)) {
+      const d = this.by(s.det), r = M.R[s.det], n = d.fotos.length, ph = Math.min(s.detPh, n - 1), isFav = this.isSaved(d.code), inVis = s.rot.includes(d.code);
+      const rows = [[d.mode === 'alugar' ? 'Aluguel' : 'Venda', this.priceL(d)]];
+      if (d.condo) rows.push(['Condomínio', this.brl(d.condo) + '/mês']);
+      if (d.iptu) rows.push(['IPTU', this.brl(d.iptu) + (d.mode === 'alugar' ? '/mês' : '/ano')]);
+      rows.push(['Área', d.area + ' m²'], ['Dormitórios', d.dorms ? String(d.dorms) : '—'], ['Banheiros', String(d.banh)], ['Vagas', String(d.vagas)]);
+      const C = r ? r.C : this.crit(d, P);
+      v.detOpen = true;
+      v.dd = { aria: `Detalhes: ${d.tipo} em ${d.bairro}`, foto: d.fotos[ph], alt: `${d.tipo} em ${d.bairro}, foto ${ph + 1} de ${n}`, cnt: `${ph + 1} / ${n}`,
+        kick: `${d.code} · ${d.mode === 'alugar' ? 'ALUGUEL' : 'VENDA'}${d.badge ? ' · ' + d.badge.toUpperCase() : ''}`, title: `${d.tipo} em ${d.bairro}`, addr: `${d.rua}, ${d.bairro} · Zona Leste (localização aproximada)`,
+        rows: rows.map(([l, x]) => ({ l, v: x })), desc: d.desc, hasFeats: d.feats.length > 0, feats: d.feats,
+        hasLines: this.linesOf(d.bairro).length > 0, lines: this.linesOf(d.bairro).map(l => ({ l: this.lineL(l), c: l.color })),
+        hasCrit: C.length > 0, critHead: r && r.known ? `ATENDE ${r.met} DE ${r.known} PREFERÊNCIAS` : 'PREFERÊNCIAS',
+        crit: C.map(c => ({ k: 'k ' + (c.st === 1 ? 'y' : c.st === 0 ? 'n' : 'u'), s: c.st === 1 ? '✓' : c.st === 0 ? '✕' : '?', sr: c.st === 1 ? 'Atende: ' : c.st === 0 ? 'Não atende: ' : 'Sem dado: ', l: c.l })),
+        href: this.anuncioHref(d.code), isFav: isFav ? 'true' : 'false', favL: isFav ? '✓ Na sua lista de visitas · tirar' : 'Quero visitar', fav: () => (isFav ? this.unsave(d.code) : this.save(d.code)),
+        inVis: inVis ? 'true' : 'false', visL: inVis ? '✓ No roteiro de visitas · remover' : `Incluir no roteiro de visitas (${s.rot.length}/${this.VISIT_MAX})`, visDis: !inVis && s.rot.length >= this.VISIT_MAX, vis: () => this.togRot(d.code) };
+      v.dPrev = () => this.setState({ detPh: (ph - 1 + n) % n }); v.dNext = () => this.setState({ detPh: (ph + 1) % n });
+      v.closeDet = () => this.closeDet();
+    }
+
+    if (s.cmpOpen && s.cmp.length) {
+      const ds = s.cmp.map(c => this.by(c)).filter(Boolean);
+      const row = (l, f) => ({ l, v: ds.map(f) });
+      Object.assign(v, { cmpOpen: true, closeCmp: () => this.setState({ cmpOpen: false }), cmpCols: ds.map(d => `${d.code} · ${d.tipo}`),
+        cmpRows: [row('Bairro', d => d.bairro), row('Preço', d => this.priceL(d)), row('Condomínio + IPTU', d => d.condo || d.iptu ? this.brl(d.condo + (d.mode === 'alugar' ? d.iptu : d.iptu / 12)) + '/mês' : '—'),
+          row('Área', d => d.area + ' m²'), row('R$/m²', d => this.brl(d.price / d.area)), row('Dorms · banhs · vagas', d => `${d.dorms} · ${d.banh} · ${d.vagas}`),
+          row('Transporte no bairro', d => this.linesOf(d.bairro).map(l => 'L' + l.num + (l.obras ? '*' : '')).join(', ') || '—'), row('Características', d => d.feats.join(', ') || '—'),
+          row('Preferências atendidas', d => M.R[d.code] && M.R[d.code].known ? `${M.R[d.code].met} de ${M.R[d.code].known}` : '—'), row('Situação', d => this.isSaved(d.code) ? (s.rot.includes(d.code) ? 'Quero visitar · no envio' : 'Quero visitar') : s.dec[d.code] ? 'Descartado' : '—')] });
+    }
+
+    const setC = k => e => { const val = e.target.value.slice(0, 120); this.setState(st => ({ contato: Object.assign({}, st.contato, { [k]: val }) })); };
+    Object.assign(v, { cNome: s.contato.nome, cTel: s.contato.tel, cEmail: s.contato.email, onCNome: setC('nome'), onCTel: setC('tel'), onCEmail: setC('email') });
+    if (s.ficha) {
+      const txt = this.fichaText(M);
+      Object.assign(v, { fichaOpen: true, fichaTxt: txt, fichaWa: this.wa('Olá! Montei minha seleção no Property Match da Capital SP. Segue minha ficha:\n\n' + txt), closeFicha: () => this.setState({ ficha: false }),
+        copyFicha: () => this.copy(txt, 'Ficha copiada'),
+        dlFicha: () => { try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain;charset=utf-8' })); a.download = 'ficha-property-match.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); } catch (e) { this.flash('Não foi possível baixar. Use Copiar ficha.'); } } });
+    }
+    if (s.visit) {
+      const ord = this.orderRot(s.rot), n = ord.length, full = n >= this.VISIT_MAX;
+      const fmt = dt => { const t = dt.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' }).replace(/\./g, '').replace(',', ''); return t.charAt(0).toUpperCase() + t.slice(1); };
+      const dias = Array.from({ length: 10 }, (_, i) => { const dt = new Date(); dt.setHours(12, 0, 0, 0); dt.setDate(dt.getDate() + i + 1); return { k: dt.toISOString().slice(0, 10), l: fmt(dt) }; });
+      const nome = s.contato.nome.trim(), ok = n > 0 && nome.length > 1;
+      const dl = s.vDays.map(k => (dias.find(x => x.k === k) || {}).l).filter(Boolean);
+      const txt = `Olá! Sou ${nome}${s.contato.tel ? ' (' + s.contato.tel + ')' : ''}. Encontrei ${n === 1 ? 'este imóvel' : 'estes imóveis'} no Property Match e quero visitar${n > 1 && s.vSame ? ', de preferência no mesmo dia' : ''}:\n`
+        + ord.map((d, i) => `${i + 1}. ${d.code} · ${d.tipo} em ${d.bairro} · ${this.priceL(d)}\n   ${this.absUrl(this.anuncioHref(d.code))}`).join('\n')
+        + `\n\n${n === 1 ? 'Ele está disponível' : 'Eles estão disponíveis'} para visita? Que horários vocês têm?\nDias que ficam bons: ${dl.length ? dl.join(', ') : 'a combinar'} · Período: ${s.vPer.length ? s.vPer.join(', ') : 'a combinar'}${n > 2 ? '\n(Ordem sugerida pela localização aproximada.)' : ''}\n\n` + this.fichaText(M);
+      const many = Ls.saved.length > this.VISIT_MAX, pick = many && s.vStep === 'pick';
+      const addable = many ? [] : Ls.saved.filter(c => !s.rot.includes(c)).map(c => this.by(c));
+      Object.assign(v, { vPick: pick, vSend: !pick, vCanBack: many, vBack: () => this.setState({ vStep: 'pick' }),
+        vPickSub: `Você marcou ${Ls.saved.length} imóveis para visitar. Escolha quais enviar ao corretor agora: pode ser 1 ou até ${this.VISIT_MAX}.`,
+        vCanClear: n > 0, vClear: () => this.setState({ rot: [] }),
+        vPickList: Ls.saved.map(c => { const d = this.by(c), on = s.rot.includes(c), dis = !on && full; return { on: on ? 'true' : 'false', dis, op: dis ? '.45' : '1', box: on ? 'pk on' : 'pk', mark: on ? '✓' : '', foto: d.fotos[0], l: `${d.tipo} em ${d.bairro}`, sub: `${d.code} · ${this.priceL(d)} · ${this.facts(d)}`, go: () => this.togRot(c) }; }),
+        vNoNext: !n, vNextL: n ? `Continuar com ${n === 1 ? '1 imóvel' : n + ' imóveis'} →` : 'Escolha ao menos 1', vNext: () => this.setState({ vStep: 'send' }) });
+      Object.assign(v, { visitOpen: true, closeVisit: () => this.setState({ visit: false }), vNone: !n, vOrderNote: n > 2,
+        vRot: ord.map((d, i) => ({ n: i + 1, foto: d.fotos[0], l: `${d.tipo} em ${d.bairro}`, sub: `${d.code} · ${this.priceL(d)}`, rmL: `Não enviar ${d.code}`, rm: () => this.togRot(d.code) })),
+        vHasAdd: addable.length > 0, vAdd: addable.map(d => ({ foto: d.fotos[0], l: `${d.tipo} em ${d.bairro} · ${this.priceL(d)}`, dis: full, add: () => this.togRot(d.code) })),
+        vDias: dias.map(x => chip(x.l, s.vDays.includes(x.k), () => this.setState({ vDays: this.tog(s.vDays, x.k) }))),
+        vPers: this.PERIODOS.filter(p => p !== 'Fim de semana').map(p => chip(p, s.vPer.includes(p), () => this.setState({ vPer: this.tog(s.vPer, p) }))),
+        vSame: s.vSame ? 'true' : 'false', togSame: () => this.setState({ vSame: !s.vSame }),
+        vCan: ok, vCant: !ok, vCantL: !n ? 'Escolha ao menos 1 imóvel' : 'Informe seu nome', vCta: `Enviar ${n === 1 ? '1 imóvel' : n + ' imóveis'} ao corretor (WhatsApp)`, visitWa: this.wa(txt) });
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>
