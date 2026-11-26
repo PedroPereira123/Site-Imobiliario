@@ -42,6 +42,21 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 }
 .gl:disabled::before,.gl:disabled::after,.gl[disabled]::before,.gl[disabled]::after{display:none}
 @media (prefers-reduced-motion:reduce){.gl::before,.gl::after{animation:none!important}}
+/* Depoimentos: card com borda luminosa em movimento + fundo pontilhado (animated-glow-card), só transform/opacity */
+.gc{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;gap:24px;padding:28px;background:#292D29;color:#EFE6D2;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(239,230,210,.1),0 28px 44px -30px rgba(30,32,28,.55);transition:transform 220ms cubic-bezier(.23,1,.32,1)}
+.gc::before{content:'';position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(201,190,168,.26) 1px,transparent 1.3px);background-size:16px 16px;-webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000,transparent 80%);mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000,transparent 80%)}
+.gcl{position:absolute;pointer-events:none;will-change:transform}
+.gcl-t,.gcl-b{height:1.5px;width:42%;background:linear-gradient(90deg,transparent,#E7845F 60%,#F3C1A8,transparent)}
+.gcl-l,.gcl-r{width:1.5px;height:42%;background:linear-gradient(180deg,transparent,#E7845F 60%,#F3C1A8,transparent)}
+.gcl-t{top:0;left:0;animation:gcx 6s linear infinite}
+.gcl-r{top:0;right:0;animation:gcy 6s linear infinite 1.5s}
+.gcl-b{bottom:0;right:0;animation:gcx 6s linear infinite 3s reverse}
+.gcl-l{bottom:0;left:0;animation:gcy 6s linear infinite 4.5s reverse}
+@keyframes gcx{from{transform:translateX(-100%)}to{transform:translateX(240%)}}
+@keyframes gcy{from{transform:translateY(-100%)}to{transform:translateY(240%)}}
+@media (hover:hover) and (pointer:fine){.gc:hover{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.gcl{animation:none;opacity:.5}.gcl-t{transform:translateX(30%)}.gcl-b{transform:translateX(-30%)}.gcl-l{transform:translateY(-30%)}.gcl-r{transform:translateY(30%)}.gc:hover{transform:none}}
+.gstar{display:block;width:12px;height:12px;background:#E7845F;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 </style>
 </helmet>
 <div style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background:#C9BEA8">
@@ -469,6 +484,37 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
           </div>
         </div>
       </sc-if>
+    </div>
+  </section>
+
+  <section data-screen-label="04 Depoimentos" style="position:relative;background:#C9BEA8;padding:clamp(72px,11vh,128px) 0 clamp(80px,12vh,144px)">
+    <div style="position:relative;max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 48px;padding-bottom:24px;border-bottom:2px solid #292D29">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>04 — DEPOIMENTOS</div>
+          <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,7.2vw,124px);line-height:.92;letter-spacing:.005em">QUEM JÁ FECHOU<br>COM A CAPITAL</h2>
+        </div>
+        <p style="margin:0;max-width:38ch;font-size:16px;line-height:1.55;opacity:.86;text-wrap:pretty">Compradores, locatários e proprietários contam como foi a busca, a visita e a assinatura.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;margin-top:clamp(32px,5vh,56px)">
+        <sc-for list="{{ tests }}" as="t" hint-placeholder-count="6">
+          <figure class="gc" style="margin:0">
+            <span class="gcl gcl-t"></span><span class="gcl gcl-r"></span><span class="gcl gcl-b"></span><span class="gcl gcl-l"></span>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+              <div style="display:flex;gap:3px" role="img" aria-label="Avaliação: 5 de 5 estrelas"><span class="gstar"></span><span class="gstar"></span><span class="gstar"></span><span class="gstar"></span><span class="gstar"></span></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#C9BEA8">{{ t.deal }}</span>
+            </div>
+            <blockquote style="margin:0;flex:1;font-size:17px;line-height:1.6;text-wrap:pretty">“{{ t.quote }}”</blockquote>
+            <figcaption style="display:flex;align-items:center;gap:14px;padding-top:20px;border-top:1px solid rgba(239,230,210,.16)">
+              <span aria-hidden="true" style="flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#A64B36;color:#EFE6D2;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;letter-spacing:.04em">{{ t.ini }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                <span style="font-weight:600;font-size:15px">{{ t.name }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#C9BEA8">{{ t.where }}</span>
+              </span>
+            </figcaption>
+          </figure>
+        </sc-for>
+      </div>
     </div>
   </section>
 
@@ -1104,6 +1150,15 @@ class Component extends DCLogic {
       };
     };
     const rel = s.sort === 0;
+    // DEPOIMENTOS FICTÍCIOS — texto de exemplo para o protótipo; substituir por avaliações reais (com autorização) antes de publicar.
+    const tests = [
+      { name: 'Marina T.', deal: 'COMPRA', where: 'Casa térrea · Alto de Pinheiros', quote: 'Eu já tinha desistido de achar casa com quintal de verdade. A Capital filtrou o que não servia e, na segunda visita, eu já sabia que era aquela. Entendi cada etapa da documentação.' },
+      { name: 'Rafael & Júlia M.', deal: 'COMPRA', where: 'Sobrado · Vila Mariana', quote: 'Fomos atendidos sem pressão. O corretor falou dos pontos fracos do imóvel antes de a gente perguntar, e foi isso que nos fez confiar.' },
+      { name: 'Carlos E.', deal: 'LOCAÇÃO', where: 'Apartamento · Pinheiros', quote: 'Alugar no meu prazo e sem fiador complicado parecia impossível. Em uma semana eu estava com as chaves, com o contrato explicado item por item.' },
+      { name: 'Beatriz L.', deal: 'VENDA', where: 'Apartamento · Butantã', quote: 'Vendi meu apartamento em menos tempo do que eu esperava e pelo valor que combinamos no início. Recebi retorno de cada visita, sem eu precisar cobrar.' },
+      { name: 'Eduardo S.', deal: 'LOCAÇÃO COMERCIAL', where: 'Sala comercial · Centro', quote: 'Precisava de uma sala para o escritório e de alguém que entendesse de vaga, condomínio e prazo. Resolveram tudo com uma única conversa.' },
+      { name: 'Helena P.', deal: 'ADMINISTRAÇÃO', where: 'Proprietária · Planalto Paulista', quote: 'Entrego meu imóvel para eles administrarem há dois anos. Repasse em dia, relatório claro e uma pessoa de verdade para atender quando preciso.' }
+    ].map(t => Object.assign(t, { ini: t.name.split(/[ &]+/).filter(w => /^[A-ZÁÉÍÓÚ]/.test(w)).slice(0, 2).map(w => w[0]).join('') }));
     const blocks = D.cats.map((cat, ci) => {
       const items = list.filter(d => d.tipo === cat);
       const n = items.length, rf = this.ringRefs[cat];
@@ -1208,7 +1263,7 @@ class Component extends DCLogic {
       sortOptions: ['Relevância', 'Menor preço', 'Maior área'].map((l, i) => seg(l, s.sort === i, () => this.setState({ sort: i }))),
       countLabel: `${n} ${n === 1 ? 'IMÓVEL' : 'IMÓVEIS'} PARA ${s.mode === 'comprar' ? 'COMPRAR' : 'ALUGAR'}`,
       summary: summaryParts.length ? summaryParts.join(' · ').toUpperCase() : 'SEM FILTROS ADICIONAIS',
-      blocks, isEmpty: n === 0,
+      blocks, tests, isEmpty: n === 0,
       emptyHint: summaryParts.length ? `Filtros ativos: ${summaryParts.join(', ')}. Remova algum deles ou limpe todos.` : 'Nenhum imóvel cadastrado para esta pretensão.',
       saved, hasSaved: saved.length > 0, savedCount: String(saved.length),
       savedLabel: `${saved.length} ${saved.length === 1 ? 'IMÓVEL' : 'IMÓVEIS'} — SALVOS NESTE NAVEGADOR`,
