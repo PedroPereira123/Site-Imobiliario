@@ -23,6 +23,11 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 @keyframes hbarIn{from{opacity:0;transform:scale(.55,.8)}to{opacity:1;transform:none}}
 .hbar{transform-origin:50% 50%;animation:hbarIn .55s cubic-bezier(.2,.7,0,1)}
 @media (prefers-reduced-motion:reduce){.hbar{animation:none}}
+.rbtn{transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease,color 150ms ease,border-color 150ms ease}
+.rbtn:active{transform:scale(.96)}
+.rstage:focus-visible{outline:2px solid #292D29;outline-offset:-4px}
+.rstage:active{cursor:grabbing}
+@media (prefers-reduced-motion:reduce){.rbtn:active{transform:none}}
 </style>
 </helmet>
 <div style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background:#C9BEA8">
@@ -363,53 +368,65 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 
       <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="2">
         <div style="margin-top:clamp(64px,9vh,96px)">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
             <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 16px">
               <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em">{{ b.n }}</span>
               <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,76px);line-height:.85">{{ b.titleUp }}</h3>
               <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.62">{{ b.countLabel }}</span>
             </div>
-            <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
-              <div style="display:flex;gap:8px;flex:none">
-                <button onClick="{{ b.prev }}" aria-label="Anterior" style="width:40px;height:40px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s,color .3s,border-color .3s" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29">←</button>
-                <button onClick="{{ b.next }}" aria-label="Próximo" style="width:40px;height:40px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s,color .3s,border-color .3s" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29">→</button>
-              </div>
-            </sc-if>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ b.hint }}</span>
           </div>
-          <div ref="{{ b.trackRef }}" onScroll="{{ b.onScroll }}" style="display:flex;align-items:flex-start;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * clamp(24px,4vw,64px));padding:24px clamp(24px,4vw,64px) 8px;scroll-padding-inline:clamp(24px,4vw,64px)">
-            <sc-for list="{{ b.cards }}" as="p" hint-placeholder-count="3">
-              <article style="flex:0 0 {{ p.w }};scroll-snap-align:start;display:flex;flex-direction:column">
-                <div onMouseEnter="{{ p.onEnter }}" onMouseLeave="{{ p.onLeave }}" onClick="{{ p.onTap }}" style="position:relative;height:clamp(320px,28vw,440px);overflow:hidden;background:#292D29;cursor:pointer">
-                  <div style="position:absolute;inset:{{ p.inset }};overflow:hidden;background:#CFC4AC;transition:inset .7s cubic-bezier(.2,.7,0,1)">
-                    <div style="position:absolute;inset:0;transform:scale({{ p.imgScale }});transition:transform 1.2s cubic-bezier(.2,.7,0,1)">
+
+          <div ref="{{ b.stageRef }}" class="rstage" role="group" aria-roledescription="carrossel" aria-label="{{ b.aria }}" onPointerDown="{{ b.onDown }}" onPointerMove="{{ b.onMove }}" onPointerUp="{{ b.onUp }}" onPointerCancel="{{ b.onCancel }}" onMouseEnter="{{ b.onEnter }}" onMouseLeave="{{ b.onLeave }}" onFocus="{{ b.onEnter }}" onBlur="{{ b.onLeave }}" onKeyDown="{{ b.onKey }}" style="position:relative;height:{{ b.stageH }}px;margin:8px calc(-1 * clamp(24px,4vw,64px)) 0;perspective:1800px;overflow:clip;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none">
+            <div ref="{{ b.ringRef }}" style="position:absolute;left:50%;top:24px;width:0;height:{{ b.ch }}px;transform-style:preserve-3d;transform:{{ b.ringTf }};will-change:transform">
+              <sc-for list="{{ b.cards }}" as="p" hint-placeholder-count="4">
+                <div ref="{{ p.cardRef }}" onClick="{{ p.onCard }}" role="group" aria-label="{{ p.aria }}" style="position:absolute;left:-{{ b.hcw }}px;top:0;width:{{ b.cw }}px;height:{{ b.ch }}px;transform:{{ p.tf }};backface-visibility:hidden;-webkit-backface-visibility:hidden;cursor:pointer">
+                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:#292D29;border-radius:2px;box-shadow:0 1px 2px rgba(41,45,41,.1),0 28px 44px -26px rgba(30,32,28,.55)">
+                    <div style="position:relative;flex:none;height:{{ b.ph }}px;overflow:hidden;background:#CFC4AC">
                       <image-slot id="{{ p.slotId }}" shape="rect" placeholder="{{ p.placeholder }}"></image-slot>
-                    </div>
-                    <div style="position:absolute;left:0;top:0;display:flex;pointer-events:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#E3D8C2">
-                      <span style="padding:8px 12px;background:#292D29">{{ p.code }} · {{ p.modeLabel }}</span>
-                      
-                    </div>
-                    <button onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
-                        <span style="position:relative;display:block;width:12px;height:16px;background:{{ p.favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .3s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#3A3832;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ p.favInner }};transition:opacity .3s"></span></span>
+                      <div style="position:absolute;left:0;top:0;display:flex;pointer-events:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#E3D8C2">
+                        <span style="padding:8px 12px;background:#292D29">{{ p.code }} · {{ p.modeLabel }}</span>
+                      </div>
+                      <button class="rbtn" onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer">
+                        <span style="position:relative;display:block;width:12px;height:16px;background:{{ p.favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .15s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#3A3832;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ p.favInner }};transition:opacity .15s"></span></span>
                       </button>
-                  </div>
-                  <div style="position:absolute;left:16px;right:16px;bottom:0;height:64px;display:flex;align-items:center;justify-content:space-between;gap:8px;opacity:{{ p.ctaOp }};transform:translateY({{ p.ctaY }});pointer-events:{{ p.ctaPE }};transition:opacity .4s {{ p.ctaDelay }},transform .6s cubic-bezier(.2,.7,0,1) {{ p.ctaDelay }}">
-                    <button onClick="{{ p.onContact }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0;border:0;background:none;color:#EFE6D2;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap" style-hover="color:#FFFFFF"><span style="flex:none;width:8px;height:8px;border-radius:50%;background:#A64B36"></span>{{ p.contactLabel }}</button>
-                    <button onClick="{{ p.onOpen }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:0;border-radius:20px;background:#EFE6D2;color:#292D29;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;transition:background .3s" style-hover="background:#FFFFFF">Anúncio completo <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-                  </div>
-                </div>
-                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;padding-top:16px">
-                  <h4 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ p.bairroSize }};line-height:1;letter-spacing:.01em">{{ p.bairroUp }}</h4>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px 12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.72">
-                    <sc-for list="{{ p.specs }}" as="sp" hint-placeholder-count="4"><span style="white-space:nowrap">{{ sp }}</span></sc-for>
+                    </div>
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:12px 16px;color:#EFE6D2">
+                      <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:26px;line-height:1;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.bairroUp }}</span>
+                      <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:30px;line-height:1;letter-spacing:.01em">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px;letter-spacing:.06em">{{ p.per }}</span></span>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#C9BEA8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.specShort }}</span>
+                    </div>
                   </div>
                 </div>
-                <div style="margin-top:8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ p.priceSize }};line-height:1;letter-spacing:.01em">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px;letter-spacing:.06em">{{ p.per }}</span></div>
-                <p style="margin:8px 0 0;max-width:60ch;font-size:14px;line-height:1.5;opacity:.78;text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:{{ p.descLines }};-webkit-box-orient:vertical;overflow:hidden">{{ p.short }}</p>
-              </article>
-            </sc-for>
+              </sc-for>
+            </div>
           </div>
-          <div style="position:relative;height:2px;margin-top:24px;background:rgba(41,45,41,.12)">
-            <span ref="{{ b.progRef }}" style="position:absolute;left:0;top:0;bottom:0;width:100%;background:#292D29;transform-origin:left;transform:scaleX(.3);transition:transform .2s"></span>
+
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px 48px;margin-top:8px;padding-top:28px;border-top:1px solid rgba(41,45,41,.3)">
+            <div style="flex:1 1 340px;min-width:0;max-width:640px;display:flex;flex-direction:column;gap:12px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.72">{{ b.f.code }} · {{ b.f.modeLabel }} · {{ b.f.tipoUp }}</span>
+              <h4 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(36px,4vw,56px);line-height:.9;letter-spacing:.01em">{{ b.f.bairroUp }}</h4>
+              <span style="font-size:15px;font-weight:500">{{ b.f.rua }}</span>
+              <p style="margin:0;max-width:56ch;font-size:15px;line-height:1.55;opacity:.86;text-wrap:pretty">{{ b.f.desc }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase">
+                <sc-for list="{{ b.f.specs }}" as="sp" hint-placeholder-count="4"><span style="white-space:nowrap">{{ sp }}</span></sc-for>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ b.f.feats }}" as="ft" hint-placeholder-count="0"><span style="padding:4px 10px;border:1px solid rgba(41,45,41,.45);border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase">{{ ft }}</span></sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:20px;flex:0 1 auto">
+              <div style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(44px,5vw,72px);line-height:.9;letter-spacing:.01em">{{ b.f.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.06em">{{ b.f.per }}</span></div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px">
+                <button class="rbtn" onClick="{{ b.f.onOpen }}" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 22px;border:0;border-radius:24px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap" style-hover="background:#3B403B">Anúncio completo <span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
+                <button class="rbtn" onClick="{{ b.f.onContact }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0;border:0;background:none;color:#292D29;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap"><span style="flex:none;width:8px;height:8px;border-radius:50%;background:#A64B36" aria-hidden="true"></span>{{ b.f.contactLabel }}</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px">
+                <button class="rbtn" onClick="{{ b.prev }}" aria-label="Imóvel anterior" style="width:44px;height:44px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29"><span aria-hidden="true">←</span></button>
+                <span style="min-width:64px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em" aria-live="off">{{ b.f.counter }}</span>
+                <button class="rbtn" onClick="{{ b.next }}" aria-label="Próximo imóvel" style="width:44px;height:44px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29"><span aria-hidden="true">→</span></button>
+              </div>
+            </div>
           </div>
         </div>
       </sc-for>
@@ -617,14 +634,19 @@ class Component extends DCLogic {
   _feat = (() => { const seen = {}; this.D.data.forEach(d => { const k = d.tipo + d.mode; if (!seen[k]) { seen[k] = 1; d.featured = true; } }); })();
   el = {};
   letterEls = [];
-  trackEls = {};
-  progEls = {};
+  rings = {};
+  ringEls = {};
+  cardRefs = {};
   R = Object.fromEntries(['header', 'headerLine', 'stage', 'photo', 'scrim', 'concrete', 'titleWrap', 'title', 'sub', 'subRule', 'subText', 'heroMeta', 'searchCopy', 'searchFoot', 'endFade', 'dock', 'dockIn', 'glass', 'bar', 'panel', 'catalog', 'noiseA', 'noiseB', 'drawer', 'contact', 'saved', 'mnav'].map(k => [k, el => { this.el[k] = el; }]));
   letterRefs = Array.from({ length: 10 }, (_, i) => el => { this.letterEls[i] = el; });
-  catRefs = Object.fromEntries(['Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'].map(c => [c, {
-    track: el => { this.trackEls[c] = el; },
-    prog: el => { this.progEls[c] = el; },
-    onScroll: () => this.updProg(c),
+  ringRefs = Object.fromEntries(['Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'].map(c => [c, {
+    stage: el => this.ringStageRef(c, el),
+    ring: el => { (this.ringEls[c] = this.ringEls[c] || {}).ring = el; },
+    onDown: e => this.ringDown(c, e), onMove: e => this.ringMove(c, e),
+    onUp: e => this.ringUp(c, e, true), onCancel: e => this.ringUp(c, e, false),
+    onEnter: () => { const r = this.rings[c]; if (r) r.hover = true; },
+    onLeave: () => { const r = this.rings[c]; if (r) r.hover = false; },
+    onKey: e => { if (e.key === 'ArrowLeft') { e.preventDefault(); this.slide(c, -1, true); } else if (e.key === 'ArrowRight') { e.preventDefault(); this.slide(c, 1, true); } },
     prev: () => this.slide(c, -1),
     next: () => this.slide(c, 1)
   }]));
@@ -633,7 +655,7 @@ class Component extends DCLogic {
     areaMin: '', areaMax: '', dorms: null, vagas: null, condo: null, feats: [], sort: 0,
     isMobile: typeof window !== 'undefined' && window.innerWidth < 760,
     narrow: typeof window !== 'undefined' && window.innerWidth < 1100,
-    hoverNav: null, hoverCard: null, hoverBtn: false, hoverPill: false, mobileMenu: false,
+    hoverNav: null, hoverCard: null, ringFocus: {}, hoverBtn: false, hoverPill: false, mobileMenu: false,
     drawer: null, drawerOpen: false, photo: 0,
     favs: (() => { try { return JSON.parse(localStorage.getItem('csp-favs')) || []; } catch (e) { return []; } })(), cName: '', cInfo: '', cMsg: '', sent: false
   };
@@ -666,6 +688,22 @@ class Component extends DCLogic {
     this.onDown = e => { if (this.state.menu && this.el.glass && !this.el.glass.contains(e.target)) this.setState({ menu: null }); };
     this.onKey = e => { if (e.key === 'Escape') this.setState({ drawerOpen: false, menu: null }); };
     addEventListener('scroll', this.onScroll, { passive: true });
+    this._ry = scrollY;
+    this.onRingScroll = () => {
+      const d = scrollY - this._ry; this._ry = scrollY;
+      if (!d || this.reduce) return;
+      const now = performance.now();
+      Object.values(this.rings).forEach(r => {
+        if (!r.visible || r.n < 2 || r.drag) return;
+        const b = this.ringBounds(r), v = r.rot - d * 0.07;
+        r.rot = b ? Math.max(b[0], Math.min(b[1], v)) : v;
+        r.target = null; r.nextAt = now + 7000; r.snapAt = now + 650;
+      });
+    };
+    addEventListener('scroll', this.onRingScroll, { passive: true });
+    this._rloop = t => this.ringLoop(t);
+    this._rraf = requestAnimationFrame(this._rloop);
+    this.ringApplyAll(false);
     ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, () => { this.userScrolled = true; }, { passive: true, once: true }));
     addEventListener('resize', this.onResize);
     addEventListener('keydown', this.onKey);
@@ -680,6 +718,9 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     removeEventListener('scroll', this.onScroll);
+    removeEventListener('scroll', this.onRingScroll);
+    cancelAnimationFrame(this._rraf);
+    if (this.io) this.io.disconnect();
     removeEventListener('resize', this.onResize);
     removeEventListener('keydown', this.onKey);
     document.removeEventListener('pointerdown', this.onDown);
@@ -700,13 +741,10 @@ class Component extends DCLogic {
     const st = this.state;
     const sig = [st.mode, st.tipo, st.local, st.preco, st.areaMin, st.areaMax, st.dorms, st.vagas, st.condo, st.feats.join(), st.sort].join('|');
     if (this._sig && sig !== this._sig && !this.reduce) {
-      Object.values(this.trackEls).forEach(t => t && t.isConnected && [...t.children].forEach((el, i) => el.animate && el.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 560, delay: Math.min(i, 6) * 45, easing: 'cubic-bezier(.2,.7,0,1)', fill: 'backwards' })));
+      Object.values(this.ringEls).forEach(o => o && o.stage && o.stage.isConnected && o.stage.animate && o.stage.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.23,1,.32,1)' }));
     }
     this._sig = sig;
     this.tick();
-    if (ps.mode !== this.state.mode || ps.sort !== this.state.sort || ps.tipo !== this.state.tipo) {
-      Object.values(this.trackEls).forEach(t => t && t.isConnected && (t.scrollLeft = 0));
-    }
     this.allProg();
   }
 
@@ -745,17 +783,120 @@ class Component extends DCLogic {
     t.style.fontSize = fs + 'px';
   }
 
-  updProg(c) {
-    const t = this.trackEls[c], pg = this.progEls[c];
-    if (!t || !pg || !t.isConnected) return;
-    const r = t.scrollWidth <= t.clientWidth + 2 ? 1 : (t.scrollLeft + t.clientWidth) / t.scrollWidth;
-    pg.style.transform = `scaleX(${r})`;
+  // ---- Carrossel 3D circular (um por tipo de imóvel) ----
+  ringStageRef(c, el) {
+    const o = (this.ringEls[c] = this.ringEls[c] || {});
+    if (o.stage === el) return;
+    if (this.io && o.stage) this.io.unobserve(o.stage);
+    o.stage = el;
+    if (!el) return;
+    el.dataset.ring = c; el.tabIndex = 0;
+    if (!this.io && typeof IntersectionObserver !== 'undefined') this.io = new IntersectionObserver(es => es.forEach(en => { const r = this.rings[en.target.dataset.ring]; if (r) r.visible = en.isIntersecting; }), { rootMargin: '120px' });
+    if (this.io) this.io.observe(el); else { const r = this.rings[c]; if (r) r.visible = true; }
   }
-  allProg() { Object.keys(this.trackEls).forEach(c => this.updProg(c)); }
-  slide(c, dir) {
-    const t = this.trackEls[c]; if (!t) return;
-    const card = t.firstElementChild;
-    t.scrollBy({ left: dir * ((card ? card.offsetWidth : 360) + 28), behavior: this.reduce ? 'auto' : 'smooth' });
+  cardRef(c, i) {
+    const m = (this.cardRefs[c] = this.cardRefs[c] || []);
+    return m[i] || (m[i] = el => { const o = (this.ringEls[c] = this.ringEls[c] || {}); (o.cards = o.cards || [])[i] = el; });
+  }
+  ringState(c, n) {
+    let r = this.rings[c];
+    if (!r) r = this.rings[c] = { rot: 0, target: null, drag: null, hover: false, visible: false, snapAt: 0, suppress: false, n: -1, focus: 0, rate: 8, adv: 1, nextAt: 0, R: 500 };
+    r.wrap = n >= 8;
+    r.step = r.wrap ? 360 / n : 38;
+    if (r.n !== n) { const f0 = r.wrap ? 0 : Math.floor((n - 1) / 2); r.n = n; r.rot = -f0 * r.step; r.target = null; r.focus = f0; r.adv = 1; r.nextAt = 0; }
+    return r;
+  }
+  ringBounds(r) { return r.wrap ? null : [-(r.n - 1) * r.step, 0]; }
+  snapTo(r, v) { const b = this.ringBounds(r), t = Math.round(v / r.step) * r.step; return b ? Math.max(b[0], Math.min(b[1], t)) : t; }
+  ringAng(r, i) { let a = (i * r.step + r.rot) % 360; if (a > 180) a -= 360; if (a < -180) a += 360; return a; }
+  ringApply(c, detect) {
+    const r = this.rings[c], o = this.ringEls[c];
+    if (!r || !o || !o.ring || !o.cards) return;
+    o.ring.style.transform = `translateZ(${-r.R}px) rotateY(${r.rot}deg)`;
+    let best = 0, bd = 1e9;
+    for (let i = 0; i < r.n; i++) {
+      const el = o.cards[i]; if (!el) continue;
+      const ab = Math.abs(this.ringAng(r, i));
+      el.style.opacity = String(Math.max(0.28, 1 - ab / 95));
+      el.style.pointerEvents = ab < 80 ? 'auto' : 'none';
+      if (ab < bd) { bd = ab; best = i; }
+    }
+    o.cards.forEach((el, i) => { const b = el && el.querySelector('button'); if (b) b.tabIndex = i === best ? 0 : -1; });
+    if (detect && best !== r.focus) { r.focus = best; this.setState(st => ({ ringFocus: Object.assign({}, st.ringFocus, { [c]: best }) })); }
+  }
+  ringApplyAll(detect) { Object.keys(this.rings).forEach(c => this.ringApply(c, detect)); }
+  ringStep(c, now, dt) {
+    const r = this.rings[c], o = this.ringEls[c];
+    if (!r || !o || !o.stage || !o.stage.isConnected) return;
+    if (r.n > 1 && !r.drag) {
+      if (r.snapAt && now > r.snapAt) { r.snapAt = 0; r.target = this.snapTo(r, r.rot); }
+      if (r.target != null) {
+        r.rot += (r.target - r.rot) * (1 - Math.exp(-dt * r.rate));
+        if (Math.abs(r.target - r.rot) < 0.04) { r.rot = r.target; r.target = null; }
+      } else if (r.visible && !this.reduce) {
+        if (!r.nextAt) r.nextAt = now + 3500;
+        if (r.hover) r.nextAt = Math.max(r.nextAt, now + 3000);
+        else if (now > r.nextAt) {
+          r.nextAt = now + 5500;
+          const i0 = Math.round(-r.rot / r.step);
+          if (r.wrap) this.ringGo(r, r.rot - r.step, 5, true);
+          else { let ni = i0 + r.adv; if (ni > r.n - 1 || ni < 0) { r.adv = -r.adv; ni = i0 + r.adv; } this.ringGo(r, -ni * r.step, 5, true); }
+        }
+      }
+    }
+    if (r.visible || r.dirty) { this.ringApply(c, true); r.dirty = false; }
+  }
+  ringLoop(now) {
+    const dt = Math.min(0.05, (now - (this._rl || now)) / 1000); this._rl = now;
+    Object.keys(this.rings).forEach(c => this.ringStep(c, now, dt));
+    this._rraf = requestAnimationFrame(this._rloop);
+  }
+  ringGo(r, t, rate, auto) {
+    r.rate = rate || 8; r.snapAt = 0; if (!auto) r.nextAt = performance.now() + 7000;
+    if (this.reduce) { r.rot = t; r.target = null; r.dirty = true; } else r.target = t;
+  }
+  allProg() { this.ringApplyAll(false); }
+  slide(c, dir, key) {
+    const r = this.rings[c]; if (!r || r.n < 2) return;
+    const base = r.target != null ? r.target : this.snapTo(r, r.rot);
+    let t;
+    if (r.wrap) t = base - dir * r.step;
+    else { let i = Math.round(-base / r.step) + dir; if (i > r.n - 1) i = 0; if (i < 0) i = r.n - 1; t = -i * r.step; }
+    this.ringGo(r, t, key ? 14 : 8);
+  }
+  ringCard(c, i, d) {
+    const r = this.rings[c]; if (!r || r.suppress) return;
+    if (i === r.focus && Math.abs(this.ringAng(r, i)) < r.step / 2 + 1) { location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; return; }
+    let t = -i * r.step;
+    if (r.wrap) t += 360 * Math.round((r.rot - t) / 360);
+    this.ringGo(r, t, 8);
+  }
+  ringDown(c, e) {
+    const r = this.rings[c]; if (!r || r.n < 2) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    r.drag = { x: e.clientX, rot: r.rot, lx: e.clientX, lt: e.timeStamp, v: 0, moved: false, id: e.pointerId };
+    r.target = null; r.snapAt = 0;
+  }
+  ringMove(c, e) {
+    const r = this.rings[c], d = r && r.drag; if (!d || e.pointerId !== d.id) return;
+    const dx = e.clientX - d.x;
+    if (!d.moved) { if (Math.abs(dx) < 6) return; d.moved = true; try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {} }
+    let v = d.rot + dx * 0.28;
+    const b = this.ringBounds(r);
+    if (b) v = v > b[1] ? b[1] + (v - b[1]) * 0.3 : v < b[0] ? b[0] + (v - b[0]) * 0.3 : v;
+    r.rot = v;
+    const dt = (e.timeStamp - d.lt) / 1000;
+    if (dt > 0) d.v = d.v * 0.6 + (((e.clientX - d.lx) * 0.28) / dt) * 0.4;
+    d.lx = e.clientX; d.lt = e.timeStamp;
+    r.nextAt = performance.now() + 7000;
+  }
+  ringUp(c, e, inertia) {
+    const r = this.rings[c], d = r && r.drag; if (!d || e.pointerId !== d.id) return;
+    r.drag = null;
+    if (!d.moved) return;
+    r.suppress = true; setTimeout(() => { r.suppress = false; }, 60);
+    const v = e.timeStamp - d.lt > 80 ? 0 : d.v;
+    this.ringGo(r, this.snapTo(r, r.rot + (inertia ? v * 0.22 : 0)), 8);
   }
 
   targets() {
@@ -987,27 +1128,28 @@ class Component extends DCLogic {
     const rel = s.sort === 0;
     const blocks = D.cats.map((cat, ci) => {
       const items = list.filter(d => d.tipo === cat);
-      const r = this.catRefs[cat];
+      const n = items.length, rf = this.ringRefs[cat], r = this.ringState(cat, n);
+      const cw = mob ? 250 : 300, ph = mob ? 210 : 260, ih = mob ? 142 : 150, ch = ph + ih;
+      const R = r.wrap ? Math.max(360, Math.round(n * (cw + 40) / (2 * Math.PI))) : Math.round(cw * 1.75);
+      r.R = R;
+      const fi = Math.min(r.focus, Math.max(n - 1, 0)), fd = items[fi];
+      const f = fd ? Object.assign(base(fd), {
+        tipoUp: fd.tipo.toUpperCase(), desc: fd.desc, feats: fd.feats,
+        contactLabel: 'Falar com corretor', onContact: () => this.openDrawer(fd.code, true),
+        counter: String(fi + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0')
+      }) : {};
       return {
-        n: '0' + (ci + 1), titleUp: cat.toUpperCase(), countLabel: `${items.length} ${items.length === 1 ? 'IMÓVEL' : 'IMÓVEIS'}`,
-        trackRef: r.track, progRef: r.prog, onScroll: r.onScroll, prev: r.prev, next: r.next,
-        cards: items.map(d => {
-          const hov = s.hoverCard === d.code, big = true;
-          return Object.assign(base(d), {
-            isFeatured: big,
-            w: mob ? 'calc(100vw - 80px)' : big ? 'clamp(480px,44vw,760px)' : 'clamp(300px,26vw,420px)',
-            bairroSize: big && !mob ? '28px' : '22px', priceSize: big && !mob ? '44px' : '32px',
-            descLines: big ? 3 : 2, short: cut(d.desc, big && !mob ? 230 : 118),
-            contactLabel: 'Falar com corretor',
-            inset: hov ? '16px 16px 64px 16px' : '0px 0px 0px 0px', imgScale: hov ? 1.06 : 1,
-            ctaOp: hov ? 1 : 0, ctaY: hov ? '0px' : '16px', ctaPE: hov ? 'auto' : 'none', ctaDelay: hov ? '.18s' : '0s',
-            onEnter: () => { if (!mob) this.setState({ hoverCard: d.code }); },
-            onLeave: () => { if (!mob) this.setState({ hoverCard: null }); },
-            onTap: () => { if (mob) this.setState(st => ({ hoverCard: st.hoverCard === d.code ? null : d.code })); else location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; },
-            onContact: e => { e.stopPropagation(); this.openDrawer(d.code, true); },
-            onOpen: e => { e.stopPropagation(); location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; }
-          });
-        })
+        n: '0' + (ci + 1), titleUp: cat.toUpperCase(), countLabel: `${n} ${n === 1 ? 'IMÓVEL' : 'IMÓVEIS'}`,
+        hint: n > 1 ? (mob ? 'ARRASTE PARA GIRAR' : 'ARRASTE, ROLE OU USE AS SETAS') : '', aria: `Carrossel de imóveis: ${cat}`,
+        stageRef: rf.stage, ringRef: rf.ring, onDown: rf.onDown, onMove: rf.onMove, onUp: rf.onUp, onCancel: rf.onCancel, onEnter: rf.onEnter, onLeave: rf.onLeave, onKey: rf.onKey,
+        prev: rf.prev, next: rf.next,
+        stageH: ch + 48, cw, hcw: cw / 2, ch, ph, ringTf: `translateZ(-${R}px)`, f,
+        cards: items.map((d, i) => Object.assign(base(d), {
+          cardRef: this.cardRef(cat, i), tf: `rotateY(${(i * r.step).toFixed(3)}deg) translateZ(${R}px)`,
+          aria: `${d.tipo} em ${d.bairro}, R$ ${fmt(d.price)}${d.mode === 'alugar' ? ' por mês' : ''}`,
+          specShort: [`${d.area} m²`, d.dorms ? `${d.dorms} dorm.` : null, d.vagas ? `${d.vagas} ${d.vagas > 1 ? 'vagas' : 'vaga'}` : 'Sem vaga'].filter(Boolean).join(' · '),
+          onCard: () => this.ringCard(cat, i, d)
+        }))
       };
     }).filter(b => b.cards.length);
     const saved = s.favs.map(c => D.data.find(d => d.code === c)).filter(Boolean).map(base);
