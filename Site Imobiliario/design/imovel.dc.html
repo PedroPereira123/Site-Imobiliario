@@ -14,6 +14,18 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <script src="./image-slot.js"></script>
 <style>
+.iso{position:absolute;inset:0;container-type:size;perspective:1600px;background:radial-gradient(ellipse at 50% 45%,#E3D8C2 0%,#D3C8AF 70%,#C6BBA2 100%);overflow:hidden}
+.isop{position:absolute;left:50%;top:52%;width:74cqmin;height:74cqmin;margin:-37cqmin 0 0 -37cqmin;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(-38deg);background:#CDC1A7;background-image:linear-gradient(90deg,transparent 0 15.2%,#EFE7D4 15.2% 19%,transparent 19% 31.2%,#EFE7D4 31.2% 35%,transparent 35% 64.2%,#EFE7D4 64.2% 68%,transparent 68% 81.2%,#EFE7D4 81.2% 85%,transparent 85%),linear-gradient(0deg,transparent 0 15.2%,#EFE7D4 15.2% 19%,transparent 19% 31.2%,#EFE7D4 31.2% 35%,transparent 35% 64.2%,#EFE7D4 64.2% 68%,transparent 68% 81.2%,#EFE7D4 81.2% 85%,transparent 85%);box-shadow:0 30px 60px -20px rgba(41,45,41,.35)}
+.pin{position:absolute;left:calc(var(--sz,44px) / -2);bottom:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;border:0;background:none;color:#292D29;cursor:pointer;transform-origin:50% 100%;transform:rotateZ(38deg) rotateX(-58deg);transition:transform 220ms cubic-bezier(.23,1,.32,1)}
+.pinc{display:flex;align-items:center;justify-content:center;width:var(--sz,44px);height:var(--sz,44px);border-radius:50%;background:#EFE6D2;box-shadow:0 0 0 3px #292D29,0 8px 16px -4px rgba(41,45,41,.45);overflow:hidden;position:relative}
+.pin::after{content:'';width:2px;height:12px;background:#292D29;order:3}
+.pinh{--sz:68px;left:-34px}
+.pinp{box-shadow:0 0 0 4px #A64B36,0 10px 20px -4px rgba(41,45,41,.5)}
+.pinl{order:2;position:absolute;bottom:calc(100% + 8px);padding:5px 9px;border-radius:6px;background:#292D29;color:#EFE6D2;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;white-space:nowrap;opacity:0;transform:translateY(4px);transition:opacity 180ms,transform 180ms;pointer-events:none}
+@media (hover:hover) and (pointer:fine){.pin:hover{transform:rotateZ(38deg) rotateX(-58deg) scale(1.12)}.pin:hover .pinl{opacity:1;transform:none}}
+.pin:focus-visible .pinl{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.pin{transition:none}}
+:focus-visible{outline:2px solid #A64B36;outline-offset:3px}
 html,body{margin:0;background:#C9BEA8;color:#292D29;-webkit-font-smoothing:antialiased}
 *{box-sizing:border-box}
 a{color:#292D29;text-decoration:none}
@@ -101,7 +113,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
             <h1 ref="{{ R.heroTitle }}" style="margin:0;max-width:15ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,7.2vw,124px);line-height:.86;letter-spacing:.005em;text-wrap:balance">{{ p.titleUp }}</h1>
           </div>
           <div ref="{{ R.heroMeta }}" style="margin-top:24px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">
-            <span>{{ p.bairroUp }}</span><span style="opacity:.7">{{ p.tipoUp }}</span><span style="opacity:.7">{{ p.finUp }}</span>
+            <span>{{ p.bairroUp }}</span><span style="opacity:.7">{{ p.tipoUp }}</span><span style="opacity:.7">{{ p.finUp }}</span><span>{{ heroFacts }}</span>
           </div>
         </div>
         <div ref="{{ R.heroCta }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:16px;pointer-events:auto">
@@ -134,7 +146,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
             <h1 ref="{{ R.heroTitle }}" style="margin:0;max-width:15ch;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(44px,6.4vw,112px);line-height:.86;letter-spacing:.005em;text-wrap:balance">{{ p.titleUp }}</h1>
           </div>
           <div ref="{{ R.heroMeta }}" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em">
-            <span>{{ p.bairroUp }}</span><span style="opacity:.65">{{ p.tipoUp }}</span><span style="opacity:.65">{{ p.finUp }}</span>
+            <span>{{ p.bairroUp }}</span><span style="opacity:.65">{{ p.tipoUp }}</span><span style="opacity:.65">{{ p.finUp }}</span><span>{{ heroFacts }}</span>
           </div>
         </div>
         <div ref="{{ R.heroCta }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:16px">
@@ -241,7 +253,25 @@ input::placeholder{color:rgba(41,45,41,.45)}
             <sc-for list="{{ caps }}" as="c" hint-placeholder-count="5">
               <div class="sch" ref="{{ c.phRef }}" style="position:absolute;inset:0;overflow:hidden;background:#B9AE97">
                 <sc-if value="{{ c.isMap }}" hint-placeholder-val="{{ false }}">
-                  <iframe src="{{ mapSrc }}" title="Mapa da localização aproximada" loading="lazy" style="display:block;width:100%;height:100%;border:0"></iframe>
+                  <div class="iso" role="group" aria-label="Mapa isométrico da região do imóvel">
+                    <div class="isop">
+                      <sc-for list="{{ iso.blocks }}" as="b" hint-placeholder-count="12"><span style="position:absolute;left:{{ b.x }}%;top:{{ b.y }}%;width:{{ b.w }}%;height:{{ b.h }}%;background:{{ b.bg }};box-shadow:{{ b.sh }}"></span></sc-for>
+                      <sc-for list="{{ iso.pins }}" as="n" hint-placeholder-count="5">
+                        <div style="position:absolute;left:{{ n.x }}%;top:{{ n.y }}%;width:0;height:0;transform-style:preserve-3d">
+                          <button class="pin" aria-label="{{ n.label }}" style="--sz:{{ n.sz }}px">
+                            <span class="pinc"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600">{{ n.g }}</span></span>
+                            <span class="pinl">{{ n.label }}</span>
+                          </button>
+                        </div>
+                      </sc-for>
+                      <div style="position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d">
+                        <div class="pin pinh">
+                          <span class="pinc pinp"><image-slot id="{{ iso.slot }}" shape="rect" placeholder="Foto do imóvel"></image-slot></span>
+                          <span class="pinl" style="opacity:1;transform:none">{{ p.code }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <span style="position:absolute;left:12px;top:12px;padding:8px 12px;border-radius:8px;background:rgba(227,216,194,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;pointer-events:none">ÁREA APROXIMADA — RAIO DE {{ locR }} M</span>
                 </sc-if>
                 <sc-if value="{{ c.isPhoto }}" hint-placeholder-val="{{ true }}">
@@ -263,14 +293,14 @@ input::placeholder{color:rgba(41,45,41,.45)}
 
   <section ref="{{ R.fin }}" data-screen-label="03 Valores" style="position:relative;padding:clamp(72px,12vh,140px) clamp(24px,4vw,64px) clamp(56px,8vh,96px)">
     <div style="max-width:1680px;margin:0 auto">
-      <div ref="{{ rv }}" style="padding-top:16px;border-top:2px solid #292D29">
+      <div style="padding-top:16px;border-top:2px solid #292D29">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em">03 — VALORES</div>
         <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(56px,9vw,150px);line-height:.84">GOSTOU?</h2>
         <p style="margin:24px 0 0;max-width:52ch;font-size:clamp(16px,1.3vw,19px);line-height:1.55;text-wrap:pretty">{{ val.hook }}</p>
       </div>
       <div ref="{{ R.closing }}" style="display:grid;grid-template-columns:{{ val.cols }};gap:16px;align-items:stretch;margin-top:clamp(32px,5vh,56px)">
         <sc-for list="{{ val.cards }}" as="v" hint-placeholder-count="3">
-          <article ref="{{ rv }}" class="vcard" style="order:{{ v.order }};display:flex;flex-direction:column;padding:clamp(22px,2.2vw,32px);border-radius:14px;background:{{ v.bg }};color:{{ v.fg }};box-shadow:{{ v.shadow }}">
+          <article class="vcard" style="order:{{ v.order }};display:flex;flex-direction:column;padding:clamp(22px,2.2vw,32px);border-radius:14px;background:{{ v.bg }};color:{{ v.fg }};box-shadow:{{ v.shadow }}">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:28px">
               <h3 style="margin:0;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:11px;letter-spacing:.24em">{{ v.nameUp }}</h3>
               <sc-if value="{{ v.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="padding:5px 10px;border-radius:999px;background:#A64B36;color:#F4EDE0;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em">{{ v.badge }}</span></sc-if>
@@ -293,7 +323,8 @@ input::placeholder{color:rgba(41,45,41,.45)}
               </div>
             </sc-if>
             <sc-if value="{{ v.cta }}" hint-placeholder-val="{{ false }}">
-              <div style="margin-top:auto;padding-top:28px;display:flex;flex-wrap:wrap;gap:8px">
+              <div style="margin-top:auto;padding-top:28px"><dc-import name="Corretor" tom="escuro" compacto="{{ true }}" hint-size="100%,92px"></dc-import></div>
+              <div style="padding-top:12px;display:flex;flex-wrap:wrap;gap:8px">
                 <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
                 <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(239,230,210,.14);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">WhatsApp</a>
               </div>
@@ -306,12 +337,13 @@ input::placeholder{color:rgba(41,45,41,.45)}
         <span>REF. {{ p.code }} · CAPITAL SP IMÓVEIS · CRECI 00000-J (EXEMPLO)</span>
         <a href="{{ backHref }}" style="display:flex;align-items:center;height:40px;color:#292D29">← VOLTAR AOS RESULTADOS</a>
       </div>
+      <p style="margin:16px 0 0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;line-height:1.8;opacity:.62">FOTOS: <sc-for list="{{ credits }}" as="cr" hint-placeholder-count="3"><a href="{{ cr.h }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px">{{ cr.t }}</a>{{ cr.sep }}</sc-for> · WIKIMEDIA COMMONS</p>
     </div>
   </section>
 
   <sc-if value="{{ hasRec }}" hint-placeholder-val="{{ true }}">
     <section data-screen-label="09 Recomendações" style="background:linear-gradient(180deg,rgba(41,45,41,0) 0,rgba(41,45,41,0) calc(100% - 200px),#292D29 100%);padding:clamp(72px,10vh,120px) clamp(24px,4vw,64px) clamp(160px,22vh,220px)">
-      <div ref="{{ rv }}" style="max-width:1680px;margin:0 auto">
+      <div style="max-width:1680px;margin:0 auto">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
           <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(28px,3vw,44px);line-height:.9">{{ recTitle }}</h3>
           <a href="{{ backHref }}" style="display:flex;align-items:center;height:40px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">TODOS OS RESULTADOS →</a>
@@ -344,6 +376,9 @@ input::placeholder{color:rgba(41,45,41,.45)}
 
   <div style="position:fixed;left:50%;bottom:{{ dockBottom }};z-index:60;width:{{ dockW }};max-width:calc(100vw - 16px);transform:translate(-50%,{{ dockY }});opacity:{{ dockOp }};pointer-events:{{ dockPE }};transition:transform .45s cubic-bezier(.2,.7,0,1),opacity .3s">
     <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:16px;background:rgba(236,228,210,.74);backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);border:1px solid rgba(255,252,242,.6);box-shadow:0 1px 2px rgba(41,45,41,.06),0 24px 56px -28px rgba(30,32,28,.45)">
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:none;display:flex;align-items:center;gap:16px;padding:0 4px 0 8px"><div style="width:300px"><dc-import name="Corretor" linha="{{ true }}" hint-size="300px,48px"></dc-import></div><span style="width:1px;height:36px;background:rgba(41,45,41,.16)"></span></div>
+      </sc-if>
       <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:4px;padding:0 16px 0 8px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;opacity:.62;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.code }} · {{ p.bairroUp }}</span>
         <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:24px;line-height:1;white-space:nowrap">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px">{{ p.per }}</span></span>
@@ -373,6 +408,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
         </div>
         <button onClick="{{ closeVisita }}" style="height:40px;padding:0;border:0;background:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">FECHAR ×</button>
       </div>
+      <div style="margin-top:20px"><dc-import name="Corretor" tom="claro" compacto="{{ true }}" hint-size="100%,92px"></dc-import></div>
       <sc-if value="{{ vNotSent }}" hint-placeholder-val="{{ true }}">
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:24px">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">DIA</span>
@@ -586,8 +622,7 @@ class Component extends DCLogic {
       if (f) {
         if (el.getAttribute('src') !== f.s) {
           el.setAttribute('src', f.s); el.dataset.auto = '1';
-          if (el.closest('button')) { el.removeAttribute('credit'); el.removeAttribute('credit-href'); }
-          else { el.setAttribute('credit', f.c); el.setAttribute('credit-href', f.h); }
+          el.removeAttribute('credit'); el.removeAttribute('credit-href');
         }
       } else if (el.dataset.auto) { el.removeAttribute('src'); el.removeAttribute('credit'); el.removeAttribute('credit-href'); delete el.dataset.auto; }
     });
@@ -740,7 +775,8 @@ class Component extends DCLogic {
     const scrolled = box.getBoundingClientRect().bottom < 72;
     const hb = hero.getBoundingClientRect().bottom;
     const c = this.el.closing ? this.el.closing.getBoundingClientRect() : { top: 1e9, bottom: 1e9 };
-    const dockShow = hb < vh * 0.3 && !(c.top < vh * 0.6 && c.bottom > 0);
+    const sr = this.el.story ? this.el.story.getBoundingClientRect() : { top: 1e9, bottom: 1e9 };
+    const dockShow = hb < vh * 0.3 && !(c.top < vh * 0.6 && c.bottom > 0) && !(sr.top < vh * 0.5 && sr.bottom > vh * 0.5);
     if (scrolled !== this.state.scrolled || dockShow !== this.state.dockShow) this.setState({ scrolled, dockShow });
   }
   openLb(i, e) {
@@ -821,6 +857,25 @@ class Component extends DCLogic {
     const rec0 = this.RAW.filter(r => r[0] !== p.code && r[1] === p.mode && r[2] === p.tipo);
     const recRaw = rec0.length >= 3 ? rec0.slice(0, 3) : rec0.concat(this.RAW.filter(r => r[0] !== p.code && r[1] === p.mode && r[2] !== p.tipo)).slice(0, 3);
     const tipoPl = { 'Casa térrea': 'CASAS TÉRREAS', 'Sobrado': 'SOBRADOS', 'Apartamento': 'APARTAMENTOS', 'Comercial': 'IMÓVEIS COMERCIAIS' }[p.tipo] || 'IMÓVEIS';
+    const seen = new Set(), cl0 = [];
+    Object.values(this.FOTOS).forEach(f => { if (!seen.has(f.c)) { seen.add(f.c); cl0.push({ t: f.c.replace(/^Foto: /, '').replace(/ · Wikimedia Commons$/, '').toUpperCase(), h: f.h }); } });
+    const credits = cl0.map((c, i) => Object.assign(c, { sep: i < cl0.length - 1 ? ' ·' : '' }));
+    const heroFacts = [`${p.area} M²`, p.dorms ? `${p.dorms} DORM.` : null, p.vagas ? `${p.vagas} ${p.vagas > 1 ? 'VAGAS' : 'VAGA'}` : null].filter(Boolean).join(' · ');
+    const hsh = n => { let h = n * 2654435761 % 4294967296; return (h >>> 7) / 33554432; };
+    const iso = (() => {
+      const cuts = [[0, 15], [19, 31], [35, 64], [68, 81], [85, 100]], blocks = [];
+      cuts.forEach((cy, j) => cuts.forEach((cx, i) => {
+        const mid = i === 2 && j === 2, r = hsh(i * 7 + j * 13 + 3), d = mid ? 16 : 3 + Math.round(r * 9);
+        const tone = mid ? '#B98A73' : ['#DACFB7', '#D4C8AE', '#E0D6C0'][Math.floor(r * 3)];
+        const edge = mid ? '#8F3F2D' : '#B9AE97';
+        const sh = Array.from({ length: d }, (_, k) => `${k + 1}px ${k + 1}px 0 ${edge}`).join(',');
+        blocks.push({ x: cx[0] + 1.2, y: cy[0] + 1.2, w: cx[1] - cx[0] - 2.4, h: cy[1] - cy[0] - 2.4, bg: tone, sh });
+      }));
+      const slots = [[17, 17], [83, 15], [84, 60], [16, 80], [60, 84]];
+      const gl = t => /TRANSP|METR|ESTA|ÔNIB/i.test(t) ? 'M' : /COM|LOJA|MERC/i.test(t) ? 'C' : /LAZ|PARQ|PRA/i.test(t) ? 'L' : 'P';
+      const pins = ((p.loc && p.loc.pois) || []).slice(0, 5).map((o, i) => ({ x: slots[i][0], y: slots[i][1], sz: 40, g: gl(o.t), label: `${o.t}: ${o.n}` }));
+      return { blocks, pins, slot: sid(0) + '~pin' };
+    })();
     // ---- História por ambientes ----
     const listPt = arr => arr.length <= 1 ? (arr[0] || '') : arr.slice(0, -1).join(', ') + ' e ' + arr[arr.length - 1];
     const svg = body => `url('data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + body + '</svg>')}') center / contain no-repeat`;
@@ -908,7 +963,7 @@ class Component extends DCLogic {
         paras: p.paras || [p.desc]
       },
       backHref, waHref: wa(waMsg), waMsg,
-      caps, facts, rail, story, val,
+      caps, facts, rail, story, val, credits, heroFacts, iso,
       hdrPill: s.scrolled ? 'rgba(41,45,41,.07)' : 'rgba(239,230,210,.16)', hdrPillBd: s.scrolled ? 'rgba(41,45,41,.24)' : 'rgba(239,230,210,.4)',
       hdrColor: s.scrolled ? '#292D29' : (adjacent && !s.scrolled ? '#EFE6D2' : '#EFE6D2'),
       hdrBg: s.scrolled ? 'rgba(220,209,186,.86)' : 'rgba(220,209,186,0)', hdrBlur: s.scrolled ? 'blur(14px)' : 'none',

@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
 <style>
+:focus-visible{outline:2px solid #A64B36;outline-offset:3px}
 body{margin:0;background:#C9BEA8}
 .cad{--ease-out:cubic-bezier(.23,1,.32,1);--ease-in-out:cubic-bezier(.77,0,.175,1);container-type:inline-size;container-name:cad;position:relative;min-height:100vh;font-family:Inter,sans-serif;color:#292D29;background:#C9BEA8;-webkit-font-smoothing:antialiased}
 .cad *{box-sizing:border-box}
@@ -60,6 +61,8 @@ body{margin:0;background:#C9BEA8}
 .paper{background:#FFFFFF;box-shadow:0 1px 2px rgba(41,45,41,.08),0 24px 48px -28px rgba(30,32,28,.5);padding:40px;max-width:760px;width:100%;margin:0 auto;font-size:12px;line-height:1.5}
 .paper .kv{font-size:12px;padding:5px 0;grid-template-columns:1fr 1.6fr}
 .dock{position:sticky;bottom:16px;z-index:6;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:8px;border-radius:12px;background:rgba(238,230,212,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,252,242,.7);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 44px -20px rgba(30,32,28,.45)}
+@keyframes dockin{from{opacity:0;pointer-events:none}to{opacity:1;pointer-events:auto}}
+@supports (animation-timeline:scroll()){.dock{animation:dockin linear both;animation-timeline:scroll(root);animation-range:140px 360px}}
 .rev{animation:rev 260ms var(--ease-out) both}
 @keyframes rev{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .pin{animation:pin 320ms var(--ease-out) both}
@@ -73,6 +76,15 @@ body{margin:0;background:#C9BEA8}
 .dlg{animation:dlg 220ms var(--ease-out) both}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes dlg{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.chk{display:flex;align-items:center;gap:14px;width:100%;min-height:56px;padding:14px 18px;border:1px solid #292D29;border-radius:6px;background:#FBF8F1;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 150ms ease}
+.chk:active{transform:scale(.99)}
+.chkb{flex:none;display:flex;align-items:center;justify-content:center;width:24px;height:24px;border:1.5px solid #292D29;border-radius:5px;background:#FFFFFF;transition:background-color 150ms ease}
+.chkb svg{opacity:0;transform:scale(.6);transition:opacity 150ms ease,transform 200ms var(--ease-out)}
+.chk[aria-checked="true"] .chkb{background:#292D29}
+.chk[aria-checked="true"] .chkb svg{opacity:1;transform:none}
+.cad main h2:focus{outline:none}
+.tick path{stroke-dasharray:26;stroke-dashoffset:26;animation:tick 420ms var(--ease-out) 220ms forwards}
+@keyframes tick{to{stroke-dashoffset:0}}
 .stepbtn{transition:background-color 150ms ease,color 150ms ease}
 @container cad (max-width:980px){
 .shell{grid-template-columns:minmax(0,1fr) !important;padding:20px 20px 64px !important;gap:20px !important}
@@ -94,7 +106,7 @@ body{margin:0;background:#C9BEA8}
 .dock .nn{display:none}
 .dock .btn{flex:1 1 auto}
 }
-@media (prefers-reduced-motion:reduce){.rev,.pin,.fin,.hh,.dlg{animation:fade 160ms linear both !important;animation-delay:0ms !important}.btn:active:not([disabled]),.tile:active,.segb:active{transform:none}.tile .tmark{transform:none}.cad progress::-webkit-progress-value{transition:none}}
+@media (prefers-reduced-motion:reduce){.tick path{animation:none;stroke-dashoffset:0}.chkb svg,.chk{transition:none}.rev,.pin,.fin,.hh,.dlg{animation:fade 160ms linear both !important;animation-delay:0ms !important}.btn:active:not([disabled]),.tile:active,.segb:active{transform:none}.tile .tmark{transform:none}.cad progress::-webkit-progress-value{transition:none}}
 /* Botões preenchidos (classe .gl): borda luminosa animada (glow-card) em hover/foco, tokens Capital SP */
 @property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
 @keyframes glspin{to{--gl:560deg}}
@@ -267,13 +279,23 @@ body{margin:0;background:#C9BEA8}
                     <button class="tile" style="grid-column:span 4;min-height:200px" aria-pressed="{{ o.on }}" onClick="{{ o.pick }}"><span class="tmark" aria-hidden="true"></span><span class="mono" style="font-size:10.5px">{{ o.code }}</span><strong class="bsd" style="font-weight:800;font-size:30px;line-height:.9">{{ o.label }}</strong><span class="tdesc">{{ o.desc }}</span></button>
                   </sc-for>
                 </div>
+                <p style="margin:0;padding:14px 18px;border-radius:6px;background:#E6F0F7;color:#23567C;font-size:14px;line-height:1.5"><strong style="font-weight:600">Uma garantia por contrato.</strong> A Lei do Inquilinato (art. 37) não permite combinar modalidades. Se o seu caso for outro, como a cessão fiduciária de quotas de fundo de investimento, fale com a equipe.</p>
                 <sc-if value="{{ guarProvisional }}" hint-placeholder-val="{{ false }}">
                   <p class="rev" style="margin:0;padding:14px 18px;border-radius:6px;background:#E6F0F7;color:#23567C;font-size:14px;line-height:1.5"><strong style="font-weight:600">Requisitos em definição.</strong> A Capital SP ainda vai informar as regras desta garantia. Por enquanto, usamos os documentos da ficha de locação.</p>
                 </sc-if>
               </section>
             </sc-if>
 
-            <p style="margin:0;padding:0 4px;font-size:13px;line-height:1.55;max-width:80ch">Coletamos estes dados para preencher a ficha cadastral de locação. O preenchimento e a geração do PDF acontecem neste aparelho. Os arquivos que você selecionar não são enviados automaticamente.</p>
+            <section class="panel" aria-labelledby="priv-t" style="gap:16px;background:transparent;border:1px solid rgba(41,45,41,.28);border-top:2px solid #292D29">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px"><h2 id="priv-t" class="mono" style="margin:0;font-size:11px;font-weight:500">Como usamos seus dados</h2><span class="mono" style="font-size:9.5px;letter-spacing:.14em;opacity:.65">Texto de exemplo, a revisar pelo jurídico</span></div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px 28px">
+                <div style="display:flex;flex-direction:column;gap:6px"><strong style="font-size:14px">Para quê</strong><span style="font-size:13.5px;line-height:1.55">Analisar o seu cadastro e preparar o contrato de locação.</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><strong style="font-size:14px">Quais dados</strong><span style="font-size:13.5px;line-height:1.55">Só os que a ficha pede para o seu caso: identificação, contato, renda e documentos.</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><strong style="font-size:14px">Quem recebe</strong><span style="font-size:13.5px;line-height:1.55">A equipe da Capital SP. O proprietário e a seguradora recebem o necessário, se a garantia pedir.</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><strong style="font-size:14px">Seus direitos</strong><span style="font-size:13.5px;line-height:1.55">Pedir acesso, correção ou eliminação dos dados pelo WhatsApp da equipe.</span></div>
+              </div>
+              <p style="margin:0;font-size:13px;line-height:1.55;opacity:.8">Neste protótipo o preenchimento e o PDF acontecem neste aparelho, e os arquivos que você selecionar não são enviados.</p>
+            </section>
           </div>
         </sc-if>
 
@@ -440,6 +462,17 @@ body{margin:0;background:#C9BEA8}
                 <span style="font-size:14px;line-height:1.5;color:#2C2C2C">{{ sumText }}</span>
               </span>
             </section>
+            <sc-if value="{{ hasFin }}" hint-placeholder-val="{{ false }}">
+              <section class="panel pin" style="gap:12px">
+                <h2 class="bsd" style="margin:0;font-weight:800;font-size:28px;line-height:.95">Resumo financeiro</h2>
+                <div>
+                  <sc-for list="{{ finRows }}" as="r" hint-placeholder-count="4">
+                    <div class="kv"><span style="color:#45483F">{{ r.l }}</span><span style="font-weight:{{ r.fw }}">{{ r.v }}</span></div>
+                  </sc-for>
+                </div>
+                <p style="margin:0;font-size:13px;line-height:1.55;max-width:70ch;color:#45483F">{{ finNote }}</p>
+              </section>
+            </sc-if>
             <section class="panel" style="flex-direction:row;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between">
               <span style="display:flex;flex-direction:column;gap:6px"><span class="mono" style="font-size:10.5px">Perfil e garantia</span><span style="font-size:17px;font-weight:600">{{ profLine }}{{ guarSuffix }}</span></span>
               <button class="btn bl" onClick="{{ goStep0 }}" aria-label="Editar perfil e garantia">Editar</button>
@@ -477,6 +510,7 @@ body{margin:0;background:#C9BEA8}
             <sc-if value="{{ cannotGen }}" hint-placeholder-val="{{ false }}">
               <p role="alert" class="fin" style="margin:0;padding:14px 18px;border-radius:6px;background:#FBE9ED;color:#9E1830;font-size:14px;font-weight:600">{{ genBlock }}</p>
             </sc-if>
+            <button class="chk" role="checkbox" aria-checked="{{ ackOn }}" onClick="{{ toggleAck }}"><span class="chkb" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EFE6D2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span><span style="font-size:14.5px;line-height:1.5;text-align:left">Li e entendi como a Capital SP usa os meus dados para analisar o cadastro e preparar o contrato de locação.</span></button>
             <div style="display:flex;flex-direction:column;gap:24px;padding:40px 24px;background:#C9BEA8;border-top:2px solid #292D29;border-radius:2px">
               <div class="paper" aria-label="Página 1 da ficha cadastral">
                 <div style="display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:2px solid #292D29">
@@ -515,7 +549,7 @@ body{margin:0;background:#C9BEA8}
         <!-- CONCLUSÃO -->
         <sc-if value="{{ s6 }}" hint-placeholder-val="{{ false }}">
           <section class="panel" style="gap:32px;padding:48px 40px;background:#292D29;color:#EFE6D2;border-top-color:#A64B36">
-            <div style="display:flex;align-items:center;gap:12px" class="mono"><span style="width:8px;height:8px;background:#A64B36"></span><span style="font-size:11px;letter-spacing:.3em">Cadastro concluído neste aparelho</span></div>
+            <div style="display:flex;align-items:center;gap:14px" class="mono"><svg class="tick" width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="16.5" stroke="#A64B36" stroke-width="1.5"/><path d="M10.5 18.5l5 5 10-11" stroke="#EFE6D2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:11px;letter-spacing:.3em">Cadastro concluído neste aparelho</span></div>
             <div style="display:flex;flex-direction:column;gap:16px">
               <h2 class="bsd hh" style="margin:0;font-weight:900;font-size:clamp(48px,7cqi,104px);line-height:.84;color:#EFE6D2">Sua ficha cadastral está pronta.</h2>
               <p style="margin:0;font-size:17px;line-height:1.6;max-width:56ch;color:#E3D8C2">Baixe sua ficha e encaminhe o documento para nossa equipe pelo WhatsApp para dar continuidade ao processo cadastral.</p>
@@ -569,7 +603,7 @@ body{margin:0;background:#C9BEA8}
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
 
 class Component extends DCLogic {
-  state = { step: 0, max: 0, person: null, role: null, guar: null, v: {}, touched: {}, tried: {}, on: {}, lists: { res: [1], dep: [1], soc: [1] }, uid: 2, docs: {}, rm: {}, ch: {}, done: false, dl: false, confirm: null };
+  state = { step: 0, max: 0, person: null, role: null, guar: null, v: {}, touched: {}, tried: {}, on: {}, lists: { res: [1], dep: [1], soc: [1] }, uid: 2, docs: {}, rm: {}, ch: {}, done: false, ack: false, dl: false, confirm: null };
   pend = null;
   EC = ['Solteiro(a)', 'Casado(a)', 'União estável', 'Divorciado(a)', 'Viúvo(a)', 'Separado(a)'];
   STEPS = ['Perfil e garantia', 'Dados principais', 'Complementares', 'Documentos', 'Revisão', 'Ficha em PDF'];
@@ -904,6 +938,13 @@ class Component extends DCLogic {
     else apply();
   }
 
+  componentDidUpdate() {
+    const k = this.state.step + ':' + this.state.done;
+    if (this._k !== k) {
+      const first = this._k === undefined; this._k = k;
+      if (!first) { const h = document.querySelector('.cad main h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
+    }
+  }
   go(i) { this.setState(st => ({ step: i, done: false })); }
   fakeFor(fd) {
     const t = fd.t, k = fd.k.split('.').pop();
@@ -916,7 +957,7 @@ class Component extends DCLogic {
     if (k === 'end') return 'Rua Exemplo, 100'; if (k === 'rg') return '00.000.000-0';
     return 'Exemplo';
   }
-  resetAll() { this.setState({ step: 0, max: 0, person: null, role: null, guar: null, v: {}, touched: {}, tried: {}, on: {}, lists: { res: [1], dep: [1], soc: [1] }, uid: 2, docs: {}, rm: {}, ch: {}, done: false, dl: false, confirm: null }); }
+  resetAll() { this.setState({ step: 0, max: 0, person: null, role: null, guar: null, v: {}, touched: {}, tried: {}, on: {}, lists: { res: [1], dep: [1], soc: [1] }, uid: 2, docs: {}, rm: {}, ch: {}, done: false, ack: false, dl: false, confirm: null }); }
 
   addItem(list) { this.setState(st => ({ lists: Object.assign({}, st.lists, { [list]: st.lists[list].concat([st.uid]) }), uid: st.uid + 1 })); }
   removeItem(rm) {
@@ -1121,9 +1162,21 @@ class Component extends DCLogic {
     const sumTitle = sumOk ? 'Tudo preenchido' : (missingF ? missingF + (missingF === 1 ? ' campo obrigatório pendente' : ' campos obrigatórios pendentes') : 'Faltam documentos');
     const sumText = missingF ? 'Preencha os campos marcados como pendentes para gerar a ficha. Cada grupo tem um botão Editar.' : (pendDocs.length ? pendDocs.length + (pendDocs.length === 1 ? ' documento ainda não foi adicionado' : ' documentos ainda não foram adicionados') + '. Eles ficarão listados como pendentes na ficha, e você deve enviá-los junto com o PDF.' : 'Seus dados e documentos estão completos. Você pode gerar a ficha.');
 
+    const num = k => { const d = String(s.v[k] || '').replace(/\D/g, ''); return d ? parseInt(d.slice(0, 11), 10) / 100 : 0; };
+    const brl = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const rent = num('im.aluguel'), iptuV = num('im.iptu'), condoV = num('im.condo'), income = num('t.sal') || num('e.renda');
+    const finRows = [], hasFin = step === 4 && rent > 0;
+    if (hasFin) {
+      finRows.push({ l: 'Aluguel proposto', v: brl(rent), fw: 500 });
+      if (iptuV) finRows.push({ l: 'IPTU mensal', v: brl(iptuV), fw: 500 });
+      if (condoV) finRows.push({ l: 'Condomínio', v: brl(condoV), fw: 500 });
+      if (iptuV || condoV) finRows.push({ l: 'Total mensal com encargos', v: brl(rent + iptuV + condoV), fw: 700 });
+      if (income) finRows.push({ l: 'Renda informada', v: brl(income) + ' (' + (income / rent).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '× o aluguel)', fw: 500 });
+    }
+    const finNote = income ? 'Algumas imobiliárias pedem renda de pelo menos 3× o aluguel. A Capital SP confirma o critério na análise, e este número não bloqueia o seu cadastro.' : 'Os valores vêm do que você informou. A análise de renda é feita pela equipe da Capital SP.';
     const nextLabel = ['Continuar', 'Continuar', 'Continuar', (s.tried.s3 && pendDocs.length) ? 'Continuar mesmo assim' : 'Continuar', 'Ver ficha em PDF', 'Gerar ficha cadastral'][step];
-    const nextNote = step === 0 && P.blocked ? 'Este caminho está em espera.' : (step === 0 && !P.ok && s.person && s.role ? 'Escolha a garantia para continuar.' : (step === 0 && !P.ok ? 'Responda às perguntas para continuar.' : (step === 5 && missingF ? 'Complete os campos pendentes para gerar a ficha.' : '')));
-    const nextDisabled = (step === 0 && !P.ok) || (step === 5 && missingF > 0);
+    const nextNote = (step === 5 && missingF === 0 && !s.ack) ? 'Confirme que leu como usamos seus dados.' : step === 0 && P.blocked ? 'Este caminho está em espera.' : (step === 0 && !P.ok && s.person && s.role ? 'Escolha a garantia para continuar.' : (step === 0 && !P.ok ? 'Responda às perguntas para continuar.' : (step === 5 && missingF ? 'Complete os campos pendentes para gerar a ficha.' : '')));
+    const nextDisabled = (step === 0 && !P.ok) || (step === 5 && (missingF > 0 || !s.ack));
 
     const HT = ['Perfil e garantia', 'Dados principais', 'Complementares', 'Documentos', 'Revisão', 'Ficha em PDF'];
     const HD = [
@@ -1142,6 +1195,7 @@ class Component extends DCLogic {
       stepItems: stepItems, pct: pct, pctLabel: pct + '%', stepNo: pad(Math.min(step + 1, 6)), stepName: this.STEPS[done ? 5 : step],
       hasProfile: P.ok, profLine: P.label, hasGuar: P.loc && !!s.guar, guarLabel: s.guar ? this.GUAR[s.guar] : '', guarSuffix: P.loc && s.guar ? ' · Garantia: ' + this.GUAR[s.guar] : '',
       hasPendDocs: P.ok && pendDocs.length > 0 && step >= 3, pendDocs: pendDocs.slice(0, 4), pendN: String(pendDocs.length), morePend: pendDocs.length > 4, morePendN: String(pendDocs.length - 4),
+      hasFin: hasFin, finRows: finRows, finNote: finNote, ackOn: String(!!s.ack), toggleAck: () => A.setState(x => ({ ack: !x.ack })),
       hasConfirm: !!s.confirm, confirmMsg: s.confirm || '',
       confirmYes: () => { const f = A.pend; A.pend = null; A.setState({ confirm: null }); if (f) f(); },
       confirmNo: () => { A.pend = null; A.setState({ confirm: null }); },

@@ -25,6 +25,43 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 @media (prefers-reduced-motion:reduce){.hbar{animation:none}}
 .rbtn{transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease,color 150ms ease,border-color 150ms ease}
 .rbtn:active{transform:scale(.96)}
+:focus-visible{outline:2px solid #A64B36;outline-offset:3px}
+.zl{position:relative}
+.zlgrid{display:grid;grid-template-columns:190px 1fr;gap:16px;max-width:1800px;margin:0 auto;padding:28px 0 0 clamp(24px,4vw,64px);align-items:start}
+.zlside{display:flex;flex-direction:column;gap:16px;position:sticky;top:88px}
+.zlmapc{position:relative;min-width:0;overflow:hidden}
+.zlcta{position:absolute;left:50%;bottom:20px;z-index:3;display:flex;align-items:center;gap:12px;height:52px;padding:0 22px 0 24px;border:0;border-radius:14px;background:#A64B36;color:#fff;cursor:pointer;font-size:15px;font-weight:600;white-space:nowrap;box-shadow:0 16px 34px -16px rgba(41,45,41,.7);transform:translateX(-50%);transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease}
+.zlcta:active{transform:translateX(-50%) scale(.97)}
+@media (hover:hover) and (pointer:fine){.zlcta:hover{background:#8F3F2C}}
+.zlw{position:relative;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.zlw::-webkit-scrollbar{display:none}
+.zlw svg{display:block;width:100%;height:auto;overflow:hidden}
+.zl .cam{transition:transform 820ms cubic-bezier(.65,0,.35,1)}
+.zl .lbp{transition:transform 820ms cubic-bezier(.65,0,.35,1)}
+.zl .t{outline:none;transition:transform 240ms cubic-bezier(.23,1,.32,1)}
+.zl .t .tp{fill:#CFC4AB;transition:fill 260ms ease}
+.zl .t.a{cursor:pointer}
+.zl .t.a .tp{fill:#EAE0CA}
+.zl .t.a.on{transform:translateY(-7px)}
+.zl .t.a.on .tp{fill:#A64B36}
+.zl .t.a:focus-visible .tp{stroke:#292D29;stroke-width:2.5}
+.zl .lb{pointer-events:none}
+.zl .lbi{transition:transform 240ms cubic-bezier(.23,1,.32,1)}
+.zl .lb .big{display:none}.zl .lb.a .big{display:inline}.zl .lb.a .sm{display:none}
+.zl .lb .cta{opacity:0;transition:opacity 160ms ease}
+.zl .lb.on .lbi{transform:translateY(-7px)}
+.zl .lb.on text{fill:#F4EDDD;stroke:#A64B36}
+.zl .lb.on .cta{opacity:1}
+.zl .ln{transition:opacity 300ms ease}
+.zl svg[data-line]:not([data-line=""]) .ln:not(.sel){opacity:.14}
+.zl .ln.sel .co{stroke-width:7}
+.zl .ln.sel .cs{stroke-width:12}
+.zlb{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px 0 12px;border:1.5px solid #292D29;border-radius:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;white-space:nowrap;transition:background-color 160ms ease,color 160ms ease,transform 160ms cubic-bezier(.23,1,.32,1)}
+.zlb:active{transform:scale(.97)}
+.zlrow{display:flex;flex-direction:column;gap:6px}
+.zlrow .zlb{width:100%;padding:0 10px;font-size:10.5px;letter-spacing:.06em}
+@media (max-width:900px){.zlgrid{grid-template-columns:1fr;padding-left:0;padding-right:0;gap:16px}.zlside{display:contents}.zlrow{order:1;display:flex;flex-direction:row;overflow-x:auto;scrollbar-width:none;padding:0 clamp(24px,4vw,64px)}.zlrow .zlb{width:auto;padding:0 14px}.zlrow::-webkit-scrollbar{display:none}.zlmapc{order:2;border-radius:0}.zlw svg{min-width:900px}}
+@media (prefers-reduced-motion:reduce){.zl .cam,.zl .lbp,.zl .t,.zl .t .tp,.zl .lbi,.zl .lb .cta,.zl .ln,.zlb{transition:none}}
 .rstage:focus-visible{outline:2px solid #292D29;outline-offset:-4px}
 .rstage:active{cursor:grabbing}
 @media (prefers-reduced-motion:reduce){.rbtn:active{transform:none}}
@@ -371,13 +408,36 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
     </div>
   </section>
 
+  <section id="bairros" data-screen-label="02 Mapa Zona Leste" class="zl" style="position:relative;background:#DCD1BA;padding:clamp(64px,10vh,112px) 0 clamp(56px,8vh,88px);overflow:hidden">
+    <div style="position:relative;max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px;padding-bottom:24px;border-bottom:2px solid #292D29">
+        <h2 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(44px,7vw,104px);line-height:.86">EXPLORE A ZONA LESTE<br>PELO MAPA.</h2>
+        <p style="max-width:380px;margin:0;font-size:16px;line-height:1.5;opacity:.8">Escolha uma linha de metrô ou trem para ver os bairros que ela atende. Clique em um bairro destacado para ver os imóveis.</p>
+      </div>
+    </div>
+    <div class="zlgrid">
+      <aside class="zlside">
+        <div class="zlrow" role="group" aria-label="Filtrar o mapa por linha">
+        <sc-for list="{{ zlLines }}" as="l" hint-placeholder-count="8"><button class="zlb" onClick="{{ l.go }}" aria-pressed="{{ l.pressed }}" aria-label="{{ l.aria }}" style="background:{{ l.bg }};color:{{ l.fg }}"><span style="width:18px;height:6px;border-radius:3px;background:{{ l.color }};box-shadow:0 0 0 1.5px {{ l.ring }}"></span>{{ l.label }}</button></sc-for>
+      </div>
+      </aside>
+      <div class="zlmapc">
+        <button class="zlcta" onClick="{{ zlGo }}">{{ zlCta }}<span aria-hidden="true">→</span></button>
+      <div ref="{{ R.zlWrap }}" class="zlw" role="group" aria-label="Mapa ilustrativo da Zona Leste. Escolha um bairro destacado para ver os imóveis.">
+        <div ref="{{ R.zlMap }}"></div>
+      </div>
+      </div>
+    </div>
+    <div style="max-width:1680px;margin:0 auto;padding:16px clamp(24px,4vw,64px) 0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;opacity:.6">MAPA ILUSTRATIVO, SEM ESCALA · TRAÇADOS APROXIMADOS</div>
+  </section>
+
   <section ref="{{ R.catalog }}" data-screen-label="03 Destaques" style="position:relative;background:#DCD1BA;padding:clamp(64px,10vh,112px) 0 clamp(96px,12vh,144px)">
     <div ref="{{ R.noiseB }}" style="position:absolute;inset:0;opacity:.6;pointer-events:none;background-size:256px 256px,720px 720px"></div>
     <div style="position:relative;max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 48px;padding-bottom:24px;border-bottom:2px solid #292D29">
         <div>
           <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>03 — DESTAQUES</div>
-          <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(56px,9.4vw,160px);line-height:.8;letter-spacing:.005em">IMÓVEIS<br>DISPONÍVEIS</h2>
+          <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(56px,9.4vw,160px);line-height:.8;letter-spacing:.005em">IMÓVEIS<br>EM DESTAQUE</h2>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;max-width:100%">
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;max-width:100%">
@@ -391,8 +451,8 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
         </div>
       </div>
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 24px;padding-top:16px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
-        <span><span style="font-weight:500">{{ countLabel }}</span><span style="opacity:.6"> — {{ summary }}</span></span>
-        <button onClick="{{ editFilters }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0;border:0;background:none;cursor:pointer;font:inherit;letter-spacing:inherit">EDITAR FILTROS <span>↑</span></button>
+        <span style="font-weight:500">{{ countLabel }}</span>
+        <button onClick="{{ goBuscaAll }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0;border:0;background:none;cursor:pointer;font:inherit;letter-spacing:inherit">VER TODOS NA BUSCA <span>→</span></button>
       </div>
 
       <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="2">
@@ -487,6 +547,21 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
     </div>
   </section>
 
+  <section data-screen-label="03b Como funciona" style="position:relative;background:#DCD1BA;padding:clamp(56px,9vh,96px) clamp(24px,4vw,64px)">
+    <div style="max-width:1640px;margin:0 auto">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px 24px;padding-top:16px;border-top:2px solid #292D29;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em"><span>COMO FUNCIONA</span><span style="font-size:10px;letter-spacing:.2em;opacity:.6">TRÊS PASSOS, SEM BUROCRACIA</span></div>
+      <div style="display:grid;grid-template-columns:{{ howCols }};gap:clamp(24px,3vw,48px);margin-top:clamp(28px,5vh,48px)">
+        <sc-for list="{{ how }}" as="h" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:12px;padding-top:16px;border-top:1px solid rgba(41,45,41,.3)">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:#A64B36">{{ h.n }}</span>
+            <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(32px,3.4vw,52px);line-height:.92">{{ h.t }}</h3>
+            <p style="margin:0;max-width:36ch;font-size:15.5px;line-height:1.55;text-wrap:pretty">{{ h.d }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
   <section data-screen-label="04 Depoimentos" style="position:relative;background:#C9BEA8;padding:clamp(72px,11vh,128px) 0 clamp(80px,12vh,144px)">
     <div style="position:relative;max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 48px;padding-bottom:24px;border-bottom:2px solid #292D29">
@@ -525,9 +600,13 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
         <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:21px;letter-spacing:.05em">CAPITAL SP IMÓVEIS</span>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:28px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em">
-        <span>HOME</span><span>SOBRE</span><span>CONTATO</span><span>BLOG</span>
+        <span>HOME</span><span>SOBRE</span><span>CONTATO</span><span>CADASTRO</span>
       </div>
       <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.6">© 2026 — SÃO PAULO, SP</span>
+    </div>
+    <div style="max-width:1640px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(220,209,186,.18);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;line-height:1.7;opacity:.62">
+      <span>CRECI 00000-J (EXEMPLO) · ATENDIMENTO NA REGIÃO DA PAULISTA, SÃO PAULO · CONTATO PELO FORMULÁRIO OU WHATSAPP</span>
+      <span>FOTOS: <sc-for list="{{ credits }}" as="cr" hint-placeholder-count="3"><a href="{{ cr.h }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:3px">{{ cr.t }}</a>{{ cr.sep }}</sc-for> · WIKIMEDIA COMMONS</span>
     </div>
   </footer>
 
@@ -578,6 +657,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
           </div>
           <div ref="{{ R.contact }}" style="margin-top:48px;padding-top:24px;border-top:2px solid #292D29;display:flex;flex-direction:column;gap:8px">
             <h4 style="margin:0 0 8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:32px;line-height:.95">FALAR COM O CORRETOR</h4>
+            <div style="margin-bottom:8px"><dc-import name="Corretor" tom="claro" compacto="{{ false }}" hint-size="100%,150px"></dc-import></div>
             <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
               <input value="{{ cName }}" onChange="{{ onCName }}" placeholder="Nome" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
               <input value="{{ cInfo }}" onChange="{{ onCInfo }}" placeholder="Telefone ou e-mail" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
@@ -686,7 +766,7 @@ class Component extends DCLogic {
   rings = {};
   ringEls = {};
   cardRefs = {};
-  R = Object.fromEntries(['header', 'headerLine', 'stage', 'photo', 'scrim', 'concrete', 'titleWrap', 'title', 'sub', 'subRule', 'subText', 'heroMeta', 'searchCopy', 'searchFoot', 'endFade', 'dock', 'dockIn', 'glass', 'bar', 'panel', 'catalog', 'noiseA', 'noiseB', 'drawer', 'contact', 'saved', 'mnav'].map(k => [k, el => { this.el[k] = el; }]));
+  R = Object.fromEntries(['header', 'headerLine', 'stage', 'photo', 'scrim', 'concrete', 'titleWrap', 'title', 'sub', 'subRule', 'subText', 'heroMeta', 'searchCopy', 'searchFoot', 'endFade', 'dock', 'dockIn', 'glass', 'bar', 'panel', 'catalog', 'noiseA', 'noiseB', 'drawer', 'contact', 'saved', 'mnav', 'zlWrap', 'zlMap'].map(k => [k, el => { this.el[k] = el; }]));
   letterRefs = Array.from({ length: 10 }, (_, i) => el => { this.letterEls[i] = el; });
   ringRefs = Object.fromEntries(['Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'].map(c => [c, {
     stage: el => this.ringStageRef(c, el),
@@ -700,7 +780,7 @@ class Component extends DCLogic {
     next: () => this.slide(c, 1)
   }]));
   state = {
-    mode: 'comprar', tipo: 0, local: '', preco: 0, menu: null, open: false, settled: false, expanded: false, hShow: false, hOpen: false,
+    zlLine: '', mode: 'comprar', tipo: 0, local: '', preco: 0, menu: null, open: false, settled: false, expanded: false, hShow: false, hOpen: false,
     areaMin: '', areaMax: '', dorms: null, vagas: null, condo: null, feats: [], sort: 0,
     isMobile: typeof window !== 'undefined' && window.innerWidth < 760,
     narrow: typeof window !== 'undefined' && window.innerWidth < 1100,
@@ -715,14 +795,14 @@ class Component extends DCLogic {
       if (f) {
         if (el.getAttribute('src') !== f.s) {
           el.setAttribute('src', f.s); el.dataset.auto = '1';
-          if (el.closest('button')) { el.removeAttribute('credit'); el.removeAttribute('credit-href'); }
-          else { el.setAttribute('credit', f.c); el.setAttribute('credit-href', f.h); }
+          el.removeAttribute('credit'); el.removeAttribute('credit-href');
         }
       } else if (el.dataset.auto) { el.removeAttribute('src'); el.removeAttribute('credit'); el.removeAttribute('credit-href'); delete el.dataset.auto; }
     });
   }
   componentDidMount() {
     setTimeout(() => this.applyFotos(), 0);
+    this.zlMount();
     this._prev = Object.assign({}, this.state);
     this.reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
     const tex = this.texture();
@@ -763,6 +843,7 @@ class Component extends DCLogic {
   }
   componentDidUpdate() {
     this.applyFotos();
+    this.zlMount();
     const ps = this._prev || this.state;
     this._prev = Object.assign({}, this.state);
     if (ps.isMobile !== this.state.isMobile) this.fit();
@@ -960,6 +1041,182 @@ class Component extends DCLogic {
     if (expand) this.pendingExpand = true;
     this.scrollToY(this.targets().search);
   }
+  // ---------- Mapa da Zona Leste (SVG isométrico estilizado, sem escala) ----------
+  // [nome, x, y] num plano ilustrativo (≈ km): x oeste→leste, y norte→sul
+  ZL = [
+    ['Belém', 2.3, 7.2], ['Mooca', 2.0, 10.0], ['Água Rasa', 4.0, 10.4], ['Vila Prudente', 4.4, 12.6], ['São Lucas', 6.6, 13.4],
+    ['Tatuapé', 4.9, 8.2], ['Carrão', 6.6, 9.3], ['Vila Formosa', 7.6, 11.1], ['Aricanduva', 9.6, 10.7], ['Penha', 7.4, 6.2],
+    ['Jardim Penha', 8.3, 4.4], ['Cangaíba', 10.0, 3.4], ['Vila Esperança', 10.0, 5.6], ['Vila Matilde', 9.0, 7.8], ['Vila Ré', 11.6, 4.9],
+    ['Patriarca', 11.4, 7.8], ['Artur Alvim', 13.0, 6.7], ['Ponte Rasa', 13.3, 4.7], ['Ermelino Matarazzo', 13.0, 2.6], ['São Miguel Paulista', 15.2, 3.9],
+    ['Jardim Helena', 16.8, 2.6], ['Itaim Paulista', 18.2, 4.3], ['Itaquera', 14.6, 8.6], ['José Bonifácio', 15.9, 10.8], ['Guaianases', 18.0, 8.8],
+    ['Cidade Líder', 12.2, 10.4], ['Sapopemba', 9.6, 14.0], ['São Mateus', 12.6, 13.3], ['Iguatemi', 15.2, 14.4], ['Cidade Tiradentes', 18.0, 12.8]
+  ];
+  ZL_ATUA = ['Penha', 'Vila Matilde', 'Tatuapé', 'Vila Ré', 'Vila Esperança', 'São Miguel Paulista', 'Itaquera', 'Vila Formosa', 'Patriarca', 'Jardim Penha'];
+  ZL_LINES = [
+    { id: 'l3', num: '3', name: 'Vermelha', kind: 'METRÔ', color: '#D7362C',
+      path: [[-0.8, 8.9], [2.4, 8.8], [4.9, 8.7], [6.5, 8.5], [7.9, 7.2], [9.4, 6.9], [10.6, 6.7], [11.9, 6.7], [13.1, 7.4], [14.5, 9.1]],
+      st: [[2.4, 8.8], [4.9, 8.7], [6.5, 8.5], [7.9, 7.2], [9.4, 6.9], [10.6, 6.7], [11.9, 6.7], [13.1, 7.4], [14.5, 9.1]],
+      bairros: ['Belém', 'Tatuapé', 'Carrão', 'Penha', 'Vila Matilde', 'Vila Esperança', 'Patriarca', 'Vila Ré', 'Artur Alvim', 'Itaquera'] },
+    { id: 'l11', num: '11', name: 'Coral', kind: 'TREM', color: '#EC7350',
+      path: [[-0.8, 9.3], [4.9, 9.1], [8.0, 7.65], [11.9, 7.15], [13.2, 7.85], [14.7, 9.5], [15.9, 9.8], [16.9, 10.1], [18.3, 9.6], [19.9, 9.5]],
+      st: [[4.9, 9.1], [14.7, 9.5], [15.9, 9.8], [16.9, 10.1], [18.3, 9.6]],
+      bairros: ['Tatuapé', 'Itaquera', 'José Bonifácio', 'Guaianases'] },
+    { id: 'l12', num: '12', name: 'Safira', kind: 'TREM', color: '#24509E',
+      path: [[-0.8, 8.5], [4.9, 8.3], [6.2, 6.6], [7.3, 5.0], [8.6, 3.4], [9.7, 2.7], [11.4, 2.2], [13.1, 2.1], [15.2, 2.9], [16.7, 2.9], [17.9, 3.5], [19.0, 3.3], [19.9, 3.4]],
+      st: [[4.9, 8.3], [9.7, 2.7], [11.4, 2.2], [13.1, 2.1], [15.2, 2.9], [16.7, 2.9], [17.9, 3.5], [19.0, 3.3]],
+      bairros: ['Tatuapé', 'Penha', 'Jardim Penha', 'Cangaíba', 'Ermelino Matarazzo', 'São Miguel Paulista', 'Jardim Helena', 'Itaim Paulista'] },
+    { id: 'l13', num: '13', name: 'Jade', kind: 'TREM', color: '#14A07E',
+      path: [[9.7, 2.7], [10.2, 1.5], [10.7, 0.0]], st: [[9.7, 2.7]],
+      bairros: ['Cangaíba', 'Jardim Penha'], note: 'Sai da Eng. Goulart rumo ao Aeroporto de Guarulhos.' },
+    { id: 'l15', num: '15', name: 'Prata', kind: 'MONOTRILHO', color: '#8C98A4',
+      path: [[4.2, 12.2], [5.3, 12.9], [6.4, 13.3], [7.3, 13.6], [8.1, 13.8], [8.9, 14.0], [9.7, 14.1], [10.5, 14.0], [11.4, 13.8], [12.4, 13.6], [13.8, 14.3]],
+      st: [[4.2, 12.2], [5.3, 12.9], [6.4, 13.3], [7.3, 13.6], [8.1, 13.8], [8.9, 14.0], [9.7, 14.1], [10.5, 14.0], [11.4, 13.8], [12.4, 13.6], [13.8, 14.3]],
+      bairros: ['Vila Prudente', 'São Lucas', 'Sapopemba', 'São Mateus', 'Iguatemi'] },
+    { id: 'l2', num: '2', name: 'Verde', kind: 'METRÔ · EXTENSÃO EM OBRAS', color: '#2E9A5A', dash: true,
+      pre: [[-0.8, 13.9], [4.2, 12.2]],
+      path: [[4.2, 12.2], [3.9, 11.3], [4.2, 10.5], [5.4, 9.9], [6.9, 10.4], [7.9, 10.6], [8.8, 10.2], [9.6, 9.4], [8.0, 7.3]],
+      st: [[4.2, 12.2], [3.9, 11.3], [4.2, 10.5], [5.4, 9.9], [6.9, 10.4], [7.9, 10.6], [8.8, 10.2], [9.6, 9.4], [8.0, 7.3]],
+      bairros: ['Vila Prudente', 'Água Rasa', 'Tatuapé', 'Vila Formosa', 'Carrão', 'Aricanduva', 'Penha'], note: 'Trecho Vila Prudente–Penha em obras. Previsão de operação: fim de 2028 ou início de 2029.' },
+    { id: 'l10', num: '10', name: 'Turquesa', kind: 'TREM', color: '#0F9AA0',
+      path: [[-0.8, 9.9], [1.4, 10.5], [1.0, 12.2], [-0.8, 13.0]], st: [[1.4, 10.5]],
+      bairros: ['Mooca'] }
+  ];
+  zlSlug(n) { return n.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+  zlCount(name) { const n = x => x.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); return this.D.data.filter(d => n(d.bairro) === n(name)).length; }
+  zlSvg() {
+    const A = 13 * Math.PI / 180, ca = Math.cos(A), sa = Math.sin(A), U = 72, SQ = 0.6, TH = 7, BASE = 20;
+    const P = (x, y, z = 0) => [(x * ca - y * sa) * U, (x * sa + y * ca) * U * SQ - z];
+    const f = v => v.toFixed(1), pts = a => a.map(p => f(p[0]) + ',' + f(p[1])).join(' ');
+    let seed = 11; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const outline = [[0.3, 6.4], [3.6, 5.4], [6.4, 4.0], [8.2, 2.5], [12.0, 1.5], [15.6, 1.4], [19.0, 2.4], [19.6, 7.0], [19.4, 12.0], [18.6, 15.0], [15.0, 16.0], [10.6, 15.8], [6.2, 14.6], [2.6, 13.0], [0.2, 10.6]];
+    const river = [[-0.8, 5.7], [3.2, 4.6], [6.0, 3.2], [7.9, 1.7], [11.8, 0.7], [15.6, 0.6], [20.0, 1.7]];
+    const parks = [[14.5, 11.6, 0.9, 'P. DO CARMO'], [11.6, 2.4, 0.6, 'P. ECOL. TIETÊ']];
+    const clip = (poly, a, b) => {
+      const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, nx = b[0] - a[0], ny = b[1] - a[1];
+      const side = p => (p[0] - mx) * nx + (p[1] - my) * ny; const out = [];
+      for (let i = 0; i < poly.length; i++) {
+        const p = poly[i], q = poly[(i + 1) % poly.length], sp = side(p), sq = side(q);
+        if (sp <= 0) out.push(p);
+        if ((sp < 0 && sq > 0) || (sp > 0 && sq < 0)) { const t = sp / (sp - sq); out.push([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]); }
+      }
+      return out;
+    };
+    const inside = (p, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j]; if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+    const segD = (p, line) => { let m = 1e9; for (let i = 0; i < line.length - 1; i++) { const a = line[i], b = line[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / (dx * dx + dy * dy))); m = Math.min(m, Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy)); } return m; };
+    const prism = (poly, z0, z1, top, sideL, sideR, cls) => {
+      const T = poly.map(p => P(p[0], p[1], z1)), B = poly.map(p => P(p[0], p[1], z0));
+      let ar = 0; T.forEach((p, i) => { const q = T[(i + 1) % T.length]; ar += p[0] * q[1] - q[0] * p[1]; }); const sg = Math.sign(ar) || 1;
+      let o = '';
+      T.forEach((p, i) => { const j = (i + 1) % T.length, q = T[j], dx = q[0] - p[0], dy = q[1] - p[1], nx = dy * sg, ny = -dx * sg;
+        if (ny > 0.01) o += `<polygon points="${pts([p, q, B[j], B[i]])}" fill="${nx > 0 ? sideR : sideL}"/>`; });
+      return o + `<polygon${cls ? ` class="${cls}"` : ''} points="${pts(T)}"${top ? ` fill="${top}"` : ''}/>`;
+    };
+    const allPaths = this.ZL_LINES.flatMap(l => [l.path].concat(l.pre ? [l.pre] : []));
+    const bb = arr => { const xs = arr.map(p => p[0]), ys = arr.map(p => p[1]); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; };
+    const geo = { cells: {}, lines: {} };
+    const cells = this.ZL.map(([name, x, y], k) => {
+      let poly = outline.slice(); this.ZL.forEach(([, x2, y2], j) => { if (j !== k) poly = clip(poly, [x, y], [x2, y2]); });
+      const cx = poly.reduce((s, p) => s + p[0], 0) / poly.length, cy = poly.reduce((s, p) => s + p[1], 0) / poly.length;
+      const ins = poly.map(p => [cx + (p[0] - cx) * 0.94, cy + (p[1] - cy) * 0.94]);
+      const slug = this.zlSlug(name); geo.cells[slug] = bb(ins.map(p => P(p[0], p[1], TH)));
+      return { name, x, y, poly: ins, sy: P(cx, cy)[1], slug, n: this.zlCount(name) };
+    });
+    let svg = '';
+    svg += `<polyline points="${pts(river.map(p => P(p[0], p[1], -BASE * 0.5)))}" fill="none" stroke="#A9B9B4" stroke-width="22" stroke-linejoin="round" stroke-linecap="round"/>`;
+    { const r = P(4.4, 3.95, -BASE * 0.5); svg += `<text x="${f(r[0])}" y="${f(r[1] - 16)}" transform="rotate(-21 ${f(r[0])} ${f(r[1] - 16)})" font-family="IBM Plex Mono,monospace" font-size="10" letter-spacing="3" fill="#6F817B">RIO TIETÊ</text>`; }
+    svg += prism(outline, -BASE, 0, '#C9BEA6', '#A99E87', '#9A8F79');
+    cells.sort((a, b) => a.sy - b.sy).forEach(c => {
+      let g = prism(c.poly, 0, TH, '', '#9C917C', '#8C826E', 'tp');
+      parks.forEach(([px, py, r]) => { if (inside([px, py], c.poly)) { const circ = Array.from({ length: 18 }, (_, i) => [px + Math.cos(i / 18 * 6.283) * r, py + Math.sin(i / 18 * 6.283) * r * 0.8]); g += `<polygon points="${pts(circ.map(p => P(p[0], p[1], TH)))}" fill="#B7C29E"/>`;
+        for (let i = 0; i < 8; i++) { const a = rnd() * 6.283, d = Math.sqrt(rnd()) * r * 0.8, t = P(px + Math.cos(a) * d, py + Math.sin(a) * d * 0.8, TH); g += `<ellipse cx="${f(t[0])}" cy="${f(t[1] - 4)}" rx="5" ry="4" fill="#97A57E"/>`; } } });
+      const [x0, y0, x1, y1] = bb(c.poly), tall = c.name === 'Tatuapé' ? 2.2 : (c.name === 'Penha' || c.name === 'Mooca' || c.name === 'Vila Prudente') ? 1.3 : 0.8;
+      const want = Math.round((x1 - x0) * (y1 - y0) * 2.2), bl = [];
+      for (let t = 0; t < want * 8 && bl.length < want; t++) {
+        const p = [x0 + rnd() * (x1 - x0), y0 + rnd() * (y1 - y0)], s = 0.14 + rnd() * 0.18;
+        if (!inside(p, c.poly) || !inside([p[0] + s, p[1] + s], c.poly) || !inside([p[0] - s, p[1] - s], c.poly)) continue;
+        if (Math.hypot(p[0] - c.x, (p[1] - c.y) * 1.5) < 0.95) continue;
+        if (allPaths.some(l => segD(p, l) < 0.38) || parks.some(([px, py, r]) => Math.hypot(p[0] - px, p[1] - py) < r + 0.3)) continue;
+        if (bl.some(b => Math.abs(b.p[0] - p[0]) < b.s + s + 0.06 && Math.abs(b.p[1] - p[1]) < b.s + s + 0.06)) continue;
+        bl.push({ p, s, h: (5 + Math.pow(rnd(), 2.2) * 28) * tall });
+      }
+      bl.sort((a, b) => P(a.p[0], a.p[1])[1] - P(b.p[0], b.p[1])[1]).forEach(b => {
+        const [x, y] = b.p, s = b.s;
+        g += prism([[x - s, y - s], [x + s, y - s], [x + s, y + s], [x - s, y + s]], TH, TH + b.h, '#EFE7D6', '#BDB39E', '#A99F8A');
+      });
+      svg += `<g class="t" data-b="${c.slug}" data-n="${c.name}" data-c="${c.n}">${g}</g>`;
+    });
+    parks.forEach(([px, py, r, nm]) => { const q = P(px, py + 0.1, TH + 6); svg += `<text x="${f(q[0])}" y="${f(q[1])}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1.6" fill="#5F6E4E" pointer-events="none">${nm}</text>`; });
+    // linhas
+    const ns = 'vector-effect="non-scaling-stroke"';
+    this.ZL_LINES.slice().reverse().forEach(l => {
+      const line = a => pts(a.map(p => P(p[0], p[1], TH)));
+      let g = '';
+      if (l.pre) g += `<polyline points="${line(l.pre)}" fill="none" stroke="#F4EDDD" stroke-width="9" stroke-linecap="round" ${ns}/><polyline points="${line(l.pre)}" fill="none" stroke="${l.color}" stroke-width="5" stroke-linecap="round" ${ns}/>`;
+      g += `<polyline class="cs" points="${line(l.path)}" fill="none" stroke="#F4EDDD" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" ${ns}/>`;
+      g += `<polyline class="co" points="${line(l.path)}" fill="none" stroke="${l.color}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"${l.dash ? ' stroke-dasharray="9 7"' : ''} ${ns}/>`;
+      l.st.forEach(p => { const q = P(p[0], p[1], TH); g += `<circle cx="${f(q[0])}" cy="${f(q[1])}" r="3.6" fill="#F7F1E4" stroke="${l.color}" stroke-width="2.2" ${ns}/>`; });
+      svg += `<g class="ln" data-l="${l.id}" pointer-events="none">${g}</g>`;
+      geo.lines[l.id] = l.st.concat(l.path.filter(p => p[0] > 0 && p[0] < 19.5 && p[1] > 0.5)).map(p => P(p[0], p[1], TH));
+    });
+    // rótulos (contra-escala no zoom)
+    cells.forEach(c => {
+      const q = P(c.x, c.y, TH), cnt = c.n ? `${c.n} ${c.n === 1 ? 'IMÓVEL' : 'IMÓVEIS'}` : '';
+      svg += `<g class="lb" data-b="${c.slug}"><g class="lbp" style="transform:translate(${f(q[0])}px,${f(q[1])}px) scale(calc(1 / var(--k, 1)))"><g class="lbi">`
+        + `<g class="big"><circle r="3" fill="#292D29"/>`
+        + `<text class="nm" y="-12" text-anchor="middle" font-family="Big Shoulders Display,Big Shoulders,sans-serif" font-weight="800" font-size="19" letter-spacing=".5" fill="#292D29" stroke="#ECE3CF" stroke-width="4" paint-order="stroke" stroke-linejoin="round">${c.name.toUpperCase()}</text>`
+        + (cnt ? `<text y="15" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1.8" fill="#292D29" stroke="#ECE3CF" stroke-width="3" paint-order="stroke">${cnt}</text>` : '')
+        + `<text class="cta" y="${cnt ? 28 : 15}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" font-weight="600" letter-spacing="1.8" fill="#A64B36" stroke="#ECE3CF" stroke-width="3" paint-order="stroke">VER IMÓVEIS →</text></g>`
+        + `<text class="sm" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8.5" letter-spacing="1.6" fill="#4E4C44" stroke="#D3C8B0" stroke-width="3" paint-order="stroke">${c.name.toUpperCase()}</text>`
+        + `</g></g></g>`;
+    });
+    const all = outline.map(p => P(p[0], p[1])).concat(outline.map(p => P(p[0], p[1], -BASE))).concat(river.map(p => P(p[0], p[1], -BASE * 0.5)));
+    const vx0 = Math.min(...all.map(p => p[0])) + 8, vx1 = Math.max(...all.map(p => p[0])) - 4, vy0 = Math.min(...all.map(p => p[1])) - 22, vy1 = Math.max(...all.map(p => p[1])) + 6;
+    geo.vb = [vx0, vy0, vx1 - vx0, vy1 - vy0]; this._zlGeo = geo;
+    return `<svg viewBox="${f(vx0)} ${f(vy0)} ${f(vx1 - vx0)} ${f(vy1 - vy0)}" xmlns="http://www.w3.org/2000/svg"><g class="cam">${svg}</g></svg>`;
+  }
+  zlMount() {
+    const host = this.el.zlMap; if (!host) return;
+    if (!host.firstChild) {
+      host.innerHTML = this._zl || (this._zl = this.zlSvg());
+      const tileOf = e => e.target.closest && e.target.closest('.t.a');
+      const mark = (t, on) => { if (!t) return; t.classList.toggle('on', on); const l = host.querySelector(`.lb[data-b="${t.dataset.b}"]`); if (l) l.classList.toggle('on', on); };
+      const fine = !window.matchMedia || matchMedia('(hover:hover) and (pointer:fine)').matches;
+      host.addEventListener('pointerover', e => { if (fine) mark(tileOf(e), true); });
+      host.addEventListener('pointerout', e => { const t = tileOf(e); if (t && !t.contains(e.relatedTarget)) mark(t, false); });
+      host.addEventListener('focusin', e => mark(tileOf(e), true));
+      host.addEventListener('focusout', e => mark(tileOf(e), false));
+      host.addEventListener('click', e => { const t = tileOf(e); if (t) this.goBairro(t.dataset.b); });
+      host.addEventListener('keydown', e => { const t = tileOf(e); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); this.goBairro(t.dataset.b); } });
+      this._zlApplied = null;
+    }
+    this.zlApply();
+  }
+  zlApply() {
+    const host = this.el.zlMap, svg = host && host.querySelector('svg'), id = this.state.zlLine || '';
+    if (!svg || this._zlApplied === id) return; this._zlApplied = id;
+    const L = this.ZL_LINES.find(l => l.id === id), act = new Set(L ? L.bairros : this.ZL_ATUA);
+    svg.setAttribute('data-line', id);
+    svg.querySelectorAll('.t').forEach(t => {
+      const on = act.has(t.dataset.n), n = +t.dataset.c; t.classList.toggle('a', on); t.classList.remove('on');
+      if (on) { t.setAttribute('tabindex', '0'); t.setAttribute('role', 'link'); t.setAttribute('aria-label', `${t.dataset.n}${n ? `, ${n} ${n === 1 ? 'imóvel' : 'imóveis'}` : ''}. Ver imóveis neste bairro.`); t.removeAttribute('aria-hidden'); }
+      else { t.removeAttribute('tabindex'); t.removeAttribute('role'); t.removeAttribute('aria-label'); t.setAttribute('aria-hidden', 'true'); }
+    });
+    svg.querySelectorAll('.lb').forEach(l => { const n = l.querySelector('.big'); const on = act.has((svg.querySelector(`.t[data-b="${l.dataset.b}"]`) || {}).dataset?.n); l.classList.toggle('a', !!on); l.classList.remove('on'); });
+    svg.querySelectorAll('.ln').forEach(g => g.classList.toggle('sel', g.dataset.l === id));
+    // câmera
+    const G = this._zlGeo, [vx, vy, vw, vh] = G.vb, cam = svg.querySelector('.cam');
+    let k = 1, tx = 0, ty = 0;
+    if (L) {
+      const ps = L.bairros.flatMap(b => { const c = G.cells[this.zlSlug(b)]; return c ? [[c[0], c[1]], [c[2], c[3]]] : []; }).concat(G.lines[id]);
+      const x0 = Math.min(...ps.map(p => p[0])) - 50, x1 = Math.max(...ps.map(p => p[0])) + 50, y0 = Math.min(...ps.map(p => p[1])) - 60, y1 = Math.max(...ps.map(p => p[1])) + 40;
+      k = Math.max(1, Math.min(2.6, vw / (x1 - x0), vh / (y1 - y0)));
+      tx = vx + vw / 2 - k * (x0 + x1) / 2; ty = vy + vh / 2 - k * (y0 + y1) / 2;
+    }
+    svg.style.setProperty('--k', k.toFixed(3));
+    cam.style.transform = `translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px) scale(${k.toFixed(3)})`;
+    const w = this.el.zlWrap; if (w && w.scrollWidth > w.clientWidth) w.scrollTo({ left: (w.scrollWidth - w.clientWidth) / 2, behavior: this.reduce ? 'auto' : 'smooth' });
+  }
+  goBairro(slug) { this.goBusca({ modo: this.state.mode, bairro: slug }); }
   goCatalog() { this.setState({ menu: null, mobileMenu: false }); this.scrollToY(this.targets().catalog); }
   openDrawer(code, contact) {
     const d = this.D.data.find(x => x.code === code);
@@ -1011,7 +1268,7 @@ class Component extends DCLogic {
       if ((pr.revealStyle ?? 'Máscara vertical') === 'Dissolução radial') { const a = er * 140 - 35; mk = `radial-gradient(circle at 50% 58%, transparent ${a}%, #000 ${a + 28}%)`; }
       else { const e = -30 + er * 170; mk = `linear-gradient(to top, transparent ${e - 30}%, #000 ${e}%)`; }
       c.style.webkitMaskImage = mk; c.style.maskImage = mk;
-      c.style.opacity = 1 - er * 0.25;
+      c.style.opacity = 0.9 - er * 0.2;
       c.style.visibility = er >= 1 ? 'hidden' : 'visible';
     }
     const ph = this.el.photo;
@@ -1053,11 +1310,12 @@ class Component extends DCLogic {
     const h = this.el.header;
     if (h) {
       const past = Y > top + s.offsetHeight - 70;
-      const mode = past ? 'solid' : (p > 0.4 && hold < 0.8 ? 'photo' : 'clear');
+      const mode = past ? 'solid' : (p > 0.4 ? 'photo' : 'clear');
       if (mode !== this.hdr) {
         this.hdr = mode;
         h.style.color = mode === 'photo' ? '#EDE4D0' : '#292D29';
         h.style.backgroundColor = mode === 'solid' ? 'rgba(220,209,186,.82)' : 'rgba(220,209,186,0)';
+        h.style.backgroundImage = mode === 'photo' ? 'linear-gradient(180deg,rgba(26,25,22,.62) 0%,rgba(26,25,22,0) 100%)' : 'none';
         h.style.backdropFilter = h.style.webkitBackdropFilter = mode === 'solid' ? 'blur(14px)' : 'none';
         h.style.height = mode === 'solid' ? '64px' : 'clamp(68px,14vh,124px)';
       }
@@ -1100,9 +1358,28 @@ class Component extends DCLogic {
     return L;
   }
 
+  featured() {
+    const s = this.state, L = this.D.data.filter(d => d.mode === s.mode);
+    if (s.sort === 0) L.sort((a, b) => ((b.featured ? 1 : 0) - (a.featured ? 1 : 0)) || a.code.localeCompare(b.code));
+    if (s.sort === 1) L.sort((a, b) => a.price - b.price);
+    if (s.sort === 2) L.sort((a, b) => b.area - a.area);
+    return L;
+  }
+  goBusca(p) {
+    const q = Object.entries(p || {}).filter(([, v]) => v !== '' && v != null && v !== 0).map(([k, v]) => k + '=' + encodeURIComponent(v)).join('&');
+    try { sessionStorage.setItem('csp-busca', JSON.stringify(p || {})); } catch (e) {}
+    location.href = 'Capital%20SP%20Busca.dc.html' + (q ? '?' + q : '');
+  }
+  buscaFromBar() {
+    const s = this.state, D = this.D, pr = D.precos[s.mode][s.preco] || {};
+    const sl = x => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const loc = s.local.trim(), row = loc && this.ZL.find(r => sl(r[0]) === sl(loc));
+    this.goBusca({ modo: s.mode, tipo: s.tipo > 0 ? D.tipos[s.tipo] : '', bairro: row ? this.zlSlug(row[0]) : '', q: row ? '' : loc, pmin: pr.min || '', pmax: pr.max || '',
+      dorms: s.dorms || '', vagas: s.vagas || '', amin: s.areaMin || '', amax: s.areaMax || '' });
+  }
   renderVals() {
     const s = this.state, D = this.D, mob = s.isMobile;
-    const list = this.filtered();
+    const list = this.featured();
     const precos = D.precos[s.mode];
     const fmt = n => n.toLocaleString('pt-BR');
     const seg = (label, active, onClick) => ({ label, onClick, bg: active ? '#292D29' : 'rgba(41,45,41,0)', fg: active ? '#EFE6D2' : '#292D29' });
@@ -1112,6 +1389,9 @@ class Component extends DCLogic {
       letters: t.split('').map(ch => { const i = gi++; return { ch: ch === ' ' ? '\u00A0' : ch, ref: this.letterRefs[i], w: ch === ' ' ? '.24em' : 'auto' }; })
     }));
     const navGo = [() => scrollTo({ top: 0, behavior: 'smooth' }), null, null, () => { location.href = 'Capital%20SP%20Cadastro.dc.html'; }];
+    const seen = new Set(), cl0 = [];
+    Object.values(this.FOTOS).forEach(f => { if (!seen.has(f.c)) { seen.add(f.c); cl0.push({ t: f.c.replace(/^Foto: /, '').replace(/ · Wikimedia Commons$/, '').toUpperCase(), h: f.h }); } });
+    const credits = cl0.map((c, i) => Object.assign(c, { sep: i < cl0.length - 1 ? ' ·' : '' }));
     const navItems = ['Home', 'Sobre', 'Contato', 'Cadastro'].map((label, i) => ({
       label, labelUp: label.toUpperCase(), n: '0' + (i + 1),
       ul: (s.hoverNav === i || (i === 0 && s.hoverNav == null)) ? 1 : 0,
@@ -1159,6 +1439,11 @@ class Component extends DCLogic {
       { name: 'Eduardo S.', deal: 'LOCAÇÃO COMERCIAL', where: 'Sala comercial · Centro', quote: 'Precisava de uma sala para o escritório e de alguém que entendesse de vaga, condomínio e prazo. Resolveram tudo com uma única conversa.' },
       { name: 'Helena P.', deal: 'ADMINISTRAÇÃO', where: 'Proprietária · Planalto Paulista', quote: 'Entrego meu imóvel para eles administrarem há dois anos. Repasse em dia, relatório claro e uma pessoa de verdade para atender quando preciso.' }
     ].map(t => Object.assign(t, { ini: t.name.split(/[ &]+/).filter(w => /^[A-ZÁÉÍÓÚ]/.test(w)).slice(0, 2).map(w => w[0]).join('') }));
+    const zlSel = this.ZL_LINES.find(l => l.id === s.zlLine);
+    const zlCta = zlSel ? `Buscar imóveis na Linha ${zlSel.num}-${zlSel.name}` : 'Buscar imóveis na Zona Leste';
+    const zlGo = () => this.goBusca({ modo: s.mode, linha: s.zlLine || '' });
+    const zlLines = [{ id: '', label: 'VISÃO GERAL', aria: 'Visão geral da Zona Leste', color: '#A64B36' }].concat(this.ZL_LINES.map(l => ({ id: l.id, label: `${l.num} · ${l.name.toUpperCase()}`, aria: `Linha ${l.num}-${l.name}`, color: l.color })))
+      .map(l => { const on = (s.zlLine || '') === l.id; return Object.assign(l, { pressed: on ? 'true' : 'false', bg: on ? '#292D29' : 'transparent', fg: on ? '#EFE6D2' : '#292D29', ring: on ? '#EFE6D2' : 'transparent', go: () => this.setState({ zlLine: l.id }) }); });
     const blocks = D.cats.map((cat, ci) => {
       const items = list.filter(d => d.tipo === cat);
       const n = items.length, rf = this.ringRefs[cat];
@@ -1204,7 +1489,9 @@ class Component extends DCLogic {
     }) : { cells: [], feats: [], photos: [] };
     const open = s.open;
     return {
-      R: this.R, isMobile: mob, isDesktop: !mob, titleLines, navItems,
+      R: this.R, isMobile: mob, isDesktop: !mob, titleLines, navItems, credits,
+      howCols: mob ? '1fr' : 'repeat(3,minmax(0,1fr))',
+      how: [{ n: '01', t: 'BUSQUE', d: 'Filtre por bairro, tipo e preço e veja só os imóveis que cabem na sua busca.' }, { n: '02', t: 'AGENDE', d: 'Escolha o imóvel e peça uma visita. O corretor responsável confirma pelo WhatsApp.' }, { n: '03', t: 'CADASTRE-SE', d: 'Na locação, preencha a ficha cadastral online, só com o que se aplica ao seu caso.' }],
       openMenu: () => this.setState({ mobileMenu: true }), closeMenu: () => this.setState({ mobileMenu: false }), mobileMenu: s.mobileMenu,
       goTop: e => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); },
       goCatalog: () => this.goCatalog(),
@@ -1220,11 +1507,11 @@ class Component extends DCLogic {
       hOpenBar: () => this.setState({ hOpen: true }, () => setTimeout(() => { const i = document.getElementById('h-local'); if (i) i.focus(); }, 80)),
       hClose: () => this.setState({ hOpen: false }),
       hKey: e => { if (e.key === 'Escape') this.setState({ hOpen: false }); },
-      hBuscar: () => { this.setState({ hOpen: false }); this.goCatalog(); },
+      hBuscar: () => { this.setState({ hOpen: false }); this.buscaFromBar(); },
       openDock: () => { this.clickOpen = true; this.pendingExpand = false; this.setState({ open: true, expanded: false, menu: null }); this.glideTo(this.targets().search); },
       pillIn: () => this.setState({ hoverPill: true }), pillOut: () => this.setState({ hoverPill: false }),
       pillBg: s.hoverPill ? '#3B403B' : '#292D29', houseY: s.hoverPill ? '-2px' : '0px',
-      thumbX: s.mode === 'comprar' ? '0%' : '100%',
+      thumbX: s.mode === 'comprar' ? '0%' : '100%', zlLines, zlCta, zlGo,
       comprarOp: s.mode === 'comprar' ? 1 : 0.5, alugarOp: s.mode === 'alugar' ? 1 : 0.5,
       setComprar: () => this.setState({ mode: 'comprar', preco: 0 }), setAlugar: () => this.setState({ mode: 'alugar', preco: 0 }),
       tipo: String(s.tipo), preco: String(s.preco),
@@ -1238,12 +1525,12 @@ class Component extends DCLogic {
       tipoOptions: D.tipos.map((l, i) => ({ label: l, value: String(i), mark: i === s.tipo ? 1 : 0, onClick: () => this.setState({ tipo: i, menu: null }) })),
       precoOptions: precos.map((o, i) => ({ label: o.l, value: String(i), mark: i === s.preco ? 1 : 0, onClick: () => this.setState({ preco: i, menu: null }) })),
       local: s.local, onLocal: e => this.setState({ local: e.target.value }),
-      onLocalKey: e => { if (e.key === 'Enter') this.goCatalog(); },
+      onLocalKey: e => { if (e.key === 'Enter') this.buscaFromBar(); },
       onFiltros: () => { this.setState({ menu: null }); if ((this.p || 0) < 0.85) this.goSearch(true); else this.setState(st => ({ expanded: !st.expanded })); },
       filtrosBg: s.expanded ? 'rgba(41,45,41,.08)' : 'rgba(41,45,41,0)',
       k1: s.expanded ? '11px' : '1px', k2: s.expanded ? '1px' : '9px', k3: s.expanded ? '7px' : '4px',
       hasExtra: extraCount > 0, extraCount,
-      onBuscar: () => this.goCatalog(),
+      onBuscar: () => this.buscaFromBar(),
       btnIn: () => this.setState({ hoverBtn: true }), btnOut: () => this.setState({ hoverBtn: false }),
       btnBg: s.hoverBtn ? '#3B403B' : '#292D29', btnArrowX: s.hoverBtn ? '4px' : '0px',
       buscarLabel: s.expanded ? `Ver ${n} ${n === 1 ? 'imóvel' : 'imóveis'}` : 'Buscar',
@@ -1261,7 +1548,7 @@ class Component extends DCLogic {
       matchLine: `${n} ${n === 1 ? 'IMÓVEL CORRESPONDE' : 'IMÓVEIS CORRESPONDEM'}`,
       modeTabs: [['comprar', 'Comprar'], ['alugar', 'Alugar']].map(([k, l]) => seg(l, s.mode === k, () => this.setState({ mode: k, preco: 0 }))),
       sortOptions: ['Relevância', 'Menor preço', 'Maior área'].map((l, i) => seg(l, s.sort === i, () => this.setState({ sort: i }))),
-      countLabel: `${n} ${n === 1 ? 'IMÓVEL' : 'IMÓVEIS'} PARA ${s.mode === 'comprar' ? 'COMPRAR' : 'ALUGAR'}`,
+      countLabel: `${n} ${n === 1 ? 'IMÓVEL' : 'IMÓVEIS'} EM DESTAQUE PARA ${s.mode === 'comprar' ? 'COMPRAR' : 'ALUGAR'}`, goBuscaAll: () => this.goBusca({ modo: s.mode }),
       summary: summaryParts.length ? summaryParts.join(' · ').toUpperCase() : 'SEM FILTROS ADICIONAIS',
       blocks, tests, isEmpty: n === 0,
       emptyHint: summaryParts.length ? `Filtros ativos: ${summaryParts.join(', ')}. Remova algum deles ou limpe todos.` : 'Nenhum imóvel cadastrado para esta pretensão.',
