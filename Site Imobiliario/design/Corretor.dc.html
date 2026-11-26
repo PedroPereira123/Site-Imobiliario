@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartão do corretor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./image-slot.js"></script>
+</helmet>
+<div style="display:flex;flex-direction:column;gap:12px;padding:{{ pad }};border-radius:14px;background:{{ bg }};color:{{ fg }};box-shadow:inset 0 0 0 1px {{ line }};font-family:Archivo,sans-serif;text-align:left">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="position:relative;flex:none;width:{{ foto }};height:{{ foto }};border-radius:50%;overflow:hidden;background:{{ fotoBg }};box-shadow:0 0 0 2px {{ ring }}">
+      <image-slot id="corretor-foto" shape="circle" src="fotos/corretor-exemplo.jpg" placeholder="Foto" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.2em;opacity:.7">SEU CORRETOR</span>
+      <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ nomeSize }};line-height:1">Mariana Costa</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">CRECI-SP 000000-F (EXEMPLO)</span>
+    </div>
+  </div>
+  <sc-if value="{{ comBio }}" hint-placeholder-val="{{ true }}">
+    <p style="margin:0;font-size:14px;line-height:1.55;opacity:.85;text-wrap:pretty">Atendo na Zona Leste há 8 anos, com foco em Tatuapé, Penha e Vila Formosa. Acompanho cada visita e explico todos os custos antes da proposta.</p>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tom":{"editor":"enum","options":["claro","escuro"],"default":"claro","tsType":"string"},"compacto":{"editor":"boolean","default":false,"tsType":"boolean"},"linha":{"editor":"boolean","default":false,"tsType":"boolean"},"$preview":{"width":420,"height":180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = (this.props.tom ?? 'claro') === 'escuro', linha = this.props.linha ?? false, compacto = linha || (this.props.compacto ?? false);
+    return {
+      pad: linha ? '0' : '16px',
+      bg: linha ? 'transparent' : escuro ? 'rgba(239,230,210,.08)' : 'rgba(41,45,41,.06)',
+      fg: escuro ? '#EFE6D2' : '#292D29',
+      line: linha ? 'transparent' : escuro ? 'rgba(239,230,210,.16)' : 'rgba(41,45,41,.1)',
+      ring: escuro ? '#EFE6D2' : '#292D29',
+      fotoBg: escuro ? 'rgba(239,230,210,.18)' : '#CFC4AB',
+      foto: linha ? '42px' : compacto ? '52px' : '64px',
+      nomeSize: linha ? '19px' : compacto ? '22px' : '26px',
+      comBio: !compacto
+    };
+  }
+}
+</script>
+</body>
+</html>

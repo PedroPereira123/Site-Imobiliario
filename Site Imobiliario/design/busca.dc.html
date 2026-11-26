@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buscar imóveis · Capital SP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./zl-ruas.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;background:#DCD1BA;color:#292D29;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;min-width:0}
+a{color:#292D29;text-decoration:none}
+button,select,input{font-family:inherit;color:inherit}
+input::placeholder{color:rgba(41,45,41,.45)}
+:focus-visible{outline:2px solid #A64B36;outline-offset:3px}
+.mono{font-family:'IBM Plex Mono',monospace}
+.bs{font-family:'Big Shoulders Display','Big Shoulders',sans-serif}
+.press{transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease,color 150ms ease,box-shadow 150ms ease}
+.press:active{transform:scale(.97)}
+/* topo */
+.bh{position:sticky;top:0;z-index:40;height:76px;display:flex;align-items:center;gap:20px;padding:0 clamp(16px,3vw,40px);background:rgba(220,209,186,.78);backdrop-filter:blur(18px) saturate(1.15);-webkit-backdrop-filter:blur(18px) saturate(1.15);border-bottom:1px solid rgba(41,45,41,.16)}
+.sbar{flex:1;max-width:980px;margin:0 auto;display:flex;align-items:stretch;height:54px;padding:6px;border-radius:14px;background:linear-gradient(180deg,rgba(243,236,220,.72),rgba(226,216,196,.55));border:1px solid rgba(255,255,255,.45);box-shadow:0 10px 30px -18px rgba(41,45,41,.45),inset 0 1px 0 rgba(255,255,255,.5)}
+.sbar label{display:flex;flex-direction:column;justify-content:center;gap:3px;padding:0 14px;border-radius:9px}
+.sbar label:hover{background:rgba(255,252,242,.45)}
+.sbar .lb{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;opacity:.65}
+.sbar select,.sbar input{width:100%;padding:0;border:0;outline:none;background:transparent;font-size:14px;font-weight:500;cursor:pointer}
+.sbar input{cursor:text}
+.sep{align-self:center;width:1px;height:26px;background:rgba(41,45,41,.14)}
+.seg{position:relative;display:flex;height:40px;padding:3px;border-radius:10px;background:rgba(41,45,41,.08)}
+.seg button{position:relative;width:78px;border:0;background:none;cursor:pointer;font-size:13px;font-weight:600}
+.seg .th{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:8px;background:#F4EDDD;box-shadow:0 1px 2px rgba(41,45,41,.16);transition:transform .45s cubic-bezier(.2,.7,0,1)}
+.sug{position:absolute;top:calc(100% + 10px);left:0;width:min(420px,92vw);max-height:420px;overflow:auto;padding:8px;border-radius:12px;background:#EFE7D6;box-shadow:0 24px 50px -20px rgba(41,45,41,.5);z-index:60}
+.sug button{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:8px 10px;border:0;border-radius:8px;background:none;cursor:pointer;text-align:left;font-size:14px}
+.sug button:hover{background:rgba(41,45,41,.07)}
+.sug .gh{padding:10px 10px 4px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.2em;opacity:.6}
+.fbtn{display:flex;align-items:center;gap:10px;margin-left:6px;padding:0 16px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:13.5px;font-weight:500;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#A64B36;color:#fff;font-size:11px;font-weight:600}
+.nav{display:flex;gap:22px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em}
+.nav a{padding:8px 0}
+.nav a:hover{color:#A64B36}
+/* corpo */
+.bm{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.bl{padding:28px clamp(16px,3vw,40px) 80px}
+.bmap{position:sticky;top:76px;height:calc(100vh - 76px);border-left:1px solid rgba(41,45,41,.16);background:#E6DDC9;overflow:hidden}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 6px 0 12px;border-radius:999px;background:#EFE7D6;border:1px solid rgba(41,45,41,.18);font-size:13px;font-weight:500}
+.chip button{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:0;border-radius:50%;background:transparent;cursor:pointer;font-size:15px;line-height:1}
+.chip button:hover{background:rgba(41,45,41,.1)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%}
+.sel{height:40px;padding:0 34px 0 14px;border:1px solid rgba(41,45,41,.22);border-radius:10px;background:#EFE7D6;font-size:13.5px;font-weight:500;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#292D29 50%),linear-gradient(135deg,#292D29 50%,transparent 50%);background-position:calc(100% - 17px) 17px,calc(100% - 12px) 17px;background-size:5px 5px;background-repeat:no-repeat}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 22px;margin-top:22px}
+.cd{position:relative;cursor:pointer;border-radius:14px;padding:8px;margin:-8px;transition:background-color 200ms ease}
+.cd.on{background:rgba(239,231,214,.85)}
+.ph{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#CFC4AB}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 260ms ease}
+.tag{padding:5px 9px;border-radius:7px;background:rgba(244,237,221,.94);font-size:11.5px;font-weight:600}
+.tag.ex{background:#292D29;color:#EFE6D2}
+.fav{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border:0;border-radius:50%;background:rgba(244,237,221,.92);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.arw{position:absolute;top:50%;width:34px;height:34px;margin-top:-17px;border:0;border-radius:50%;background:rgba(244,237,221,.92);cursor:pointer;opacity:0;transition:opacity 160ms ease;font-size:16px}
+.dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:5px;pointer-events:none}
+.dots span{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 2px rgba(0,0,0,.4)}
+@media (hover:hover) and (pointer:fine){.cd:hover{background:rgba(239,231,214,.6)}.cd:hover .arw{opacity:1}}
+/* mapa */
+.mhost{position:absolute;inset:0;touch-action:none;cursor:grab}
+.mhost.drag{cursor:grabbing}
+.mhost canvas{position:absolute;inset:0;width:100%;height:100%}
+.pl{position:absolute;inset:0;pointer-events:none}
+.pn,.pc{position:absolute;left:0;top:0;pointer-events:auto;border:0;cursor:pointer;white-space:nowrap;transition:background-color 150ms ease,color 150ms ease}
+.pn{padding:6px 9px;border-radius:8px;background:#292D29;color:#EFE6D2;font-size:12px;font-weight:600;box-shadow:0 6px 14px -6px rgba(41,45,41,.6)}
+.pn::after{content:'';position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top-color:inherit}
+.pn{border-top-color:#292D29}
+.pn.on{background:#A64B36;z-index:5}
+.pn.on{border-top-color:#A64B36}
+.pn.fd{opacity:.55}
+.pc{width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:#EFE7D6;color:#292D29;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;box-shadow:0 0 0 2.5px #292D29,0 8px 16px -6px rgba(41,45,41,.6)}
+.pc.on{background:#A64B36;color:#fff;box-shadow:0 0 0 2.5px #A64B36,0 8px 16px -6px rgba(41,45,41,.6)}
+.mctl{position:absolute;right:16px;top:16px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.mctl button{width:40px;height:40px;border:0;border-radius:10px;background:rgba(239,231,214,.94);box-shadow:0 4px 14px -6px rgba(41,45,41,.5);cursor:pointer;font-size:18px;font-weight:500}
+.mfit{position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:3;height:38px;padding:0 14px;border:0;border-radius:19px;background:rgba(239,231,214,.94);box-shadow:0 4px 14px -6px rgba(41,45,41,.5);cursor:pointer;font-size:13px;font-weight:500}
+.attr{position:absolute;right:8px;bottom:6px;z-index:3;padding:2px 6px;border-radius:4px;background:rgba(239,231,214,.8);font-size:10px}
+.mini{position:absolute;left:16px;right:16px;bottom:16px;z-index:4;display:flex;gap:14px;max-width:460px;margin:0 auto;padding:10px;border-radius:14px;background:#F2EBDC;box-shadow:0 18px 40px -18px rgba(41,45,41,.6);cursor:pointer}
+.mini img{flex:none;width:120px;height:96px;object-fit:cover;border-radius:10px}
+.lgd{position:absolute;left:16px;top:16px;z-index:3;display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:10px;background:rgba(239,231,214,.9);font-size:11px}
+/* painel de filtros */
+.ov{position:fixed;inset:0;z-index:80;background:rgba(30,32,28,.38)}
+.fp{position:fixed;left:0;top:0;bottom:0;z-index:81;width:min(460px,100vw);display:flex;flex-direction:column;background:#EBE3D1;box-shadow:20px 0 60px -30px rgba(30,32,28,.6);animation:fpIn 320ms cubic-bezier(.32,.72,0,1)}
+@keyframes fpIn{from{transform:translateX(-100%)}to{transform:none}}
+.fpb{flex:1;overflow:auto;padding:8px 24px 24px}
+.fg{padding:20px 0;border-bottom:1px solid rgba(41,45,41,.12)}
+.fg h4{margin:0 0 12px;font-size:15px;font-weight:600}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.op{min-height:40px;padding:0 14px;border:1px solid rgba(41,45,41,.22);border-radius:20px;background:transparent;cursor:pointer;font-size:13.5px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.op[aria-pressed="true"]{background:#292D29;color:#EFE6D2;border-color:#292D29}
+.rng{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rng label{display:flex;flex-direction:column;gap:6px;font-size:12px;opacity:.85}
+.rng input{height:44px;padding:0 12px;border:1px solid rgba(41,45,41,.22);border-radius:10px;background:#F4EDDD;font-size:16px;outline:none}
+.fpf{display:flex;gap:10px;padding:16px 24px;border-top:1px solid rgba(41,45,41,.14);background:#EBE3D1}
+/* detalhe */
+.dt{position:fixed;right:0;top:0;bottom:0;z-index:81;width:min(460px,100vw);overflow:auto;background:#EFE7D6;box-shadow:-20px 0 60px -30px rgba(30,32,28,.6);animation:dtIn 360ms cubic-bezier(.32,.72,0,1)}
+@keyframes dtIn{from{transform:translateX(100%)}to{transform:none}}
+.vt{display:none}
+@media (max-width:900px){
+  .bh{height:64px;gap:12px}
+  .sbar,.nav{display:none}
+  .msum{display:flex !important}
+  .bm{display:block}
+  .bmap{position:fixed;top:64px;left:0;right:0;bottom:0;height:auto;z-index:20;border:0;display:none}
+  .v-map .bmap{display:block}
+  .v-map .bl{display:none}
+  .grid{grid-template-columns:1fr}
+  .vt{display:flex;position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30}
+  .lgd{display:none}
+}
+@media (prefers-reduced-motion:reduce){.fp,.dt{animation:none}.press,.ph img,.cd,.pn,.pc{transition:none}}
+</style>
+</helmet>
+<div ref="{{ R.root }}" class="{{ rootCls }}" style="min-height:100vh;font-family:Archivo,sans-serif;color:#292D29;background:#DCD1BA">
+
+  <header class="bh">
+    <a href="Capital%20SP%20Home%20v3.dc.html" style="display:flex;align-items:center;gap:12px;flex:none">
+      <span style="position:relative;display:block;width:24px;height:24px;border:2px solid currentColor"><span style="position:absolute;right:-2px;bottom:-2px;width:11px;height:11px;background:#A64B36"></span></span>
+      <span style="display:flex;flex-direction:column;line-height:1"><span class="bs" style="font-weight:800;font-size:20px;letter-spacing:.05em">CAPITAL SP</span><span class="mono" style="font-size:8.5px;letter-spacing:.42em;margin-top:3px">IMÓVEIS</span></span>
+    </a>
+
+    <div class="sbar" role="search">
+      <div style="display:flex;align-items:center;padding-right:8px">
+        <div class="seg"><span class="th" style="transform:translateX({{ thumbX }})"></span>
+          <button onClick="{{ setComprar }}" aria-pressed="{{ isComprar }}" style="opacity:{{ comprarOp }}">Comprar</button>
+          <button onClick="{{ setAlugar }}" aria-pressed="{{ isAlugar }}" style="opacity:{{ alugarOp }}">Alugar</button>
+        </div>
+      </div>
+      <span class="sep"></span>
+      <label style="position:relative;flex:1.6 1 0">
+        <span class="lb">LOCALIZAÇÃO</span>
+        <input value="{{ q }}" onChange="{{ onQ }}" onFocus="{{ onQFocus }}" onKeyDown="{{ onQKey }}" placeholder="{{ qPh }}" aria-label="Bairro, linha, rua ou código" autocomplete="off">
+        <sc-if value="{{ sugOpen }}" hint-placeholder-val="{{ false }}">
+          <div class="sug" onMouseDown="{{ keepSug }}">
+            <sc-if value="{{ hasSugLines }}"><div class="gh">LINHAS DE METRÔ E TREM</div></sc-if>
+            <sc-for list="{{ sugLines }}" as="s" hint-placeholder-count="3"><button onClick="{{ s.go }}"><span class="dot" style="background:{{ s.color }}"></span>{{ s.label }}<span class="mono" style="margin-left:auto;font-size:10px;opacity:.6">{{ s.sub }}</span></button></sc-for>
+            <sc-if value="{{ hasSugBairros }}"><div class="gh">BAIRROS DA ZONA LESTE</div></sc-if>
+            <sc-for list="{{ sugBairros }}" as="s" hint-placeholder-count="5"><button onClick="{{ s.go }}"><span style="width:10px;height:10px;border:1.5px solid #292D29;border-radius:2px"></span>{{ s.label }}<span class="mono" style="margin-left:auto;font-size:10px;opacity:.6">{{ s.sub }}</span></button></sc-for>
+          </div>
+        </sc-if>
+      </label>
+      <span class="sep"></span>
+      <label style="flex:1 1 0"><span class="lb">TIPO</span>
+        <select value="{{ tipoSel }}" onChange="{{ onTipo }}"><sc-for list="{{ tipoOpts }}" as="o" hint-placeholder-count="0"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+      </label>
+      <span class="sep"></span>
+      <label style="flex:1 1 0"><span class="lb">PREÇO</span>
+        <select value="{{ precoSel }}" onChange="{{ onPreco }}"><sc-for list="{{ precoOpts }}" as="o" hint-placeholder-count="0"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+      </label>
+      <button class="fbtn press" onClick="{{ openFilters }}">
+        <span style="display:flex;flex-direction:column;gap:4px;width:15px"><span style="height:1.5px;background:currentColor"></span><span style="height:1.5px;background:currentColor;width:70%"></span><span style="height:1.5px;background:currentColor;width:40%"></span></span>
+        Filtros<sc-if value="{{ hasExtra }}"><span class="badge">{{ extraN }}</span></sc-if>
+      </button>
+    </div>
+
+    <button class="msum press" onClick="{{ openFilters }}" style="display:none;flex:1;align-items:center;justify-content:space-between;gap:10px;height:46px;padding:0 6px 0 14px;border:1px solid rgba(41,45,41,.2);border-radius:12px;background:rgba(239,231,214,.85);text-align:left;cursor:pointer">
+      <span style="display:flex;flex-direction:column;line-height:1.25;overflow:hidden"><span style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ mTitle }}</span><span style="font-size:12px;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ mSub }}</span></span>
+      <span style="position:relative;display:flex;align-items:center;justify-content:center;flex:none;width:36px;height:36px;border-radius:9px;background:#292D29;color:#EFE6D2;font-size:12px"><span style="display:flex;flex-direction:column;gap:4px;width:15px"><span style="height:1.5px;background:currentColor"></span><span style="height:1.5px;background:currentColor;width:70%"></span><span style="height:1.5px;background:currentColor;width:40%"></span></span><sc-if value="{{ hasExtra }}"><span class="badge" style="position:absolute;right:-6px;top:-6px">{{ extraN }}</span></sc-if></span>
+    </button>
+
+    <nav class="nav"><a href="Capital%20SP%20Home%20v3.dc.html">HOME</a><a href="Capital%20SP%20Cadastro.dc.html">CADASTRO</a></nav>
+  </header>
+
+  <div class="bm">
+    <section class="bl" aria-label="Resultados">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px">
+        <div>
+          <h1 class="bs" style="margin:0;font-weight:900;font-size:clamp(40px,5vw,64px);line-height:.9">{{ countBig }}</h1>
+          <p style="margin:8px 0 0;font-size:15px;opacity:.8">{{ countSub }}</p>
+        </div>
+        <label style="display:flex;align-items:center;gap:10px"><span class="mono" style="font-size:10px;letter-spacing:.2em;opacity:.65">ORDENAR</span>
+          <select class="sel" value="{{ sort }}" onChange="{{ onSort }}"><sc-for list="{{ sortOpts }}" as="o" hint-placeholder-count="0"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+        </label>
+      </div>
+      <sc-if value="{{ hasChips }}">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="2"><span class="chip"><span class="dot" style="background:{{ c.color }}"></span>{{ c.label }}<button onClick="{{ c.remove }}" aria-label="{{ c.aria }}">×</button></span></sc-for>
+          <button onClick="{{ clearAll }}" class="mono" style="height:36px;padding:0 8px;border:0;background:none;cursor:pointer;font-size:10.5px;letter-spacing:.16em;text-decoration:underline;text-underline-offset:3px">LIMPAR TUDO</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ lineNote }}"><p style="margin:12px 0 0;font-size:13.5px;line-height:1.5;opacity:.75">{{ lineNote }}</p></sc-if>
+
+      <sc-if value="{{ hasResults }}">
+        <div class="grid">
+          <sc-for list="{{ cards }}" as="c" hint-placeholder-count="6">
+            <article id="{{ c.domId }}" class="{{ c.cls }}" onClick="{{ c.open }}" onMouseEnter="{{ c.enter }}" onMouseLeave="{{ c.leave }}" role="link" tabindex="0" onKeyDown="{{ c.key }}" aria-label="{{ c.aria }}">
+              <div class="ph">
+                <img src="{{ c.img }}" alt="{{ c.alt }}" loading="lazy">
+                <div style="position:absolute;left:10px;top:10px;display:flex;gap:6px"><sc-for list="{{ c.tags }}" as="t" hint-placeholder-count="1"><span class="{{ t.cls }}">{{ t.l }}</span></sc-for></div>
+                <button class="arw press" onClick="{{ c.prev }}" aria-label="Foto anterior" style="left:10px">‹</button>
+                <button class="arw press" onClick="{{ c.next }}" aria-label="Próxima foto" style="right:10px">›</button>
+                <div class="dots"><sc-for list="{{ c.dots }}" as="d" hint-placeholder-count="3"><span style="opacity:{{ d.op }}"></span></sc-for></div>
+                <button class="fav press" onClick="{{ c.fav }}" aria-label="{{ c.favAria }}" aria-pressed="{{ c.favOn }}"><svg width="18" height="16" viewBox="0 0 18 16" aria-hidden="true"><path d="M9 15 1.9 8.1A4.3 4.3 0 0 1 9 2.6a4.3 4.3 0 0 1 7.1 5.5Z" fill="{{ c.favFill }}" stroke="#292D29" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+              </div>
+              <p style="margin:12px 0 0;font-size:13px;line-height:1.4;opacity:.72;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ c.desc }}</p>
+              <div style="display:flex;align-items:baseline;gap:6px;margin-top:8px"><span style="font-size:21px;font-weight:600;letter-spacing:-.01em">{{ c.price }}</span><span style="font-size:13px;font-weight:500">{{ c.priceSuf }}</span></div>
+              <div style="margin-top:2px;font-size:13.5px;opacity:.7">{{ c.sub }}</div>
+              <div style="margin-top:10px;font-size:14px;font-weight:600">{{ c.facts }}</div>
+              <div style="margin-top:3px;font-size:13.5px;opacity:.75">{{ c.addr }}</div>
+              <div class="mono" style="margin-top:8px;font-size:10px;letter-spacing:.16em;opacity:.55">{{ c.code }}</div>
+            </article>
+          </sc-for>
+        </div>
+        <sc-if value="{{ hasMore }}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:40px">
+            <span class="mono" style="font-size:10.5px;letter-spacing:.16em;opacity:.65">{{ shownLine }}</span>
+            <button class="press" onClick="{{ more }}" style="height:48px;padding:0 28px;border:1.5px solid #292D29;border-radius:12px;background:transparent;cursor:pointer;font-size:14px;font-weight:600">Ver mais imóveis</button>
+          </div>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{ noResults }}">
+        <div style="margin-top:48px;max-width:520px">
+          <h2 class="bs" style="margin:0;font-weight:800;font-size:36px;line-height:1">Nenhum imóvel com esses filtros.</h2>
+          <p style="margin:10px 0 18px;font-size:15px;line-height:1.5;opacity:.8">Tente outros bairros, outra linha ou uma faixa de preço maior.</p>
+          <button class="press" onClick="{{ clearAll }}" style="height:46px;padding:0 22px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500">Limpar filtros</button>
+        </div>
+      </sc-if>
+      <p class="mono" style="margin:56px 0 0;font-size:10px;letter-spacing:.14em;line-height:1.7;opacity:.55">IMÓVEIS DE DEMONSTRAÇÃO · FOTOS ILUSTRATIVAS · LOCALIZAÇÃO APROXIMADA</p>
+    </section>
+
+    <aside class="bmap" aria-label="Mapa dos resultados">
+      <div ref="{{ R.mapHost }}" class="mhost"></div>
+      <sc-if value="{{ hasLegend }}"><div class="lgd"><sc-for list="{{ legend }}" as="g" hint-placeholder-count="1"><span style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:4px;border-radius:2px;background:{{ g.color }}"></span>{{ g.l }}</span></sc-for></div></sc-if>
+      <div class="mctl"><button class="press" onClick="{{ zoomIn }}" aria-label="Aproximar">+</button><button class="press" onClick="{{ zoomOut }}" aria-label="Afastar">−</button></div>
+      <button class="mfit press" onClick="{{ fitResults }}">Enquadrar resultados</button>
+      <sc-if value="{{ hasMini }}">
+        <div class="mini" onClick="{{ mini.open }}" role="link" aria-label="{{ mini.aria }}">
+          <img src="{{ mini.img }}" alt="">
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;overflow:hidden">
+            <span style="font-size:18px;font-weight:600">{{ mini.price }}</span>
+            <span style="font-size:12.5px;opacity:.7">{{ mini.sub }}</span>
+            <span style="font-size:13px;font-weight:600">{{ mini.facts }}</span>
+            <span style="font-size:12.5px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ mini.addr }}</span>
+          </div>
+          <button onClick="{{ mini.close }}" aria-label="Fechar" style="position:absolute;right:6px;top:6px;width:32px;height:32px;border:0;border-radius:50%;background:transparent;cursor:pointer;font-size:16px">×</button>
+        </div>
+      </sc-if>
+      <span class="attr">© colaboradores do <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="text-decoration:underline">OpenStreetMap</a></span>
+    </aside>
+  </div>
+
+  <div class="vt"><button class="press" onClick="{{ toggleView }}" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 20px;border:0;border-radius:24px;background:#292D29;color:#EFE6D2;box-shadow:0 12px 30px -12px rgba(30,32,28,.7);cursor:pointer;font-size:14px;font-weight:500">{{ viewLabel }}</button></div>
+
+  <sc-if value="{{ filtersOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="ov" onClick="{{ closeFilters }}"></div>
+    <div class="fp" role="dialog" aria-modal="true" aria-label="Filtros" onKeyDown="{{ escFilters }}">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px 6px">
+        <span class="bs" style="font-weight:800;font-size:30px">FILTROS</span>
+        <button class="press" onClick="{{ closeFilters }}" aria-label="Fechar filtros" style="width:44px;height:44px;border:0;border-radius:50%;background:rgba(41,45,41,.07);cursor:pointer;font-size:18px">×</button>
+      </div>
+      <div class="fpb">
+        <div class="fg" style="padding-top:8px"><div class="seg" style="width:max-content"><span class="th" style="transform:translateX({{ fThumbX }})"></span><button onClick="{{ fComprar }}" style="opacity:{{ fComprarOp }}">Comprar</button><button onClick="{{ fAlugar }}" style="opacity:{{ fAlugarOp }}">Alugar</button></div></div>
+        <div class="fg"><h4>Linha de metrô ou trem</h4><div class="opts"><sc-for list="{{ fLines }}" as="o" hint-placeholder-count="7"><button class="op press" onClick="{{ o.go }}" aria-pressed="{{ o.on }}"><span class="dot" style="background:{{ o.color }}"></span>{{ o.l }}</button></sc-for></div></div>
+        <div class="fg"><h4>Bairros</h4><div class="opts"><sc-for list="{{ fBairros }}" as="o" hint-placeholder-count="10"><button class="op press" onClick="{{ o.go }}" aria-pressed="{{ o.on }}">{{ o.l }}</button></sc-for></div></div>
+        <div class="fg"><h4>{{ fPriceTitle }}</h4><div class="rng"><label>Mínimo (R$)<input inputmode="numeric" value="{{ fd.pmin }}" onChange="{{ fPmin }}" placeholder="0"></label><label>Máximo (R$)<input inputmode="numeric" value="{{ fd.pmax }}" onChange="{{ fPmax }}" placeholder="Sem limite"></label></div></div>
+        <div class="fg"><h4>Condomínio + IPTU por mês</h4><div class="rng"><label>Máximo (R$)<input inputmode="numeric" value="{{ fd.cmax }}" onChange="{{ fCmax }}" placeholder="Sem limite"></label></div></div>
+        <div class="fg"><h4>Tipo de imóvel</h4><div class="opts"><sc-for list="{{ fTipos }}" as="o" hint-placeholder-count="4"><button class="op press" onClick="{{ o.go }}" aria-pressed="{{ o.on }}">{{ o.l }}</button></sc-for></div></div>
+        <div class="fg"><h4>Quartos</h4><div class="opts"><sc-for list="{{ fDorms }}" as="o" hint-placeholder-count="5"><button class="op press" onClick="{{ o.go }}" aria-pressed="{{ o.on }}">{{ o.l }}</button></sc-for></div></div>
+        <div class="fg"><h4>Banheiros</h4><div class="opts"><sc-for list="{{ fBanh }}" as="o" hint-placeholder-count="5"><button class="op press" onClick="{{ o.go }}" aria-pressed="{{ o.on }}">{{ o.l }}</button></sc-for></div></div>
+        <div class="fg"><h4>Vagas de garagem</h4><div class="opts"><sc-for list="{{ fVagas }}" as="o" hint-placeholder-count="5"><button class="op press" onClick="{{ o.go }}" aria-pressed="{{ o.on }}">{{ o.l }}</button></sc-for></div></div>
+        <div class="fg"><h4>Área (m²)</h4><div class="rng"><label>Mínima<input inputmode="numeric" value="{{ fd.amin }}" onChange="{{ fAmin }}" placeholder="0"></label><label>Máxima<input inputmode="numeric" value="{{ fd.amax }}" onChange="{{ fAmax }}" placeholder="Sem limite"></label></div></div>
+        <div class="fg" style="border:0"><h4>Características</h4><div class="opts"><sc-for list="{{ fFeats }}" as="o" hint-placeholder-count="8"><button class="op press" onClick="{{ o.go }}" aria-pressed="{{ o.on }}">{{ o.l }}</button></sc-for></div></div>
+      </div>
+      <div class="fpf">
+        <button class="press" onClick="{{ fClear }}" style="height:50px;padding:0 20px;border:1.5px solid #292D29;border-radius:12px;background:transparent;cursor:pointer;font-size:14px;font-weight:600">Limpar</button>
+        <button class="press" onClick="{{ fApply }}" style="flex:1;height:50px;border:0;border-radius:12px;background:#A64B36;color:#fff;cursor:pointer;font-size:15px;font-weight:600">{{ fApplyLabel }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ detOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="ov" onClick="{{ closeDet }}"></div>
+    <div class="dt" role="dialog" aria-modal="true" aria-label="{{ det.aria }}" onKeyDown="{{ escDet }}">
+      <div style="position:relative;aspect-ratio:4/3;background:#CFC4AB">
+        <img src="{{ det.img }}" alt="{{ det.alt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        <button class="press" onClick="{{ closeDet }}" aria-label="Fechar" style="position:absolute;right:14px;top:14px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(244,237,221,.94);cursor:pointer;font-size:18px">×</button>
+        <button class="press" onClick="{{ det.prev }}" aria-label="Foto anterior" style="position:absolute;left:14px;top:50%;width:44px;height:44px;margin-top:-22px;border:0;border-radius:50%;background:rgba(244,237,221,.94);cursor:pointer;font-size:20px">‹</button>
+        <button class="press" onClick="{{ det.next }}" aria-label="Próxima foto" style="position:absolute;right:14px;top:50%;width:44px;height:44px;margin-top:-22px;border:0;border-radius:50%;background:rgba(244,237,221,.94);cursor:pointer;font-size:20px">›</button>
+        <span class="mono" style="position:absolute;left:14px;bottom:14px;padding:5px 9px;border-radius:7px;background:rgba(41,45,41,.8);color:#EFE6D2;font-size:10.5px;letter-spacing:.14em">{{ det.photoN }}</span>
+      </div>
+      <div style="padding:24px 28px 32px">
+        <div class="mono" style="font-size:10.5px;letter-spacing:.2em;opacity:.65">{{ det.kick }}</div>
+        <h2 class="bs" style="margin:10px 0 0;font-weight:900;font-size:40px;line-height:.92">{{ det.title }}</h2>
+        <p style="margin:8px 0 0;font-size:15px;opacity:.8">{{ det.addr }}</p>
+        <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;margin-top:20px"><span style="font-size:28px;font-weight:600;letter-spacing:-.01em">{{ det.priceMain }}</span><span style="font-size:14px;font-weight:500">{{ det.priceSuf }}</span></div>
+        <div style="margin-top:2px;font-size:14px;opacity:.72">{{ det.priceSub }}</div>
+        <div style="margin-top:14px;font-size:15px;font-weight:600">{{ det.factsLine }}</div>
+        <a class="press" href="{{ det.href }}" onClick="{{ det.go }}" style="display:flex;align-items:center;justify-content:center;gap:12px;height:56px;margin-top:26px;border-radius:12px;background:#A64B36;color:#fff;font-size:16px;font-weight:600">Ver anúncio completo<span aria-hidden="true">→</span></a>
+        <p style="margin:10px 0 0;font-size:13px;line-height:1.5;opacity:.7">No anúncio: todas as fotos, descrição, itens do imóvel, mapa da região, corretor e agendamento de visita.</p>
+        <a href="{{ det.wa }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:14px;font-size:14px;text-decoration:underline;text-underline-offset:3px">Falar no WhatsApp sobre o {{ det.code }}</a>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  RAW = [["CSP-1001", "comprar", "Casa térrea", "Belém", "R. Siqueira Bueno", -23.53616, -46.59709, 130, 3, 2, 1, 783000, 0, 360, "Quintal|Pet friendly", "", 43, ["fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg"], "Casa térrea de 3 dormitórios com quintal."], ["CSP-1002", "comprar", "Comercial", "Belém", "R. Siqueira Bueno", -23.54764, -46.59316, 120, 0, 1, 4, 970000, 0, 440, "Perto do metrô", "Exclusivo", 42, ["fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg", "fotos/winplace-coworking-space-22730c.jpg", "fotos/openspace-wao-coworking-f9666a.jpg"], "Salão comercial de frente para a rua, a poucos minutos do metrô ou trem."], ["CSP-1003", "alugar", "Apartamento", "Belém", "Av. Celso Garcia", -23.53865, -46.60144, 104, 3, 3, 1, 4550, 900, 430, "Perto do metrô|Portaria 24h|Elevador|Pet friendly|Mobiliado", "Novo", 39, ["fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg"], "Apartamento de 3 dormitórios com portaria 24h e elevador, a poucos minutos do metrô ou trem."], ["CSP-1004", "alugar", "Casa térrea", "Mooca", "R. da Mooca", -23.55386, -46.60168, 98, 4, 4, 1, 3000, 0, 340, "Perto do metrô|Quintal|Churrasqueira", "Exclusivo", 34, ["fotos/casa-modernista-da-rua-it-polis-gregori--db0a5a.jpg", "fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg"], "Casa térrea de 4 dormitórios com quintal e churrasqueira, a poucos minutos do metrô ou trem."], ["CSP-1005", "comprar", "Sobrado", "Mooca", "R. da Mooca", -23.55366, -46.5953, 115, 2, 2, 1, 892000, 0, 410, "Quintal", "Exclusivo", 28, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 2 dormitórios com quintal, em rua residencial."], ["CSP-1006", "comprar", "Apartamento", "Mooca", "R. da Mooca", -23.56079, -46.59341, 46, 2, 2, 2, 477000, 730, 220, "Portaria 24h|Churrasqueira", "Novo", 20, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 2 dormitórios com portaria 24h e churrasqueira."], ["CSP-1007", "alugar", "Apartamento", "Água Rasa", "R. Serra de Jairé", -23.56738, -46.57401, 98, 3, 3, 1, 3150, 790, 350, "Portaria 24h|Academia|Elevador|Pet friendly", "", 7, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com portaria 24h e academia."], ["CSP-1008", "comprar", "Apartamento", "Água Rasa", "R. Orfanato", -23.565, -46.57116, 46, 2, 2, 2, 373000, 380, 170, "Pet friendly", "", 15, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 2 dormitórios."], ["CSP-1009", "comprar", "Apartamento", "Água Rasa", "R. Serra de Jairé", -23.56053, -46.56999, 66, 2, 2, 1, 526000, 670, 240, "Portaria 24h|Pet friendly", "Exclusivo", 50, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 2 dormitórios com portaria 24h."], ["CSP-1010", "alugar", "Apartamento", "Vila Prudente", "Av. Prof. Luiz Ignácio Anhaia Mello", -23.5786, -46.57707, 72, 2, 2, 2, 2300, 1010, 230, "Perto do metrô|Varanda|Elevador|Churrasqueira", "Novo", 25, ["fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg", "fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg"], "Apartamento de 2 dormitórios com varanda e elevador, a poucos minutos do metrô ou trem."], ["CSP-1011", "alugar", "Sobrado", "Vila Prudente", "R. Ibitirama", -23.5812, -46.58157, 120, 3, 3, 3, 3500, 0, 320, "Perto do metrô|Quintal|Churrasqueira|Pet friendly", "", 18, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 3 dormitórios com quintal e churrasqueira, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1012", "comprar", "Apartamento", "Vila Prudente", "Av. Prof. Luiz Ignácio Anhaia Mello", -23.58705, -46.58268, 104, 3, 3, 2, 738000, 700, 340, "Perto do metrô|Varanda|Elevador|Pet friendly", "", 50, ["fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg"], "Apartamento de 3 dormitórios com varanda e elevador, a poucos minutos do metrô ou trem."], ["CSP-1013", "comprar", "Apartamento", "São Lucas", "Av. Sapopemba", -23.60038, -46.55842, 64, 2, 1, 1, 396000, 530, 180, "Perto do metrô|Varanda|Piscina|Elevador|Churrasqueira", "Exclusivo", 34, ["fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg", "fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg"], "Apartamento de 2 dormitórios com varanda e piscina, a poucos minutos do metrô ou trem."], ["CSP-1014", "comprar", "Sobrado", "São Lucas", "R. Moacir Antônio de Moraes", -23.59519, -46.55286, 155, 3, 2, 2, 740000, 0, 340, "Perto do metrô|Quintal|Churrasqueira", "Novo", 24, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com quintal e churrasqueira, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1015", "alugar", "Apartamento", "Tatuapé", "R. Apucarana", -23.53958, -46.57227, 80, 3, 3, 2, 3700, 540, 360, "Perto do metrô|Varanda|Portaria 24h|Academia|Elevador", "Exclusivo", 17, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1016", "comprar", "Apartamento", "Tatuapé", "R. Apucarana", -23.54475, -46.57766, 108, 3, 3, 1, 1193000, 1050, 550, "Perto do metrô|Varanda|Academia|Elevador", "Novo", 32, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 3 dormitórios com varanda e academia, a poucos minutos do metrô ou trem."], ["CSP-1017", "alugar", "Apartamento", "Tatuapé", "R. Serra de Bragança", -23.53638, -46.5798, 74, 2, 2, 1, 3600, 830, 340, "Perto do metrô|Portaria 24h|Elevador|Pet friendly", "Ótimo preço", 31, ["fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg"], "Apartamento de 2 dormitórios com portaria 24h e elevador, a poucos minutos do metrô ou trem."], ["CSP-1018", "comprar", "Sobrado", "Tatuapé", "R. Emília Marengo", -23.53708, -46.57022, 205, 3, 3, 2, 1806000, 0, 830, "Varanda", "Novo", 13, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com varanda, em rua residencial."], ["CSP-1019", "alugar", "Comercial", "Tatuapé", "R. Serra de Bragança", -23.53913, -46.58108, 70, 0, 2, 2, 2500, 550, 280, "Perto do metrô", "Novo", 2, ["fotos/conjunto-nacional-em-31-de-julho-de-2025-9f5c5e.jpg", "fotos/escrit-rio-virtual-ac68d0.jpg", "fotos/c4di-interior-coworking-space-2025-803799.jpg"], "Galpão com pé-direito alto e acesso para carga, a poucos minutos do metrô ou trem."], ["CSP-1020", "comprar", "Sobrado", "Tatuapé", "R. Emília Marengo", -23.53886, -46.57454, 150, 4, 4, 2, 1308000, 0, 600, "Quintal|Churrasqueira|Varanda|Pet friendly", "Exclusivo", 52, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 4 dormitórios com quintal e churrasqueira, em rua residencial."], ["CSP-1021", "comprar", "Apartamento", "Tatuapé", "R. Serra de Bragança", -23.53553, -46.5719, 38, 1, 1, 1, 380000, 600, 170, "Perto do metrô|Varanda|Portaria 24h|Elevador|Pet friendly", "Exclusivo", 42, ["fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg", "fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg"], "Apartamento de 1 dormitório com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1022", "comprar", "Apartamento", "Tatuapé", "R. Itapura", -23.5436, -46.57961, 52, 2, 1, 1, 578000, 540, 260, "Varanda|Portaria 24h|Academia|Piscina|Elevador", "Novo", 5, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 2 dormitórios com varanda e portaria 24h."], ["CSP-1023", "alugar", "Sobrado", "Tatuapé", "R. Apucarana", -23.54261, -46.57685, 215, 2, 2, 1, 10150, 0, 990, "Perto do metrô|Quintal|Varanda", "Ótimo preço", 23, ["fotos/colorful-row-of-houses-981837.jpg", "fotos/rainbow-row-east-bay-street-south-of-bro-c51c42.jpg", "fotos/parque-residencial-sav-ia-7-700195.jpg"], "Sobrado de 2 dormitórios com quintal e varanda, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1024", "comprar", "Apartamento", "Tatuapé", "R. Tuiuti", -23.54162, -46.57681, 90, 3, 3, 1, 894000, 620, 410, "Portaria 24h|Piscina|Elevador|Churrasqueira", "Novo", 42, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 3 dormitórios com portaria 24h e piscina."], ["CSP-1025", "alugar", "Sobrado", "Carrão", "R. Antônio de Barros", -23.5478, -46.53738, 200, 3, 2, 2, 5450, 0, 610, "Perto do metrô", "Ótimo preço", 51, ["fotos/colorful-row-of-houses-981837.jpg", "fotos/rainbow-row-east-bay-street-south-of-bro-c51c42.jpg", "fotos/parque-residencial-sav-ia-7-700195.jpg"], "Sobrado de 3 dormitórios, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1026", "alugar", "Apartamento", "Carrão", "R. Antônio de Barros", -23.55532, -46.54739, 98, 3, 3, 0, 3650, 850, 370, "Varanda|Portaria 24h|Elevador", "", 19, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com varanda e portaria 24h."], ["CSP-1027", "comprar", "Apartamento", "Carrão", "Av. Conselheiro Carrão", -23.55177, -46.54795, 36, 1, 1, 1, 311000, 570, 140, "Perto do metrô|Varanda|Academia|Elevador|Churrasqueira|Pet friendly", "Exclusivo", 58, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 1 dormitório com varanda e academia, a poucos minutos do metrô ou trem."], ["CSP-1028", "alugar", "Sobrado", "Vila Formosa", "R. Abel Tavares", -23.56863, -46.54429, 200, 3, 3, 1, 5600, 0, 550, "Churrasqueira|Varanda", "", 31, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com churrasqueira e varanda, em rua residencial."], ["CSP-1029", "comprar", "Casa térrea", "Vila Formosa", "Av. Renata", -23.56627, -46.54486, 162, 3, 3, 2, 1171000, 0, 540, "Quintal|Churrasqueira|Pet friendly", "", 35, ["fotos/casa-modernista-da-rua-bahia-gregori-war-44442b.jpg", "fotos/interior-of-camille-pissarro-s-studio-at-654b2e.jpg", "fotos/casa-modernista-da-rua-it-polis-gregori--db0a5a.jpg"], "Casa térrea de 3 dormitórios com quintal e churrasqueira."], ["CSP-1030", "alugar", "Apartamento", "Vila Formosa", "Av. Renata", -23.56365, -46.54856, 62, 2, 2, 0, 1950, 540, 200, "Varanda|Pet friendly", "Exclusivo", 35, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 2 dormitórios com varanda."], ["CSP-1031", "comprar", "Sobrado", "Vila Formosa", "Av. Renata", -23.56399, -46.54501, 250, 4, 4, 3, 1560000, 0, 720, "Churrasqueira|Pet friendly", "Ótimo preço", 8, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 4 dormitórios com churrasqueira, em rua residencial."], ["CSP-1032", "alugar", "Apartamento", "Vila Formosa", "R. Abel Tavares", -23.56647, -46.55201, 92, 3, 3, 1, 3000, 960, 320, "Portaria 24h|Academia|Piscina|Elevador|Pet friendly", "Exclusivo", 21, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com portaria 24h e academia."], ["CSP-1033", "comprar", "Sobrado", "Vila Formosa", "R. Abel Tavares", -23.56445, -46.5423, 260, 4, 4, 2, 1889000, 0, 870, "Quintal|Churrasqueira|Pet friendly", "Ótimo preço", 30, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 4 dormitórios com quintal e churrasqueira, em rua residencial."], ["CSP-1034", "alugar", "Apartamento", "Vila Formosa", "Av. Renata", -23.56775, -46.5453, 44, 1, 1, 2, 1650, 630, 150, "Varanda|Portaria 24h|Academia|Elevador|Mobiliado", "", 58, ["fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg", "fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg"], "Apartamento de 1 dormitório com varanda e portaria 24h."], ["CSP-1035", "alugar", "Sobrado", "Vila Formosa", "Av. Dr. Eduardo Cotching", -23.57151, -46.54279, 170, 4, 3, 3, 4950, 0, 480, "Churrasqueira|Pet friendly", "", 55, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 4 dormitórios com churrasqueira, em rua residencial."], ["CSP-1036", "alugar", "Apartamento", "Aricanduva", "R. Antônio Juvenal", -23.56895, -46.50994, 56, 2, 2, 1, 1500, 690, 160, "Varanda|Portaria 24h|Churrasqueira", "", 48, ["fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg", "fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg"], "Apartamento de 2 dormitórios com varanda e portaria 24h."], ["CSP-1037", "alugar", "Apartamento", "Aricanduva", "R. Antônio Juvenal", -23.55916, -46.51217, 44, 1, 1, 1, 1150, 620, 120, "Varanda|Portaria 24h|Piscina|Elevador", "", 52, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 1 dormitório com varanda e portaria 24h."], ["CSP-1038", "alugar", "Casa térrea", "Penha", "R. Dr. João Ribeiro", -23.53177, -46.54248, 110, 4, 4, 2, 2950, 0, 320, "Quintal", "Exclusivo", 54, ["fotos/casa-modernista-da-rua-it-polis-gregori--db0a5a.jpg", "fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg"], "Casa térrea de 4 dormitórios com quintal."], ["CSP-1039", "comprar", "Sobrado", "Penha", "Av. Penha de França", -23.53169, -46.54708, 120, 3, 3, 3, 758000, 0, 350, "Perto do metrô|Quintal|Churrasqueira|Pet friendly", "", 50, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 3 dormitórios com quintal e churrasqueira, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1040", "comprar", "Apartamento", "Penha", "Av. Penha de França", -23.53009, -46.53838, 54, 2, 2, 1, 430000, 470, 200, "Perto do metrô|Varanda|Portaria 24h|Churrasqueira", "Ótimo preço", 55, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 2 dormitórios com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1041", "comprar", "Apartamento", "Penha", "R. Santo Afonso", -23.52049, -46.5431, 82, 3, 3, 1, 594000, 990, 270, "Perto do metrô|Portaria 24h|Piscina|Elevador|Pet friendly", "Novo", 4, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 3 dormitórios com portaria 24h e piscina, a poucos minutos do metrô ou trem."], ["CSP-1042", "comprar", "Sobrado", "Penha", "R. Santo Afonso", -23.52519, -46.54915, 135, 2, 2, 3, 765000, 0, 350, "Quintal|Churrasqueira", "Exclusivo", 32, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 2 dormitórios com quintal e churrasqueira, em rua residencial."], ["CSP-1043", "comprar", "Sobrado", "Penha", "R. Padre Benedito de Camargo", -23.5229, -46.53849, 160, 3, 2, 2, 859000, 0, 390, "Perto do metrô|Quintal|Churrasqueira|Varanda|Pet friendly", "Ótimo preço", 33, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 3 dormitórios com quintal e churrasqueira, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1044", "comprar", "Comercial", "Penha", "Av. Penha de França", -23.52576, -46.5483, 180, 0, 2, 4, 1223000, 0, 560, "Perto do metrô", "Exclusivo", 55, ["fotos/escrit-rio-virtual-ac68d0.jpg", "fotos/c4di-interior-coworking-space-2025-803799.jpg", "fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg"], "Salão comercial de frente para a rua, a poucos minutos do metrô ou trem."], ["CSP-1045", "alugar", "Sobrado", "Penha", "Av. Penha de França", -23.52411, -46.53997, 190, 4, 3, 1, 5500, 0, 520, "Perto do metrô|Quintal|Pet friendly", "Ótimo preço", 12, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 4 dormitórios com quintal, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1046", "comprar", "Apartamento", "Penha", "Av. Penha de França", -23.53047, -46.54325, 84, 3, 2, 0, 541000, 720, 250, "Varanda|Portaria 24h|Piscina|Elevador", "Exclusivo", 26, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 3 dormitórios com varanda e portaria 24h."], ["CSP-1047", "comprar", "Casa térrea", "Penha", "Av. Penha de França", -23.52339, -46.5419, 182, 3, 3, 2, 1075000, 0, 490, "Quintal", "", 34, ["fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Casa térrea de 3 dormitórios com quintal."], ["CSP-1048", "comprar", "Apartamento", "Jardim Penha", "R. Cel. Rodrigues de Carvalho", -23.51386, -46.5287, 78, 3, 3, 2, 549000, 960, 250, "Perto do metrô|Portaria 24h|Elevador", "Novo", 10, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com portaria 24h e elevador, a poucos minutos do metrô ou trem."], ["CSP-1049", "comprar", "Apartamento", "Jardim Penha", "R. Cel. Rodrigues de Carvalho", -23.51278, -46.53521, 42, 1, 1, 1, 253000, 420, 120, "Varanda|Academia|Piscina", "Novo", 56, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 1 dormitório com varanda e academia."], ["CSP-1050", "comprar", "Apartamento", "Jardim Penha", "R. Cel. Rodrigues de Carvalho", -23.51486, -46.5296, 40, 1, 1, 1, 231000, 340, 110, "Piscina|Elevador|Pet friendly", "", 7, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 1 dormitório com piscina e elevador."], ["CSP-1051", "alugar", "Casa térrea", "Jardim Penha", "Av. Gabriela Mistral", -23.51447, -46.52636, 178, 3, 3, 3, 4550, 0, 460, "Perto do metrô|Quintal|Pet friendly", "", 17, ["fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Casa térrea de 3 dormitórios com quintal, a poucos minutos do metrô ou trem."], ["CSP-1052", "alugar", "Apartamento", "Jardim Penha", "R. Cel. Rodrigues de Carvalho", -23.50624, -46.52594, 106, 3, 2, 2, 3100, 650, 290, "Portaria 24h|Elevador|Pet friendly", "Ótimo preço", 47, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 3 dormitórios com portaria 24h e elevador."], ["CSP-1053", "alugar", "Sobrado", "Jardim Penha", "R. Cel. Rodrigues de Carvalho", -23.5108, -46.52857, 240, 3, 3, 3, 5850, 0, 540, "Perto do metrô|Quintal|Churrasqueira|Varanda", "", 49, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com quintal e churrasqueira, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1054", "alugar", "Apartamento", "Cangaíba", "R. Guirá Acangatara", -23.49701, -46.5271, 54, 2, 2, 2, 1400, 740, 150, "Perto do metrô|Varanda|Academia|Piscina|Elevador|Pet friendly", "Novo", 1, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 2 dormitórios com varanda e academia, a poucos minutos do metrô ou trem."], ["CSP-1055", "alugar", "Casa térrea", "Cangaíba", "Estr. do Cangaíba", -23.50674, -46.52571, 130, 4, 3, 1, 2450, 0, 260, "Perto do metrô", "Novo", 33, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/escadaria-da-casa-de-vidro-de-lina-bo-ba-2673e0.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6a7993.jpg"], "Casa térrea de 4 dormitórios, a poucos minutos do metrô ou trem."], ["CSP-1056", "alugar", "Apartamento", "Vila Esperança", "Av. Gov. Carvalho Pinto", -23.52628, -46.51272, 88, 3, 2, 1, 2500, 1030, 250, "Perto do metrô|Varanda|Academia|Elevador", "", 39, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 3 dormitórios com varanda e academia, a poucos minutos do metrô ou trem."], ["CSP-1057", "alugar", "Casa térrea", "Vila Esperança", "R. Cachoeira Utupanema", -23.5264, -46.51539, 190, 2, 2, 1, 4300, 0, 420, "Perto do metrô|Churrasqueira|Pet friendly", "Exclusivo", 31, ["fotos/casa-modernista-da-rua-it-polis-gregori--db0a5a.jpg", "fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg"], "Casa térrea de 2 dormitórios com churrasqueira, a poucos minutos do metrô ou trem."], ["CSP-1058", "comprar", "Comercial", "Vila Esperança", "R. Cachoeira Utupanema", -23.52355, -46.51279, 120, 0, 2, 1, 630000, 510, 290, "Perto do metrô", "", 30, ["fotos/work-wall-espace-de-coworking-neyron-jui-efae79.jpg", "fotos/vista-lateral-do-conjunto-nacional-em-20-391830.jpg", "fotos/communal-coworking-interior-unsplash-f2068a.jpg"], "Sala comercial com recepção e copa, a poucos minutos do metrô ou trem."], ["CSP-1059", "comprar", "Sobrado", "Vila Esperança", "Av. Gov. Carvalho Pinto", -23.51811, -46.51526, 260, 3, 3, 1, 1351000, 0, 620, "Perto do metrô|Varanda|Pet friendly", "Ótimo preço", 35, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com varanda, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1060", "comprar", "Sobrado", "Vila Esperança", "R. Cachoeira Utupanema", -23.52774, -46.52189, 130, 3, 2, 3, 638000, 0, 290, "Perto do metrô|Quintal|Varanda|Pet friendly", "Exclusivo", 12, ["fotos/colorful-row-of-houses-981837.jpg", "fotos/rainbow-row-east-bay-street-south-of-bro-c51c42.jpg", "fotos/parque-residencial-sav-ia-7-700195.jpg"], "Sobrado de 3 dormitórios com quintal e varanda, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1061", "alugar", "Apartamento", "Vila Esperança", "Av. Gov. Carvalho Pinto", -23.52631, -46.51765, 92, 3, 2, 0, 2600, 760, 270, "Perto do metrô|Varanda|Piscina|Elevador|Pet friendly", "Novo", 45, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com varanda e piscina, a poucos minutos do metrô ou trem."], ["CSP-1062", "alugar", "Casa térrea", "Vila Matilde", "R. Joaquim Marra", -23.5338, -46.53068, 186, 3, 2, 3, 4500, 0, 450, "Churrasqueira", "", 48, ["fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/escadaria-da-casa-de-vidro-de-lina-bo-ba-2673e0.jpg"], "Casa térrea de 3 dormitórios com churrasqueira."], ["CSP-1063", "comprar", "Apartamento", "Vila Matilde", "R. Joaquim Marra", -23.52874, -46.53367, 66, 2, 2, 1, 417000, 840, 190, "Varanda|Piscina|Elevador|Pet friendly", "", 53, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 2 dormitórios com varanda e piscina."], ["CSP-1064", "alugar", "Sobrado", "Vila Matilde", "R. Gil de Oliveira", -23.53104, -46.52453, 155, 3, 2, 2, 4150, 0, 390, "Perto do metrô|Quintal|Pet friendly", "", 18, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com quintal, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1065", "comprar", "Apartamento", "Vila Matilde", "R. Gil de Oliveira", -23.52906, -46.5273, 68, 2, 2, 1, 430000, 620, 200, "Perto do metrô|Portaria 24h|Piscina|Elevador", "Novo", 51, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 2 dormitórios com portaria 24h e piscina, a poucos minutos do metrô ou trem."], ["CSP-1066", "alugar", "Apartamento", "Vila Matilde", "R. Joaquim Marra", -23.53358, -46.52324, 42, 1, 1, 2, 1400, 650, 130, "Perto do metrô|Varanda|Academia|Elevador|Pet friendly", "", 9, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 1 dormitório com varanda e academia, a poucos minutos do metrô ou trem."], ["CSP-1067", "comprar", "Sobrado", "Vila Matilde", "Av. Waldemar Carlos Pereira", -23.53681, -46.52719, 135, 2, 2, 2, 830000, 0, 380, "Perto do metrô|Quintal", "Ótimo preço", 54, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 2 dormitórios com quintal, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1068", "comprar", "Apartamento", "Vila Matilde", "R. Gil de Oliveira", -23.53113, -46.53386, 98, 3, 2, 2, 724000, 970, 330, "Academia|Piscina|Elevador|Churrasqueira", "", 33, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 3 dormitórios com academia e piscina."], ["CSP-1069", "alugar", "Apartamento", "Vila Matilde", "Av. Waldemar Carlos Pereira", -23.53365, -46.52727, 110, 3, 3, 1, 3100, 1000, 340, "Perto do metrô|Elevador|Pet friendly", "Ótimo preço", 20, ["fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg"], "Apartamento de 3 dormitórios com elevador, a poucos minutos do metrô ou trem."], ["CSP-1070", "comprar", "Sobrado", "Vila Ré", "R. Fortunato Grimaldi", -23.51407, -46.49783, 160, 4, 3, 2, 859000, 0, 390, "Quintal|Churrasqueira|Pet friendly", "Novo", 54, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 4 dormitórios com quintal e churrasqueira, em rua residencial."], ["CSP-1071", "comprar", "Comercial", "Vila Ré", "Av. São Miguel", -23.51689, -46.50548, 320, 0, 2, 1, 1988000, 0, 910, "Perto do metrô", "Ótimo preço", 52, ["fotos/escrit-rio-virtual-ac68d0.jpg", "fotos/c4di-interior-coworking-space-2025-803799.jpg", "fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg"], "Galpão com pé-direito alto e acesso para carga, a poucos minutos do metrô ou trem."], ["CSP-1072", "comprar", "Apartamento", "Vila Ré", "Av. São Miguel", -23.52174, -46.4965, 62, 2, 1, 1, 416000, 450, 190, "Perto do metrô|Portaria 24h|Academia|Churrasqueira", "Ótimo preço", 33, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 2 dormitórios com portaria 24h e academia, a poucos minutos do metrô ou trem."], ["CSP-1073", "comprar", "Apartamento", "Vila Ré", "Av. São Miguel", -23.5219, -46.49832, 102, 3, 3, 2, 698000, 950, 320, "Perto do metrô|Portaria 24h|Piscina|Elevador|Pet friendly", "Exclusivo", 18, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 3 dormitórios com portaria 24h e piscina, a poucos minutos do metrô ou trem."], ["CSP-1074", "alugar", "Casa térrea", "Vila Ré", "Av. São Miguel", -23.52155, -46.49946, 114, 2, 1, 2, 3000, 0, 280, "Perto do metrô|Quintal|Churrasqueira|Pet friendly", "", 51, ["fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/escadaria-da-casa-de-vidro-de-lina-bo-ba-2673e0.jpg"], "Casa térrea de 2 dormitórios com quintal e churrasqueira, a poucos minutos do metrô ou trem."], ["CSP-1075", "comprar", "Apartamento", "Vila Ré", "R. Fortunato Grimaldi", -23.52187, -46.5013, 46, 2, 2, 1, 243000, 700, 110, "Perto do metrô|Academia|Elevador", "", 36, ["fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg", "fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg"], "Apartamento de 2 dormitórios com academia e elevador, a poucos minutos do metrô ou trem."], ["CSP-1076", "alugar", "Apartamento", "Patriarca", "R. Coroados", -23.53695, -46.50682, 92, 3, 2, 2, 2600, 1170, 280, "Perto do metrô|Varanda|Elevador|Pet friendly", "Novo", 4, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com varanda e elevador, a poucos minutos do metrô ou trem."], ["CSP-1077", "alugar", "Apartamento", "Patriarca", "R. Coroados", -23.53298, -46.50002, 68, 2, 2, 1, 2350, 830, 230, "Perto do metrô|Piscina|Elevador|Pet friendly", "Novo", 37, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 2 dormitórios com piscina e elevador, a poucos minutos do metrô ou trem."], ["CSP-1078", "alugar", "Casa térrea", "Patriarca", "R. Coroados", -23.5359, -46.5056, 122, 3, 3, 2, 3000, 0, 290, "Perto do metrô|Quintal|Varanda|Pet friendly", "", 29, ["fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg"], "Casa térrea de 3 dormitórios com quintal e varanda, a poucos minutos do metrô ou trem."], ["CSP-1079", "alugar", "Casa térrea", "Patriarca", "R. Coroados", -23.53387, -46.50949, 86, 4, 3, 2, 2400, 0, 220, "Perto do metrô|Quintal", "Novo", 49, ["fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Casa térrea de 4 dormitórios com quintal, a poucos minutos do metrô ou trem."], ["CSP-1080", "alugar", "Apartamento", "Patriarca", "R. Coroados", -23.53878, -46.50733, 82, 3, 3, 1, 2300, 680, 250, "Perto do metrô|Varanda|Academia|Elevador|Pet friendly", "Exclusivo", 60, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 3 dormitórios com varanda e academia, a poucos minutos do metrô ou trem."], ["CSP-1081", "comprar", "Apartamento", "Patriarca", "Av. Waldemar Tietz", -23.53113, -46.4983, 102, 3, 2, 0, 692000, 1200, 320, "Perto do metrô|Varanda|Portaria 24h|Academia|Piscina|Elevador", "Ótimo preço", 15, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 3 dormitórios com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1082", "alugar", "Casa térrea", "Artur Alvim", "Av. Águia de Haia", -23.54398, -46.49167, 98, 4, 4, 1, 2050, 0, 210, "Perto do metrô|Quintal", "Novo", 3, ["fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg"], "Casa térrea de 4 dormitórios com quintal, a poucos minutos do metrô ou trem."], ["CSP-1083", "alugar", "Apartamento", "Artur Alvim", "R. Dr. Campos Moura", -23.53408, -46.48149, 64, 2, 1, 0, 2050, 450, 190, "Perto do metrô|Elevador|Pet friendly|Mobiliado", "", 44, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 2 dormitórios com elevador, a poucos minutos do metrô ou trem."], ["CSP-1084", "alugar", "Casa térrea", "Artur Alvim", "R. Dr. Campos Moura", -23.5365, -46.48346, 170, 4, 3, 3, 3400, 0, 340, "Perto do metrô|Quintal|Pet friendly", "Exclusivo", 34, ["fotos/casa-modernista-da-rua-it-polis-gregori--db0a5a.jpg", "fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg"], "Casa térrea de 4 dormitórios com quintal, a poucos minutos do metrô ou trem."], ["CSP-1085", "comprar", "Apartamento", "Ponte Rasa", "R. Ponte Rasa", -23.5067, -46.48162, 82, 3, 3, 1, 486000, 570, 220, "Academia|Piscina|Elevador", "Novo", 43, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com academia e piscina."], ["CSP-1086", "comprar", "Sobrado", "Ponte Rasa", "Av. Paranaguá", -23.50818, -46.48177, 255, 4, 4, 2, 937000, 0, 430, "Quintal|Churrasqueira|Varanda", "", 3, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 4 dormitórios com quintal e churrasqueira, em rua residencial."], ["CSP-1087", "comprar", "Apartamento", "Ermelino Matarazzo", "Av. Paranaguá", -23.50212, -46.48102, 74, 2, 2, 0, 391000, 630, 180, "Varanda|Elevador", "Novo", 45, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 2 dormitórios com varanda e elevador."], ["CSP-1088", "alugar", "Comercial", "Ermelino Matarazzo", "Av. Paranaguá", -23.493, -46.47323, 180, 0, 2, 2, 3600, 0, 360, "Perto do metrô", "Exclusivo", 12, ["fotos/winplace-coworking-space-22730c.jpg", "fotos/openspace-wao-coworking-f9666a.jpg", "fotos/exterior-view-of-the-glass-fronted-ascen-d4f388.jpg"], "Loja térrea com vitrine, a poucos minutos do metrô ou trem."], ["CSP-1089", "comprar", "Casa térrea", "São Miguel Paulista", "Av. Nordestina", -23.49924, -46.43991, 134, 3, 3, 2, 564000, 0, 260, "Perto do metrô|Quintal|Varanda", "", 54, ["fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Casa térrea de 3 dormitórios com quintal e varanda, a poucos minutos do metrô ou trem."], ["CSP-1090", "comprar", "Apartamento", "São Miguel Paulista", "Av. Nordestina", -23.49194, -46.44976, 80, 3, 3, 1, 430000, 970, 200, "Perto do metrô|Elevador|Pet friendly", "Exclusivo", 12, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 3 dormitórios com elevador, a poucos minutos do metrô ou trem."], ["CSP-1091", "alugar", "Apartamento", "São Miguel Paulista", "R. Dr. José Artur Nova", -23.49745, -46.4446, 80, 3, 3, 0, 1600, 910, 180, "Perto do metrô|Varanda|Portaria 24h|Piscina|Elevador|Pet friendly", "Novo", 57, ["fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg", "fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg"], "Apartamento de 3 dormitórios com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1092", "comprar", "Apartamento", "São Miguel Paulista", "Av. Nordestina", -23.49679, -46.44955, 34, 1, 1, 1, 172000, 370, 80, "Varanda|Portaria 24h|Piscina|Elevador|Pet friendly", "Ótimo preço", 56, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 1 dormitório com varanda e portaria 24h."], ["CSP-1093", "comprar", "Sobrado", "São Miguel Paulista", "R. Dr. José Artur Nova", -23.49595, -46.44978, 120, 3, 2, 3, 559000, 0, 260, "", "Novo", 19, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 3 dormitórios, em rua residencial."], ["CSP-1094", "comprar", "Apartamento", "São Miguel Paulista", "Av. Marechal Tito", -23.49404, -46.44483, 92, 3, 2, 2, 469000, 1180, 210, "Perto do metrô|Varanda|Portaria 24h|Piscina|Elevador|Pet friendly", "Novo", 30, ["fotos/modern-kitchen-and-dining-area-in-a-simp-d221be.jpg", "fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg"], "Apartamento de 3 dormitórios com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1095", "alugar", "Sobrado", "Jardim Helena", "R. Capachós", -23.48297, -46.42078, 205, 3, 3, 2, 3000, 0, 310, "", "Ótimo preço", 39, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios, em rua residencial."], ["CSP-1096", "alugar", "Apartamento", "Jardim Helena", "Av. Kumaki Aoki", -23.48212, -46.42128, 66, 2, 2, 1, 1400, 720, 140, "Perto do metrô|Varanda|Piscina|Elevador|Pet friendly", "", 3, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 2 dormitórios com varanda e piscina, a poucos minutos do metrô ou trem."], ["CSP-1097", "alugar", "Apartamento", "Itaim Paulista", "Av. Marechal Tito", -23.50686, -46.40525, 110, 3, 3, 1, 2150, 1320, 220, "Perto do metrô|Varanda|Portaria 24h|Elevador|Pet friendly", "", 11, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 3 dormitórios com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1098", "alugar", "Apartamento", "Itaim Paulista", "R. Barão de Alagoas", -23.49958, -46.39668, 74, 2, 2, 1, 1400, 890, 150, "Perto do metrô|Portaria 24h|Piscina|Elevador|Pet friendly", "Ótimo preço", 1, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 2 dormitórios com portaria 24h e piscina, a poucos minutos do metrô ou trem."], ["CSP-1099", "comprar", "Sobrado", "Itaquera", "R. Gregório Ramalho", -23.54612, -46.45587, 210, 4, 4, 3, 1105000, 0, 510, "Perto do metrô|Quintal|Varanda|Pet friendly", "Ótimo preço", 47, ["fotos/colorful-row-of-houses-981837.jpg", "fotos/rainbow-row-east-bay-street-south-of-bro-c51c42.jpg", "fotos/parque-residencial-sav-ia-7-700195.jpg"], "Sobrado de 4 dormitórios com quintal e varanda, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1100", "comprar", "Apartamento", "Itaquera", "R. Gregório Ramalho", -23.53781, -46.45952, 50, 2, 2, 1, 255000, 420, 120, "Varanda|Portaria 24h", "", 49, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 2 dormitórios com varanda e portaria 24h."], ["CSP-1101", "alugar", "Casa térrea", "Itaquera", "Av. José Pinheiro Borges", -23.54056, -46.45624, 110, 2, 1, 2, 2100, 0, 210, "Quintal", "", 43, ["fotos/casa-modernista-da-rua-bahia-gregori-war-613f21.jpg", "fotos/casa-de-vidro-sede-do-instituto-lina-bo--ada933.jpg", "fotos/paulo-mendes-da-rocha-casa-butant-ac215e.jpg"], "Casa térrea de 2 dormitórios com quintal."], ["CSP-1102", "comprar", "Sobrado", "Itaquera", "R. Gregório Ramalho", -23.53951, -46.45291, 240, 3, 2, 3, 1030000, 0, 470, "Perto do metrô|Quintal", "Novo", 5, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com quintal, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1103", "alugar", "Apartamento", "Itaquera", "R. Gregório Ramalho", -23.5393, -46.45092, 70, 2, 2, 2, 1850, 670, 210, "Perto do metrô|Varanda|Portaria 24h", "", 25, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 2 dormitórios com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1104", "comprar", "Apartamento", "Itaquera", "Av. Itaquera", -23.54453, -46.46025, 60, 2, 2, 1, 328000, 850, 150, "Elevador|Pet friendly", "", 54, ["fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg"], "Apartamento de 2 dormitórios com elevador."], ["CSP-1105", "alugar", "Apartamento", "Itaquera", "Av. José Pinheiro Borges", -23.54775, -46.45342, 40, 1, 1, 1, 850, 340, 100, "Perto do metrô|Portaria 24h|Elevador|Churrasqueira|Pet friendly", "", 54, ["fotos/this-cozy-kitchen-showcases-modern-desig-ee1393.jpg", "fotos/atlanta-24-27-feb-2010-4399677164-e7f69c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg"], "Apartamento de 1 dormitório com portaria 24h e elevador, a poucos minutos do metrô ou trem."], ["CSP-1106", "comprar", "Sobrado", "Itaquera", "Av. Itaquera", -23.54783, -46.4532, 235, 4, 4, 1, 1288000, 0, 590, "Churrasqueira|Varanda|Pet friendly", "Novo", 26, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 4 dormitórios com churrasqueira e varanda, em rua residencial."], ["CSP-1107", "comprar", "Sobrado", "José Bonifácio", "R. Ana Perena", -23.55935, -46.43229, 215, 3, 3, 2, 826000, 0, 380, "Varanda|Pet friendly", "Exclusivo", 37, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 3 dormitórios com varanda, em rua residencial."], ["CSP-1108", "comprar", "Sobrado", "José Bonifácio", "Av. Pires do Rio", -23.55602, -46.42913, 200, 2, 2, 3, 676000, 0, 310, "Perto do metrô|Quintal|Varanda|Pet friendly", "", 58, ["fotos/parque-residencial-sav-ia-3-d6104d.jpg", "fotos/john-r-street-brush-park-midtown-detroit-99e72d.jpg", "fotos/parque-residencial-sav-ia-2-477baf.jpg"], "Sobrado de 2 dormitórios com quintal e varanda, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1109", "alugar", "Comercial", "Guaianases", "Estr. Dom João Nery", -23.544, -46.40858, 370, 0, 2, 4, 6000, 760, 590, "", "", 14, ["fotos/escrit-rio-virtual-ac68d0.jpg", "fotos/c4di-interior-coworking-space-2025-803799.jpg", "fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg"], "Sala comercial com recepção e copa."], ["CSP-1110", "alugar", "Apartamento", "Guaianases", "R. Hipólito de Camargo", -23.54639, -46.4059, 80, 3, 3, 2, 1250, 840, 140, "Perto do metrô|Portaria 24h|Elevador|Mobiliado", "", 32, ["fotos/living-room-paul-schweiker-house-and-stu-cac52c.jpg", "fotos/living-room-paul-schweiker-house-and-stu-6fbc63.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg"], "Apartamento de 3 dormitórios com portaria 24h e elevador, a poucos minutos do metrô ou trem."], ["CSP-1111", "alugar", "Casa térrea", "Cidade Líder", "R. Manoel de Vasconcelos", -23.55732, -46.48503, 182, 3, 3, 2, 4250, 0, 400, "Quintal", "Ótimo preço", 46, ["fotos/casa-modernista-rua-bahia-03-f24fb6.jpg", "fotos/casa-modernista-da-rua-bahia-gregori-war-44442b.jpg", "fotos/interior-of-camille-pissarro-s-studio-at-654b2e.jpg"], "Casa térrea de 3 dormitórios com quintal."], ["CSP-1112", "comprar", "Apartamento", "Cidade Líder", "R. Manoel de Vasconcelos", -23.56425, -46.49017, 102, 3, 3, 0, 536000, 1140, 250, "Varanda|Elevador", "Exclusivo", 23, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 3 dormitórios com varanda e elevador."], ["CSP-1113", "comprar", "Apartamento", "Sapopemba", "R. Arquiteto Vilanova Artigas", -23.60607, -46.51216, 60, 2, 1, 0, 318000, 600, 150, "Portaria 24h|Elevador|Churrasqueira|Pet friendly", "Ótimo preço", 7, ["fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg", "fotos/modern-dining-area-with-stylish-table-an-bb00db.jpg"], "Apartamento de 2 dormitórios com portaria 24h e elevador."], ["CSP-1114", "comprar", "Comercial", "Sapopemba", "R. Arquiteto Vilanova Artigas", -23.60161, -46.51554, 340, 0, 1, 2, 1410000, 0, 650, "", "", 20, ["fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg", "fotos/winplace-coworking-space-22730c.jpg", "fotos/openspace-wao-coworking-f9666a.jpg"], "Galpão com pé-direito alto e acesso para carga."], ["CSP-1115", "comprar", "Apartamento", "São Mateus", "Av. Ragueb Chohfi", -23.60861, -46.4724, 38, 1, 1, 1, 177000, 670, 80, "Perto do metrô|Varanda|Portaria 24h|Pet friendly", "Exclusivo", 6, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 1 dormitório com varanda e portaria 24h, a poucos minutos do metrô ou trem."], ["CSP-1116", "alugar", "Sobrado", "São Mateus", "Av. Ragueb Chohfi", -23.60201, -46.47632, 140, 3, 3, 2, 2650, 0, 250, "Perto do metrô|Quintal|Churrasqueira", "Novo", 39, ["fotos/2916-2924-n-street-nw-227882.jpg", "fotos/interior-staircase-railing-mukhi-mahal-5c996b.jpg", "fotos/parque-residencial-sav-ia-5-8e1395.jpg"], "Sobrado de 3 dormitórios com quintal e churrasqueira, em rua residencial, a poucos minutos do metrô ou trem."], ["CSP-1117", "comprar", "Comercial", "Iguatemi", "Av. Ragueb Chohfi", -23.60761, -46.44199, 260, 0, 2, 2, 997000, 460, 460, "Perto do metrô", "Novo", 24, ["fotos/communal-coworking-interior-unsplash-f2068a.jpg", "fotos/tsohue-coworking-1f-80a2b1.jpg", "fotos/conjunto-nacional-em-31-de-julho-de-2025-9f5c5e.jpg"], "Salão comercial de frente para a rua, a poucos minutos do metrô ou trem."], ["CSP-1118", "comprar", "Apartamento", "Iguatemi", "Estr. do Iguatemi", -23.59991, -46.44679, 110, 3, 2, 0, 483000, 980, 220, "Perto do metrô|Portaria 24h|Academia|Churrasqueira", "Novo", 2, ["fotos/modern-kitchen-and-dining-area-with-styl-5a51e4.jpg", "fotos/modern-luxury-living-room-with-kitchen-i-f341d3.jpg", "fotos/modern-bedroom-design-in-a-stylish-hotel-c93206.jpg"], "Apartamento de 3 dormitórios com portaria 24h e academia, a poucos minutos do metrô ou trem."], ["CSP-1119", "comprar", "Comercial", "Cidade Tiradentes", "Av. dos Metalúrgicos", -23.59131, -46.4022, 130, 0, 2, 2, 442000, 0, 200, "", "", 41, ["fotos/work-wall-espace-de-coworking-neyron-jui-efae79.jpg", "fotos/vista-lateral-do-conjunto-nacional-em-20-391830.jpg", "fotos/communal-coworking-interior-unsplash-f2068a.jpg"], "Sala comercial com recepção e copa."], ["CSP-1120", "alugar", "Comercial", "Cidade Tiradentes", "Av. dos Metalúrgicos", -23.58437, -46.4051, 60, 0, 2, 4, 800, 750, 90, "", "", 55, ["fotos/escrit-rio-virtual-ac68d0.jpg", "fotos/c4di-interior-coworking-space-2025-803799.jpg", "fotos/interior-de-galp-o-do-cais-mau-em-porto--152ed6.jpg"], "Salão comercial de frente para a rua."]];
+  BAIRROS = {"Belém": [-23.542, -46.596], "Mooca": [-23.556, -46.599], "Água Rasa": [-23.564, -46.574], "Vila Prudente": [-23.583, -46.58], "São Lucas": [-23.601, -46.556], "Tatuapé": [-23.54, -46.576], "Carrão": [-23.552, -46.542], "Vila Formosa": [-23.568, -46.547], "Aricanduva": [-23.564, -46.514], "Penha": [-23.526, -46.544], "Jardim Penha": [-23.512, -46.53], "Cangaíba": [-23.503, -46.525], "Vila Esperança": [-23.523, -46.516], "Vila Matilde": [-23.534, -46.529], "Vila Ré": [-23.516, -46.5], "Patriarca": [-23.534, -46.504], "Artur Alvim": [-23.538, -46.486], "Ponte Rasa": [-23.508, -46.484], "Ermelino Matarazzo": [-23.497, -46.478], "São Miguel Paulista": [-23.496, -46.444], "Jardim Helena": [-23.484, -46.421], "Itaim Paulista": [-23.501, -46.4], "Itaquera": [-23.542, -46.456], "José Bonifácio": [-23.554, -46.431], "Guaianases": [-23.542, -46.41], "Cidade Líder": [-23.56, -46.488], "Sapopemba": [-23.603, -46.51], "São Mateus": [-23.608, -46.478], "Iguatemi": [-23.605, -46.441], "Cidade Tiradentes": [-23.59, -46.4]};
+  LINES = [
+    { id: 'l3', num: '3', name: 'Vermelha', kind: 'Metrô', color: '#D7362C', bairros: ['Belém', 'Tatuapé', 'Carrão', 'Penha', 'Vila Matilde', 'Vila Esperança', 'Patriarca', 'Vila Ré', 'Artur Alvim', 'Itaquera'] },
+    { id: 'l11', num: '11', name: 'Coral', kind: 'Trem', color: '#EC7350', bairros: ['Tatuapé', 'Itaquera', 'José Bonifácio', 'Guaianases'] },
+    { id: 'l12', num: '12', name: 'Safira', kind: 'Trem', color: '#24509E', bairros: ['Tatuapé', 'Penha', 'Jardim Penha', 'Cangaíba', 'Ermelino Matarazzo', 'São Miguel Paulista', 'Jardim Helena', 'Itaim Paulista'] },
+    { id: 'l13', num: '13', name: 'Jade', kind: 'Trem', color: '#14A07E', bairros: ['Cangaíba', 'Jardim Penha'] },
+    { id: 'l15', num: '15', name: 'Prata', kind: 'Monotrilho', color: '#8C98A4', bairros: ['Vila Prudente', 'São Lucas', 'Sapopemba', 'São Mateus', 'Iguatemi'] },
+    { id: 'l2', num: '2', name: 'Verde', kind: 'Metrô · extensão em obras', color: '#2E9A5A', bairros: ['Vila Prudente', 'Água Rasa', 'Tatuapé', 'Vila Formosa', 'Carrão', 'Aricanduva', 'Penha'], note: 'O trecho Vila Prudente–Penha da Linha 2-Verde está em obras, com previsão de operação no fim de 2028 ou início de 2029.' },
+    { id: 'l10', num: '10', name: 'Turquesa', kind: 'Trem', color: '#0F9AA0', bairros: ['Mooca'] }
+  ];
+  RAIL_COLORS = { '1': '#2D5FA8', '2': '#2E9A5A', '3': '#D7362C', '10': '#0F9AA0', '11': '#EC7350', '12': '#24509E', '13': '#14A07E', '15': '#8C98A4' };
+  TIPOS = ['Apartamento', 'Sobrado', 'Casa térrea', 'Comercial'];
+  FEATS = ['Perto do metrô', 'Varanda', 'Quintal', 'Pet friendly', 'Portaria 24h', 'Elevador', 'Academia', 'Piscina', 'Churrasqueira', 'Mobiliado'];
+  PRECOS = {
+    comprar: [['Qualquer valor', '', ''], ['Até R$ 400 mil', '', 400000], ['R$ 400 a 700 mil', 400000, 700000], ['R$ 700 mil a 1 mi', 700000, 1000000], ['Acima de R$ 1 mi', 1000000, '']],
+    alugar: [['Qualquer valor', '', ''], ['Até R$ 2.000', '', 2000], ['R$ 2.000 a 3.500', 2000, 3500], ['R$ 3.500 a 6.000', 3500, 6000], ['Acima de R$ 6.000', 6000, '']]
+  };
+  D = this.RAW.map(r => ({ code: r[0], mode: r[1], tipo: r[2], bairro: r[3], rua: r[4], lat: r[5], lng: r[6], area: r[7], dorms: r[8], banh: r[9], vagas: r[10], price: r[11], condo: r[12], iptu: r[13], feats: r[14] ? r[14].split('|') : [], badge: r[15], age: r[16], fotos: r[17], desc: r[18] }));
+  EMPTY = { linha: '', bairros: [], tipos: [], pmin: '', pmax: '', cmax: '', dorms: 0, banh: 0, vagas: 0, amin: '', amax: '', feats: [] };
+  el = {};
+  R = Object.fromEntries(['root', 'mapHost'].map(k => [k, el => { this.el[k] = el; }]));
+  state = {
+    mode: 'comprar', q: '', f: Object.assign({}, this.EMPTY), fd: null, sort: 'rel', page: 1,
+    sugOpen: false, filtersOpen: false, det: null, detPhoto: 0, ph: {}, hover: null, sel: null, view: 'list', favs: []
+  };
+
+  norm(s) { return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  slug(s) { return this.norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+  num(v) { const n = parseInt(String(v).replace(/\D/g, ''), 10); return isNaN(n) ? '' : n; }
+  brl(n) { return 'R$ ' + Math.round(n).toLocaleString('pt-BR'); }
+  short(d) { if (d.mode === 'alugar') return this.brl(d.price); return d.price >= 1e6 ? 'R$ ' + (d.price / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mi' : 'R$ ' + Math.round(d.price / 1000) + ' mil'; }
+
+  filter(mode, q, f) {
+    let L = this.D.filter(d => d.mode === mode);
+    const bs = f.linha ? (this.LINES.find(l => l.id === f.linha) || { bairros: [] }).bairros : f.bairros;
+    if (bs.length) L = L.filter(d => bs.includes(d.bairro));
+    if (q && q.trim()) { const t = this.norm(q.trim()); L = L.filter(d => this.norm(`${d.bairro} ${d.rua} ${d.code} ${d.tipo}`).includes(t)); }
+    if (f.tipos.length) L = L.filter(d => f.tipos.includes(d.tipo));
+    if (f.pmin !== '') L = L.filter(d => d.price >= f.pmin);
+    if (f.pmax !== '') L = L.filter(d => d.price <= f.pmax);
+    if (f.cmax !== '') L = L.filter(d => d.condo + d.iptu <= f.cmax);
+    if (f.dorms) L = L.filter(d => d.dorms >= f.dorms);
+    if (f.banh) L = L.filter(d => d.banh >= f.banh);
+    if (f.vagas) L = L.filter(d => d.vagas >= f.vagas);
+    if (f.amin !== '') L = L.filter(d => d.area >= f.amin);
+    if (f.amax !== '') L = L.filter(d => d.area <= f.amax);
+    if (f.feats.length) L = L.filter(d => f.feats.every(x => d.feats.includes(x)));
+    return L;
+  }
+  sorted(L) {
+    const s = this.state.sort, rank = d => (d.badge === 'Exclusivo' ? 2 : d.badge === 'Novo' ? 1 : 0);
+    const A = L.slice();
+    if (s === 'rel') A.sort((a, b) => rank(b) - rank(a) || a.age - b.age);
+    if (s === 'rec') A.sort((a, b) => a.age - b.age);
+    if (s === 'menor') A.sort((a, b) => a.price - b.price);
+    if (s === 'maior') A.sort((a, b) => b.price - a.price);
+    if (s === 'area') A.sort((a, b) => b.area - a.area);
+    return A;
+  }
+  results() { const s = this.state; return this.sorted(this.filter(s.mode, s.q, s.f)); }
+  setF(patch, extra) { this.setState(Object.assign({ f: Object.assign({}, this.state.f, patch), page: 1, sel: null }, extra || {})); }
+  setFd(patch) { this.setState({ fd: Object.assign({}, this.state.fd, patch) }); }
+  pickLine(id) { const l = this.LINES.find(x => x.id === id); this.setF({ linha: id, bairros: l ? l.bairros.slice() : [] }, { q: '', sugOpen: false }); }
+  pickBairro(b) { const f = this.state.f, cur = f.linha ? [] : f.bairros; this.setF({ linha: '', bairros: cur.includes(b) ? cur : cur.concat([b]) }, { q: '', sugOpen: false }); }
+
+  readUrl() {
+    let p = {};
+    try { new URLSearchParams(location.search).forEach((v, k) => { p[k] = v; }); } catch (e) {}
+    if (!Object.keys(p).length) { try { p = JSON.parse(sessionStorage.getItem('csp-busca') || '{}'); } catch (e) {} }
+    try { sessionStorage.removeItem('csp-busca'); } catch (e) {}
+    const f = Object.assign({}, this.EMPTY), st = {};
+    if (p.modo === 'alugar' || p.modo === 'comprar') st.mode = p.modo;
+    const bySlug = s => Object.keys(this.BAIRROS).find(b => this.slug(b) === s);
+    if (p.linha && this.LINES.find(l => l.id === p.linha)) { f.linha = p.linha; f.bairros = this.LINES.find(l => l.id === p.linha).bairros.slice(); }
+    const bs = (p.bairros || p.bairro || '').split(',').map(bySlug).filter(Boolean);
+    if (bs.length && !f.linha) f.bairros = bs;
+    if (p.tipo && this.TIPOS.includes(p.tipo)) f.tipos = [p.tipo];
+    ['pmin', 'pmax', 'cmax', 'amin', 'amax'].forEach(k => { if (p[k]) f[k] = this.num(p[k]); });
+    ['dorms', 'banh', 'vagas'].forEach(k => { if (p[k]) f[k] = this.num(p[k]) || 0; });
+    if (p.feats) f.feats = p.feats.split(',').filter(x => this.FEATS.includes(x));
+    if (p.q) { const b = Object.keys(this.BAIRROS).find(x => this.norm(x) === this.norm(p.q)); if (b) f.bairros = [b]; else st.q = p.q; }
+    st.f = f; return st;
+  }
+  componentDidMount() {
+    let favs = []; try { favs = JSON.parse(localStorage.getItem('csp-favs') || '[]'); } catch (e) {}
+    this.setState(Object.assign({ favs }, this.readUrl()), () => { this.ensureMap(); this.fitResults(true); });
+    setTimeout(() => { if (this.ensureMap()) this.fitResults(true); }, 60);
+    this.onDocKey = e => { if (e.key === 'Escape') { if (this.state.det) this.setState({ det: null }); else if (this.state.filtersOpen) this.setState({ filtersOpen: false }); else if (this.state.sugOpen) this.setState({ sugOpen: false }); } };
+    this.onDocDown = e => { if (this.state.sugOpen && !e.target.closest('.sbar label')) this.setState({ sugOpen: false }); };
+    document.addEventListener('keydown', this.onDocKey); document.addEventListener('mousedown', this.onDocDown);
+  }
+  componentWillUnmount() { document.removeEventListener('keydown', this.onDocKey); document.removeEventListener('mousedown', this.onDocDown); if (this.ro) this.ro.disconnect(); }
+  componentDidUpdate() {
+    const s = this.state, sig = [s.mode, s.q, JSON.stringify(s.f)].join('|');
+    if (this._sig !== undefined && sig !== this._sig) this.fitResults(false);
+    this._sig = sig;
+    this.ensureMap();
+    this.req();
+  }
+
+  // ---------------- mapa (dados © OpenStreetMap) ----------------
+  ensureMap() { const h = this.el.mapHost; if (!h) return false; if (this.map && this.map.host === h && h.querySelector('canvas')) return false; const keep = this.map && this.map.host === h ? { cx: this.map.cx, cy: this.map.cy, k: this.map.k } : null; this.mapInit(); if (keep) Object.assign(this.map, keep); return !keep; }
+  mapInit() {
+    const host = this.el.mapHost; if (!host) return;
+    if (!this.geo) {
+      const txt = (typeof window !== 'undefined' && window.ZL_RUAS) || '', geo = { names: [] };
+      txt.split('\n').forEach(line => {
+        if (!line) return; const c = line[0], body = line.slice(2);
+        if (c === 'N') { geo.names = body.split('|'); return; }
+        geo[c] = body.split('|').map(f => { const i = f.indexOf(';'), ni = f.slice(0, i), pts = f.slice(i + 1).split(' '); let x = 0, y = 0; const xs = new Float64Array(pts.length), ys = new Float64Array(pts.length);
+          pts.forEach((p, j) => { const k = p.indexOf(','); x += parseInt(p.slice(0, k), 36); y += parseInt(p.slice(k + 1), 36); xs[j] = x / 1e4; ys[j] = y / 1e4; });
+          return { n: ni === '' ? '' : geo.names[parseInt(ni, 36)] || '', xs, ys }; });
+      });
+      this.geo = geo;
+    }
+    host.innerHTML = '<canvas></canvas><div class="pl"></div>';
+    this.map = { host, cv: host.firstChild, pl: host.lastChild, cx: -46.50, cy: -23.545, k: 3000 };
+    const m = this.map, C = Math.cos(23.55 * Math.PI / 180);
+    m.C = C;
+    const ptrs = new Map(); let drag = null, pinch = null;
+    const local = e => { const r = host.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    host.addEventListener('pointerdown', e => {
+      if (e.target.closest('.pn,.pc')) { m.down = { t: e.target.closest('.pn,.pc'), x: e.clientX, y: e.clientY }; return; }
+      host.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, local(e));
+      if (ptrs.size === 1) { drag = { p: local(e), cx: m.cx, cy: m.cy }; host.classList.add('drag'); }
+      if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), k: m.k }; drag = null; }
+    });
+    host.addEventListener('pointermove', e => {
+      if (!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId, local(e));
+      if (pinch && ptrs.size === 2) { const [a, b] = [...ptrs.values()]; this.zoomAt((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, pinch.k * Math.hypot(a[0] - b[0], a[1] - b[1]) / pinch.d / m.k); return; }
+      if (drag) { const p = local(e); m.cx = drag.cx - (p[0] - drag.p[0]) / (m.k * C); m.cy = drag.cy + (p[1] - drag.p[1]) / m.k; this.clamp(); this.req(); }
+    });
+    const up = e => { ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; if (!ptrs.size) { drag = null; host.classList.remove('drag'); } };
+    host.addEventListener('pointerup', e => {
+      if (m.down && Math.hypot(e.clientX - m.down.x, e.clientY - m.down.y) < 6) this.pinClick(m.down.t);
+      m.down = null; up(e);
+    });
+    host.addEventListener('pointercancel', up);
+    host.addEventListener('wheel', e => { e.preventDefault(); const p = local(e); this.zoomAt(p[0], p[1], Math.exp(-e.deltaY * 0.0016)); }, { passive: false });
+    host.addEventListener('dblclick', e => { const p = local(e); this.zoomAt(p[0], p[1], 2); });
+    host.addEventListener('mouseover', e => { const t = e.target.closest('.pn'); if (t && t.dataset.c !== this.state.hover) this.setState({ hover: t.dataset.c }); });
+    host.addEventListener('mouseout', e => { const t = e.target.closest('.pn'); if (t && this.state.hover === t.dataset.c) this.setState({ hover: null }); });
+    if (this.ro) this.ro.disconnect();
+    this.ro = new ResizeObserver(() => this.req()); this.ro.observe(host);
+    this.req();
+  }
+  kMin() { const m = this.map; if (!m) return 2000; const w = m.host.clientWidth || 600, h = m.host.clientHeight || 600; return Math.min(w / (0.28 * m.C), h / 0.2) * 0.9; }
+  clamp() { const m = this.map; m.k = Math.max(this.kMin(), Math.min(42000, m.k)); m.cx = Math.max(-46.635, Math.min(-46.355, m.cx)); m.cy = Math.max(-23.655, Math.min(-23.455, m.cy)); }
+  zoomAt(px, py, f) {
+    const m = this.map; if (!m) return; const w = m.host.clientWidth, h = m.host.clientHeight;
+    const lon = m.cx + (px - w / 2) / (m.k * m.C), lat = m.cy - (py - h / 2) / m.k;
+    m.k *= f; this.clamp(); m.cx = lon - (px - w / 2) / (m.k * m.C); m.cy = lat + (py - h / 2) / m.k; this.clamp(); this.req();
+  }
+  fitPts(pts, pad) {
+    const m = this.map; if (!m || !pts.length) return; const w = m.host.clientWidth || 600, h = m.host.clientHeight || 600;
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    m.cx = (x0 + x1) / 2; m.cy = (y0 + y1) / 2;
+    m.k = Math.min((w - pad * 2) / Math.max((x1 - x0) * m.C, 0.004), (h - pad * 2) / Math.max(y1 - y0, 0.004));
+    m.k = Math.min(m.k, 16000); this.clamp(); this.req();
+  }
+  fitResults(first) {
+    if (!this.map) return; const s = this.state, L = this.filter(s.mode, s.q, s.f);
+    const bs = s.f.linha ? this.LINES.find(l => l.id === s.f.linha).bairros : s.f.bairros;
+    let pts = L.map(d => [d.lng, d.lat]);
+    if (!pts.length) pts = (bs.length ? bs : Object.keys(this.BAIRROS)).map(b => [this.BAIRROS[b][1], this.BAIRROS[b][0]]);
+    this.fitPts(pts, first ? 70 : 60);
+  }
+  req() { if (this._raf || !this.map) return; this._raf = requestAnimationFrame(() => { this._raf = 0; this.draw(); }); }
+  draw() {
+    const m = this.map, G = this.geo; if (!m || !m.host.isConnected) return;
+    const w = m.host.clientWidth, h = m.host.clientHeight; if (!w || !h) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1), cv = m.cv;
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+    const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const X = lon => (lon - m.cx) * m.k * m.C + w / 2, Y = lat => (m.cy - lat) * m.k + h / 2;
+    const t = Math.max(0, Math.min(1, Math.log(m.k / 3000) / Math.log(25)));
+    g.fillStyle = '#E6DDC9'; g.fillRect(0, 0, w, h);
+    const s = this.state, selB = new Set(s.f.linha ? this.LINES.find(l => l.id === s.f.linha).bairros : s.f.bairros);
+    // áreas dos bairros escolhidos
+    selB.forEach(b => { const c = this.BAIRROS[b]; if (!c) return; g.beginPath(); g.ellipse(X(c[1]), Y(c[0]), 0.008 * m.k * m.C * 1.1, 0.008 * m.k, 0, 0, 6.2832); g.fillStyle = 'rgba(166,75,54,.10)'; g.fill(); g.strokeStyle = 'rgba(166,75,54,.32)'; g.lineWidth = 1.2; g.stroke(); });
+    const minX = m.cx - w / 2 / (m.k * m.C) - 0.01, maxX = m.cx + w / 2 / (m.k * m.C) + 0.01, minY = m.cy - h / 2 / m.k - 0.01, maxY = m.cy + h / 2 / m.k + 0.01;
+    const path = f => { const xs = f.xs, ys = f.ys; let inb = false; for (let i = 0; i < xs.length; i++) if (xs[i] > minX && xs[i] < maxX && ys[i] > minY && ys[i] < maxY) { inb = true; break; } if (!inb) return false; g.beginPath(); g.moveTo(X(xs[0]), Y(ys[0])); for (let i = 1; i < xs.length; i++) g.lineTo(X(xs[i]), Y(ys[i])); return true; };
+    const stroke = (arr, color, width, dash) => { g.strokeStyle = color; g.lineWidth = width; g.setLineDash(dash || []); (arr || []).forEach(f => { if (path(f)) g.stroke(); }); g.setLineDash([]); };
+    g.lineCap = 'round'; g.lineJoin = 'round';
+    stroke(G.w, '#A9BDB7', 2.5 + 6 * t);
+    if (m.k > 5000) { g.globalAlpha = Math.min(1, (m.k - 5000) / 6000); stroke(G.t, '#F1EADB', 0.5 + 1.8 * t); g.globalAlpha = 1; }
+    stroke(G.s, '#F4EEE1', 0.7 + 2.2 * t);
+    stroke(G.p, '#CFC3A8', 2.4 + 4.5 * t); stroke(G.p, '#FAF6EC', 1.4 + 3.2 * t);
+    stroke(G.m, '#C5A889', 3.4 + 6 * t); stroke(G.m, '#EBD6B8', 2.2 + 4.4 * t);
+    const lineSel = s.f.linha ? this.LINES.find(l => l.id === s.f.linha).num : '';
+    const railCol = f => { const mm = /Linha (\d+)/.exec(f.n || ''); return mm && this.RAIL_COLORS[mm[1]] ? [this.RAIL_COLORS[mm[1]], mm[1]] : ['#8A8070', '']; };
+    [['r', 0], ['u', 0], ['o', 0]].forEach(([c]) => (G[c] || []).forEach(f => {
+      const [col, n] = railCol(f), on = !lineSel || n === lineSel; if (!path(f)) return;
+      g.globalAlpha = on ? 1 : 0.25; g.strokeStyle = '#F7F1E4'; g.lineWidth = (on && lineSel ? 6 : 3.6) + 2 * t; g.stroke();
+      g.strokeStyle = col; g.lineWidth = (on && lineSel ? 4 : 2.2) + 1.6 * t; if (!n) g.setLineDash([5, 4]); g.stroke(); g.setLineDash([]); g.globalAlpha = 1;
+    }));
+    // rótulos dos bairros
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    Object.entries(this.BAIRROS).forEach(([b, c]) => {
+      const x = X(c[1]), y = Y(c[0]); if (x < -80 || x > w + 80 || y < -20 || y > h + 20) return;
+      const on = selB.has(b); g.font = `${on ? 600 : 500} ${on ? 11 : 10}px "IBM Plex Mono", monospace`; try { g.letterSpacing = '1.5px'; } catch (e) {}
+      g.lineWidth = 4; g.strokeStyle = '#E6DDC9'; g.strokeText(b.toUpperCase(), x, y); g.fillStyle = on ? '#A64B36' : 'rgba(41,45,41,.62)'; g.fillText(b.toUpperCase(), x, y);
+    });
+    this.drawPins(X, Y, w, h);
+  }
+  drawPins(X, Y, w, h) {
+    const m = this.map, s = this.state, L = this.filter(s.mode, s.q, s.f);
+    const pts = L.map(d => ({ d, x: X(d.lng), y: Y(d.lat) })).filter(p => p.x > -40 && p.x < w + 40 && p.y > -20 && p.y < h + 40).sort((a, b) => a.y - b.y);
+    const cl = [];
+    pts.forEach(p => { const c = cl.find(c => Math.abs(c.x - p.x) < 54 && Math.abs(c.y - p.y) < 30); if (c) { c.m.push(p); c.x = (c.x * (c.m.length - 1) + p.x) / c.m.length; c.y = (c.y * (c.m.length - 1) + p.y) / c.m.length; } else cl.push({ x: p.x, y: p.y, m: [p] }); });
+    this._cl = cl;
+    const act = s.hover || s.sel;
+    m.pl.innerHTML = cl.map((c, i) => {
+      if (c.m.length === 1) { const d = c.m[0].d, on = act === d.code; return `<button class="pn${on ? ' on' : ''}" data-c="${d.code}" style="transform:translate(${c.x.toFixed(1)}px,${c.y.toFixed(1)}px) translate(-50%,calc(-100% - 6px))" aria-label="${d.tipo} em ${d.bairro}, ${this.short(d)}">${this.short(d)}</button>`; }
+      const on = c.m.some(p => p.d.code === act);
+      return `<button class="pc${on ? ' on' : ''}" data-g="${i}" style="transform:translate(${c.x.toFixed(1)}px,${c.y.toFixed(1)}px)" aria-label="${c.m.length} imóveis nesta área. Aproximar.">${c.m.length}</button>`;
+    }).join('');
+  }
+  pinClick(t) {
+    if (t.dataset.c) { const code = t.dataset.c; this.setState({ sel: code }); const el = document.getElementById('cd-' + code); if (el && this.state.view !== 'map') el.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    const c = this._cl && this._cl[+t.dataset.g]; if (!c) return;
+    this.fitPts(c.m.map(p => [p.d.lng, p.d.lat]), 90);
+  }
+
+  openDet(code) { this.setState({ det: code, detPhoto: 0 }); }
+  goAnuncio(code) { try { sessionStorage.setItem('csp-anuncio', code); } catch (e) {} location.href = 'Capital%20SP%20Anuncio.dc.html?id=' + encodeURIComponent(code); }
+  toggleFav(code) { const f = this.state.favs.includes(code) ? this.state.favs.filter(c => c !== code) : this.state.favs.concat([code]); this.setState({ favs: f }); try { localStorage.setItem('csp-favs', JSON.stringify(f)); } catch (e) {} }
+
+  renderVals() {
+    const s = this.state, f = s.f, isC = s.mode === 'comprar';
+    const all = this.results(), n = all.length, shown = all.slice(0, s.page * 12);
+    const line = f.linha ? this.LINES.find(l => l.id === f.linha) : null;
+    const bs = line ? line.bairros : f.bairros;
+    const where = line ? `na Linha ${line.num}-${line.name}` : bs.length === 1 ? `em ${bs[0]}` : bs.length > 1 ? `em ${bs.slice(0, 2).join(', ')}${bs.length > 2 ? ` e mais ${bs.length - 2}` : ''}` : 'na Zona Leste de São Paulo';
+    const extraN = f.tipos.length + (f.pmin !== '' || f.pmax !== '' ? 1 : 0) + (f.cmax !== '' ? 1 : 0) + (f.dorms ? 1 : 0) + (f.banh ? 1 : 0) + (f.vagas ? 1 : 0) + (f.amin !== '' || f.amax !== '' ? 1 : 0) + f.feats.length;
+    const chips = [];
+    if (line) chips.push({ label: `Linha ${line.num}-${line.name} · ${line.bairros.length} bairros`, color: line.color, aria: 'Remover linha', remove: () => this.setF({ linha: '', bairros: [] }) });
+    else bs.forEach(b => chips.push({ label: b, color: '#A64B36', aria: `Remover ${b}`, remove: () => this.setF({ bairros: f.bairros.filter(x => x !== b) }) }));
+    f.tipos.forEach(t => chips.push({ label: t, color: '#292D29', aria: `Remover ${t}`, remove: () => this.setF({ tipos: f.tipos.filter(x => x !== t) }) }));
+    if (f.pmin !== '' || f.pmax !== '') chips.push({ label: f.pmin !== '' && f.pmax !== '' ? `${this.brl(f.pmin)} a ${this.brl(f.pmax)}` : f.pmax !== '' ? `Até ${this.brl(f.pmax)}` : `A partir de ${this.brl(f.pmin)}`, color: '#292D29', aria: 'Remover faixa de preço', remove: () => this.setF({ pmin: '', pmax: '' }) });
+    if (f.cmax !== '') chips.push({ label: `Cond. + IPTU até ${this.brl(f.cmax)}`, color: '#292D29', aria: 'Remover limite de condomínio', remove: () => this.setF({ cmax: '' }) });
+    [['dorms', 'quartos'], ['banh', 'banheiros'], ['vagas', 'vagas']].forEach(([k, l]) => { if (f[k]) chips.push({ label: `${f[k]}+ ${l}`, color: '#292D29', aria: `Remover ${l}`, remove: () => this.setF({ [k]: 0 }) }); });
+    if (f.amin !== '' || f.amax !== '') chips.push({ label: `${f.amin || 0} a ${f.amax || '∞'} m²`, color: '#292D29', aria: 'Remover área', remove: () => this.setF({ amin: '', amax: '' }) });
+    f.feats.forEach(x => chips.push({ label: x, color: '#292D29', aria: `Remover ${x}`, remove: () => this.setF({ feats: f.feats.filter(y => y !== x) }) }));
+    if (s.q.trim()) chips.push({ label: `“${s.q.trim()}”`, color: '#292D29', aria: 'Remover texto da busca', remove: () => this.setState({ q: '' }) });
+
+    const cardOf = d => {
+      const pi = s.ph[d.code] || 0, on = s.hover === d.code || s.sel === d.code, fav = s.favs.includes(d.code);
+      const tags = []; if (d.badge) tags.push({ l: d.badge, cls: 'tag' + (d.badge === 'Exclusivo' ? ' ex' : '') });
+      const step = k => e => { e.stopPropagation(); this.setState({ ph: Object.assign({}, s.ph, { [d.code]: (pi + k + d.fotos.length) % d.fotos.length }) }); };
+      return {
+        domId: 'cd-' + d.code, cls: 'cd' + (on ? ' on' : ''), code: d.code, img: d.fotos[pi], alt: `Foto ilustrativa — ${d.tipo} em ${d.bairro}`, tags,
+        dots: d.fotos.map((_, i) => ({ op: i === pi ? 1 : 0.5 })), prev: step(-1), next: step(1),
+        fav: e => { e.stopPropagation(); this.toggleFav(d.code); }, favOn: fav ? 'true' : 'false', favFill: fav ? '#A64B36' : 'none', favAria: fav ? 'Remover dos salvos' : 'Salvar imóvel',
+        desc: d.desc, price: this.brl(d.price), priceSuf: isC ? '' : 'aluguel',
+        sub: isC ? (d.condo + d.iptu ? `${this.brl(d.condo + d.iptu)} Cond. + IPTU` : 'Sem condomínio') : `${this.brl(d.price + d.condo + d.iptu)} total por mês`,
+        facts: [`${d.area} m²`, d.dorms ? `${d.dorms} ${d.dorms > 1 ? 'quartos' : 'quarto'}` : '', d.vagas ? `${d.vagas} ${d.vagas > 1 ? 'vagas' : 'vaga'}` : ''].filter(Boolean).join(' · '),
+        addr: `${d.rua}, ${d.bairro} · São Paulo`, aria: `${d.tipo} em ${d.bairro}, ${this.brl(d.price)}${isC ? '' : ' por mês'}. Abrir detalhes.`,
+        open: () => this.openDet(d.code), key: e => { if (e.key === 'Enter') this.openDet(d.code); },
+        enter: () => this.setState({ hover: d.code }), leave: () => { if (this.state.hover === d.code) this.setState({ hover: null }); }
+      };
+    };
+
+    // sugestões
+    const qn = this.norm(s.q.trim());
+    const sugLines = this.LINES.filter(l => !qn || this.norm(`linha ${l.num} ${l.name} ${l.kind}`).includes(qn)).map(l => ({ label: `Linha ${l.num}-${l.name}`, sub: `${l.bairros.length} BAIRRO${l.bairros.length > 1 ? 'S' : ''}`, color: l.color, go: () => this.pickLine(l.id) }));
+    const cnt = b => this.D.filter(d => d.mode === s.mode && d.bairro === b).length;
+    const sugBairros = Object.keys(this.BAIRROS).filter(b => !qn || this.norm(b).includes(qn)).slice(0, qn ? 12 : 30).map(b => ({ label: b, sub: `${cnt(b)}`, go: () => this.pickBairro(b) }));
+
+    // filtros (rascunho)
+    const fd = s.fd || f, fdMode = s.fdMode || s.mode, fdN = s.filtersOpen ? this.filter(fdMode, s.q, fd).length : 0;
+    const tog = (arr, v) => arr.includes(v) ? arr.filter(x => x !== v) : arr.concat([v]);
+    const nums = (k, labels) => labels.map(([v, l]) => ({ l, on: fd[k] === v ? 'true' : 'false', go: () => this.setFd({ [k]: v }) }));
+    const fdBs = fd.linha ? this.LINES.find(l => l.id === fd.linha).bairros : fd.bairros;
+
+    const det = s.det ? this.D.find(d => d.code === s.det) : null;
+    let detV = {};
+    if (det) {
+      const dp = s.detPhoto % det.fotos.length, dc = det.mode === 'comprar';
+      const rows = dc ? [{ l: 'Venda', v: this.brl(det.price), fs: '22px', fw: 600, bt: 'none' }, { l: 'Condomínio', v: det.condo ? this.brl(det.condo) + '/mês' : 'Não há', fs: '14.5px', fw: 400, bt: 'none' }, { l: 'IPTU', v: this.brl(det.iptu) + '/mês', fs: '14.5px', fw: 400, bt: 'none' }]
+        : [{ l: 'Aluguel', v: this.brl(det.price), fs: '14.5px', fw: 400, bt: 'none' }, { l: 'Condomínio', v: det.condo ? this.brl(det.condo) : 'Não há', fs: '14.5px', fw: 400, bt: 'none' }, { l: 'IPTU', v: this.brl(det.iptu), fs: '14.5px', fw: 400, bt: 'none' }, { l: 'Total por mês', v: this.brl(det.price + det.condo + det.iptu), fs: '22px', fw: 600, bt: '1px solid rgba(41,45,41,.2)' }];
+      const lines = this.LINES.filter(l => l.bairros.includes(det.bairro)).map(l => ({ l: `Linha ${l.num}-${l.name}`, color: l.color }));
+      const msg = `Olá! Tenho interesse no imóvel ${det.code} (${det.tipo} em ${det.bairro}) e gostaria de agendar uma visita.`;
+      detV = {
+        code: det.code, img: det.fotos[dp], alt: `Foto ilustrativa — ${det.tipo} em ${det.bairro}`, photoN: `${dp + 1} / ${det.fotos.length}`,
+        prev: () => this.setState({ detPhoto: (dp - 1 + det.fotos.length) % det.fotos.length }), next: () => this.setState({ detPhoto: (dp + 1) % det.fotos.length }),
+        kick: `${det.tipo.toUpperCase()} · ${dc ? 'VENDA' : 'ALUGUEL'} · ${det.code}`, title: det.bairro.toUpperCase(), addr: `${det.rua} — ${det.bairro}, São Paulo`, rows,
+        facts: [{ v: det.area, l: 'M²' }, { v: det.dorms || '—', l: 'QUARTOS' }, { v: det.banh, l: 'BANHEIROS' }, { v: det.vagas, l: 'VAGAS' }],
+        priceMain: this.brl(det.price), priceSuf: dc ? '' : 'aluguel', priceSub: dc ? (det.condo + det.iptu ? `${this.brl(det.condo + det.iptu)} Cond. + IPTU por mês` : 'Sem condomínio') : `${this.brl(det.price + det.condo + det.iptu)} total por mês`,
+        factsLine: [`${det.area} m²`, det.dorms ? `${det.dorms} ${det.dorms > 1 ? 'quartos' : 'quarto'}` : '', det.vagas ? `${det.vagas} ${det.vagas > 1 ? 'vagas' : 'vaga'}` : ''].filter(Boolean).join(' · '),
+        href: 'Capital%20SP%20Anuncio.dc.html?id=' + det.code, go: e => { e.preventDefault(); this.goAnuncio(det.code); },
+        wa: 'https://wa.me/5511976653830?text=' + encodeURIComponent(msg), aria: `Detalhes do imóvel ${det.code}`
+      };
+    }
+    const selD = s.sel ? all.find(d => d.code === s.sel) : null;
+    const pr = this.PRECOS[s.mode], pIdx = pr.findIndex(p => String(p[1]) === String(f.pmin) && String(p[2]) === String(f.pmax));
+    const legendLines = line ? [{ l: `Linha ${line.num}-${line.name}`, color: line.color }] : [];
+
+    return {
+      R: this.R,
+      rootCls: s.view === 'map' ? 'v-map' : '',
+      thumbX: isC ? '0%' : '100%', comprarOp: isC ? 1 : 0.55, alugarOp: isC ? 0.55 : 1, isComprar: isC ? 'true' : 'false', isAlugar: isC ? 'false' : 'true',
+      setComprar: () => this.setState({ mode: 'comprar', page: 1, sel: null, f: Object.assign({}, f, { pmin: '', pmax: '' }) }),
+      setAlugar: () => this.setState({ mode: 'alugar', page: 1, sel: null, f: Object.assign({}, f, { pmin: '', pmax: '' }) }),
+      q: s.q, qPh: line ? `Linha ${line.num}-${line.name}` : bs.length ? bs.join(', ') : 'Bairro, linha, rua ou código',
+      onQ: e => this.setState({ q: e.target.value, sugOpen: true, page: 1 }), onQFocus: () => this.setState({ sugOpen: true }),
+      onQKey: e => { if (e.key === 'Enter') { const b = Object.keys(this.BAIRROS).find(x => this.norm(x) === qn); if (b) this.pickBairro(b); else this.setState({ sugOpen: false }); } },
+      keepSug: e => e.preventDefault(),
+      sugOpen: s.sugOpen && (sugLines.length + sugBairros.length > 0), sugLines, sugBairros, hasSugLines: sugLines.length > 0, hasSugBairros: sugBairros.length > 0,
+      tipoOpts: [{ v: '', l: 'Todos os tipos' }].concat(this.TIPOS.map(t => ({ v: t, l: t }))), tipoSel: f.tipos.length === 1 ? f.tipos[0] : '',
+      onTipo: e => this.setF({ tipos: e.target.value ? [e.target.value] : [] }),
+      precoOpts: pr.map((p, i) => ({ v: String(i), l: p[0] })).concat(pIdx < 0 ? [{ v: '-1', l: 'Faixa personalizada' }] : []), precoSel: String(pIdx),
+      onPreco: e => { const p = pr[+e.target.value]; if (p) this.setF({ pmin: p[1], pmax: p[2] }); },
+      hasExtra: extraN > 0, extraN: String(extraN), extraN2: extraN ? String(extraN) : '',
+      openFilters: () => this.setState({ filtersOpen: true, fd: JSON.parse(JSON.stringify(f)), fdMode: s.mode, sugOpen: false }),
+      mTitle: line ? `Linha ${line.num}-${line.name}` : bs.length ? bs.join(', ') : 'Zona Leste, São Paulo', mSub: `${isC ? 'Comprar' : 'Alugar'} · ${extraN ? extraN + ' filtro' + (extraN > 1 ? 's' : '') : 'Sem filtros de imóvel'}`,
+      countBig: `${n} ${n === 1 ? 'imóvel' : 'imóveis'}`, countSub: `${isC ? 'à venda' : 'para alugar'} ${where}`,
+      sort: s.sort, sortOpts: [{ v: 'rel', l: 'Mais relevantes' }, { v: 'rec', l: 'Mais recentes' }, { v: 'menor', l: 'Menor valor' }, { v: 'maior', l: 'Maior valor' }, { v: 'area', l: 'Maior área' }],
+      onSort: e => this.setState({ sort: e.target.value }),
+      chips, hasChips: chips.length > 0, clearAll: () => this.setState({ f: Object.assign({}, this.EMPTY), q: '', page: 1, sel: null }),
+      lineNote: line ? `Bairros atendidos: ${line.bairros.join(' · ')}.${line.note ? ' ' + line.note : ''}` : '',
+      cards: shown.map(cardOf), hasResults: n > 0, noResults: n === 0, hasMore: shown.length < n, shownLine: `MOSTRANDO ${shown.length} DE ${n}`, more: () => this.setState({ page: s.page + 1 }),
+      hasLegend: legendLines.length > 0, legend: legendLines,
+      zoomIn: () => { const m = this.map; if (m) this.zoomAt(m.host.clientWidth / 2, m.host.clientHeight / 2, 1.6); },
+      zoomOut: () => { const m = this.map; if (m) this.zoomAt(m.host.clientWidth / 2, m.host.clientHeight / 2, 1 / 1.6); },
+      fitResults: () => this.fitResults(false),
+      hasMini: !!selD, mini: selD ? Object.assign(cardOf(selD), { open: () => this.openDet(selD.code), close: e => { e.stopPropagation(); this.setState({ sel: null }); }, aria: `Abrir ${selD.code}` }) : { open: () => {}, close: () => {} },
+      toggleView: () => this.setState({ view: s.view === 'map' ? 'list' : 'map' }, () => this.req()), viewLabel: s.view === 'map' ? 'Ver lista' : 'Ver mapa',
+      // painel de filtros
+      filtersOpen: s.filtersOpen, closeFilters: () => this.setState({ filtersOpen: false }), escFilters: e => { if (e.key === 'Escape') this.setState({ filtersOpen: false }); },
+      fd: { pmin: fd.pmin === '' ? '' : fd.pmin.toLocaleString('pt-BR'), pmax: fd.pmax === '' ? '' : fd.pmax.toLocaleString('pt-BR'), cmax: fd.cmax === '' ? '' : fd.cmax.toLocaleString('pt-BR'), amin: String(fd.amin), amax: String(fd.amax) },
+      fThumbX: fdMode === 'comprar' ? '0%' : '100%', fComprarOp: fdMode === 'comprar' ? 1 : 0.55, fAlugarOp: fdMode === 'comprar' ? 0.55 : 1,
+      fComprar: () => this.setState({ fdMode: 'comprar', fd: Object.assign({}, fd, { pmin: '', pmax: '' }) }), fAlugar: () => this.setState({ fdMode: 'alugar', fd: Object.assign({}, fd, { pmin: '', pmax: '' }) }),
+      fLines: this.LINES.map(l => ({ l: `${l.num} · ${l.name}`, color: l.color, on: fd.linha === l.id ? 'true' : 'false', go: () => this.setFd(fd.linha === l.id ? { linha: '', bairros: [] } : { linha: l.id, bairros: l.bairros.slice() }) })),
+      fBairros: Object.keys(this.BAIRROS).map(b => ({ l: b, on: fdBs.includes(b) ? 'true' : 'false', go: () => this.setFd({ linha: '', bairros: tog(fdBs, b) }) })),
+      fPriceTitle: fdMode === 'comprar' ? 'Valor do imóvel' : 'Valor do aluguel',
+      fPmin: e => this.setFd({ pmin: this.num(e.target.value) }), fPmax: e => this.setFd({ pmax: this.num(e.target.value) }), fCmax: e => this.setFd({ cmax: this.num(e.target.value) }),
+      fAmin: e => this.setFd({ amin: this.num(e.target.value) }), fAmax: e => this.setFd({ amax: this.num(e.target.value) }),
+      fTipos: this.TIPOS.map(t => ({ l: t, on: fd.tipos.includes(t) ? 'true' : 'false', go: () => this.setFd({ tipos: tog(fd.tipos, t) }) })),
+      fDorms: nums('dorms', [[0, 'Tanto faz'], [1, '1+'], [2, '2+'], [3, '3+'], [4, '4+']]), fBanh: nums('banh', [[0, 'Tanto faz'], [1, '1+'], [2, '2+'], [3, '3+']]), fVagas: nums('vagas', [[0, 'Tanto faz'], [1, '1+'], [2, '2+'], [3, '3+']]),
+      fFeats: this.FEATS.map(x => ({ l: x, on: fd.feats.includes(x) ? 'true' : 'false', go: () => this.setFd({ feats: tog(fd.feats, x) }) })),
+      fClear: () => this.setState({ fd: Object.assign({}, this.EMPTY) }),
+      fApply: () => this.setState({ f: fd, mode: fdMode, filtersOpen: false, page: 1, sel: null }), fApplyLabel: fdN ? `Ver ${fdN} ${fdN === 1 ? 'imóvel' : 'imóveis'}` : 'Nenhum imóvel com esses filtros',
+      // detalhe
+      detOpen: !!det, det: detV, closeDet: () => this.setState({ det: null }), escDet: e => { if (e.key === 'Escape') this.setState({ det: null }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
