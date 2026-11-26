@@ -28,6 +28,20 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 .rstage:focus-visible{outline:2px solid #292D29;outline-offset:-4px}
 .rstage:active{cursor:grabbing}
 @media (prefers-reduced-motion:reduce){.rbtn:active{transform:none}}
+/* Botões: borda luminosa animada (glow-card) — só em hover/foco, tokens Capital SP */
+@property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
+@keyframes glspin{to{--gl:560deg}}
+button,.btn,a[data-glow]{position:relative}
+button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+button::before,.btn::before,a[data-glow]::before{inset:-2px;padding:4px;filter:blur(6px)}
+button:focus-visible::after,.btn:focus-visible::after,a[data-glow]:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
+button:focus-visible::before,.btn:focus-visible::before,a[data-glow]:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
+@media (hover:hover) and (pointer:fine){
+button:hover::after,.btn:hover::after,a[data-glow]:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
+button:hover::before,.btn:hover::before,a[data-glow]:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
+}
+button:disabled::before,button:disabled::after{display:none}
+@media (prefers-reduced-motion:reduce){button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{animation:none!important}}
 </style>
 </helmet>
 <div style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background:#C9BEA8">

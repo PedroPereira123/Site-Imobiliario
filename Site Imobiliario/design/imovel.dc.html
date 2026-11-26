@@ -21,6 +21,20 @@ a:hover{color:#A64B36}
 button,input{font-family:inherit;color:inherit}
 input::placeholder{color:rgba(41,45,41,.45)}
 :focus-visible{outline:2px solid #A64B36;outline-offset:2px}
+/* Botões: borda luminosa animada (glow-card) — só em hover/foco, tokens Capital SP */
+@property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
+@keyframes glspin{to{--gl:560deg}}
+button,.btn,a[data-glow]{position:relative}
+button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+button::before,.btn::before,a[data-glow]::before{inset:-2px;padding:4px;filter:blur(6px)}
+button:focus-visible::after,.btn:focus-visible::after,a[data-glow]:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
+button:focus-visible::before,.btn:focus-visible::before,a[data-glow]:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
+@media (hover:hover) and (pointer:fine){
+button:hover::after,.btn:hover::after,a[data-glow]:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
+button:hover::before,.btn:hover::before,a[data-glow]:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
+}
+button:disabled::before,button:disabled::after{display:none}
+@media (prefers-reduced-motion:reduce){button::before,button::after,.btn::before,.btn::after,a[data-glow]::before,a[data-glow]::after{animation:none!important}}
 </style>
 </helmet>
 <div ref="{{ R.root }}" style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background-color:#C9BEA8;background-size:256px 256px,720px 720px">
@@ -86,7 +100,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
             <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-            <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">WhatsApp</a>
+            <a data-glow href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">WhatsApp</a>
           </div>
         </div>
       </div>
@@ -119,7 +133,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
             <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-            <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+            <a data-glow href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
           </div>
         </div>
       </div>
@@ -297,7 +311,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
         </sc-for>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px">
           <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+          <a data-glow href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
         </div>
       </div>
     </div>
@@ -319,7 +333,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;pointer-events:auto">
           <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:56px;padding:0 28px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:16px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:16px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">Conversar pelo WhatsApp</a>
+          <a data-glow href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:16px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">Conversar pelo WhatsApp</a>
         </div>
         <p style="margin:16px 0 0;max-width:72ch;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.6;opacity:.8">MENSAGEM PRONTA: “{{ waMsg }}”</p>
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:48px;padding-top:16px;border-top:1px solid rgba(239,230,210,.3);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;pointer-events:auto">
@@ -375,7 +389,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
         </button>
         <button onClick="{{ share }}" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;cursor:pointer;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.07)">Compartilhar</button>
       </sc-if>
-      <a href="{{ waHref }}" target="_blank" rel="noopener" style="flex:none;display:flex;align-items:center;height:48px;padding:0 16px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+      <a data-glow href="{{ waHref }}" target="_blank" rel="noopener" style="flex:none;display:flex;align-items:center;height:48px;padding:0 16px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
       <button onClick="{{ openVisita }}" style="flex:none;display:flex;align-items:center;gap:12px;height:48px;padding:0 20px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap;transition:background .2s" style-hover="background:#8F3F2D">{{ dockCta }}</button>
     </div>
   </div>
