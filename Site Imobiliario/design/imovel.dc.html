@@ -21,6 +21,20 @@ a:hover{color:#A64B36}
 button,input{font-family:inherit;color:inherit}
 input::placeholder{color:rgba(41,45,41,.45)}
 :focus-visible{outline:2px solid #A64B36;outline-offset:2px}
+/* Botões preenchidos (classe .gl): borda luminosa animada (glow-card) em hover/foco, tokens Capital SP */
+@property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
+@keyframes glspin{to{--gl:560deg}}
+.gl{position:relative}
+.gl::before,.gl::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.gl::before{inset:-2px;padding:4px;filter:blur(6px)}
+.gl:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
+@media (hover:hover) and (pointer:fine){
+.gl:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
+}
+.gl:disabled::before,.gl:disabled::after,.gl[disabled]::before,.gl[disabled]::after{display:none}
+@media (prefers-reduced-motion:reduce){.gl::before,.gl::after{animation:none!important}}
 </style>
 </helmet>
 <div ref="{{ R.root }}" style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background-color:#C9BEA8;background-size:256px 256px,720px 720px">
@@ -43,7 +57,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
       <div style="display:flex;align-items:center;gap:24px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.7">{{ p.code }} · {{ p.bairroUp }}</span>
         <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:22px;line-height:1">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px">{{ p.per }}</span></span>
-        <button onClick="{{ openVisita }}" style="height:40px;padding:0 16px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:14px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita</button>
+        <button class="gl" onClick="{{ openVisita }}" style="height:40px;padding:0 16px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:14px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita</button>
       </div>
     </sc-if>
     <sc-if value="{{ hdrDefault }}" hint-placeholder-val="{{ true }}">
@@ -68,7 +82,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
         </div>
       </div>
       <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.55) 0%,rgba(22,22,19,0) 22%,rgba(41,45,41,0) 44%,rgba(41,45,41,.78) 80%,#292D29 100%)"></div>
-      <button onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);top:clamp(104px,15vh,136px);height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.62)">{{ p.photoCount }} — VER GALERIA</button>
+      <button class="gl" onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);top:clamp(104px,15vh,136px);height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.62)">{{ p.photoCount }} — VER GALERIA</button>
       <div ref="{{ rv }}" style="position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:clamp(40px,7vh,72px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px;pointer-events:none">
         <div style="min-width:0;flex:1 1 560px">
           <div ref="{{ R.heroKick }}" style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em"><span style="width:8px;height:8px;background:#EFE6D2"></span>IMÓVEL EM DESTAQUE — {{ p.code }}</div>
@@ -85,8 +99,8 @@ input::placeholder{color:rgba(41,45,41,.45)}
             <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(40px,3.8vw,60px);line-height:.9">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:13px;letter-spacing:.06em">{{ p.per }}</span></span>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
-            <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-            <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">WhatsApp</a>
+            <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">WhatsApp</a>
           </div>
         </div>
       </div>
@@ -100,7 +114,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
           <image-slot id="{{ p.slot0 }}" shape="rect" placeholder="{{ p.heroPh }}"></image-slot>
         </div>
         <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(22,22,19,.55) 0%,rgba(22,22,19,0) 30%)"></div>
-        <button onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);bottom:16px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">{{ p.photoCount }} — VER GALERIA</button>
+        <button class="gl" onClick="{{ openGallery }}" style="position:absolute;right:clamp(24px,4vw,64px);bottom:16px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">{{ p.photoCount }} — VER GALERIA</button>
       </div>
       <div style="padding:clamp(32px,5vh,48px) clamp(24px,4vw,64px) clamp(16px,3vh,32px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 64px">
         <div style="min-width:0;flex:1 1 520px">
@@ -118,8 +132,8 @@ input::placeholder{color:rgba(41,45,41,.45)}
             <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(40px,3.8vw,60px);line-height:.9">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:13px;letter-spacing:.06em">{{ p.per }}</span></span>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
-            <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-            <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+            <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
           </div>
         </div>
       </div>
@@ -146,7 +160,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
             <div ref="{{ rv }}" style="position:relative;grid-column:{{ t.col }};grid-row:{{ t.row }};overflow:hidden;background:#3A3D39">
               <image-slot id="{{ t.id }}" shape="rect" placeholder="{{ t.ph }}"></image-slot>
               <span style="position:absolute;left:0;bottom:0;padding:8px 12px;background:#292D29;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">{{ t.n }}</span>
-              <button onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.65)">AMPLIAR</button>
+              <button class="gl" onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;transition:background .2s" style-hover="background:rgba(26,25,22,.65)">AMPLIAR</button>
             </div>
           </sc-for>
         </div>
@@ -158,7 +172,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
             <div style="position:relative;flex:0 0 calc(100vw - 80px);aspect-ratio:4/5;scroll-snap-align:start;overflow:hidden;background:#3A3D39">
               <image-slot id="{{ t.id }}" shape="rect" placeholder="{{ t.ph }}"></image-slot>
               <span style="position:absolute;left:0;bottom:0;padding:8px 12px;background:#292D29;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">{{ t.n }}</span>
-              <button onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:40px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
+              <button class="gl" onClick="{{ t.open }}" style="position:absolute;top:8px;right:8px;height:40px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
             </div>
           </sc-for>
         </div>
@@ -167,13 +181,13 @@ input::placeholder{color:rgba(41,45,41,.45)}
       <sc-if value="{{ galPlanta }}" hint-placeholder-val="{{ false }}">
         <div style="position:relative;height:clamp(360px,40vw,640px);margin-top:40px;overflow:hidden;background:#E3D8C2;color:#292D29">
           <image-slot id="{{ planta.id }}" shape="rect" fit="contain" placeholder="{{ planta.ph }}"></image-slot>
-          <button onClick="{{ planta.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(41,45,41,.12);color:#292D29;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
+          <button class="gl" onClick="{{ planta.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(41,45,41,.12);color:#292D29;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
         </div>
       </sc-if>
 
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em">
         <span style="opacity:.62">{{ galNote }}</span>
-        <button onClick="{{ openGallery }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font:inherit;letter-spacing:inherit;transition:background .2s" style-hover="background:rgba(239,230,210,.18)">VER EM TELA CHEIA →</button>
+        <button class="gl" onClick="{{ openGallery }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:0;border-radius:10px;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font:inherit;letter-spacing:inherit;transition:background .2s" style-hover="background:rgba(239,230,210,.18)">VER EM TELA CHEIA →</button>
       </div>
     </div>
   </section>
@@ -209,7 +223,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
         <figure ref="{{ rv }}" style="grid-column:{{ edPhotoCol }};margin:{{ edPhotoMargin }};display:flex;flex-direction:column;gap:8px">
           <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:#B9AE97">
             <image-slot id="{{ side.id }}" shape="rect" placeholder="{{ side.ph }}"></image-slot>
-            <button onClick="{{ side.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
+            <button class="gl" onClick="{{ side.open }}" style="position:absolute;top:8px;right:8px;height:32px;padding:0 12px;border:0;border-radius:8px;background:rgba(26,25,22,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em">AMPLIAR</button>
           </div>
           <figcaption style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;opacity:.62">FOTO {{ side.n }} / {{ p.nPad }}</figcaption>
         </figure>
@@ -296,8 +310,8 @@ input::placeholder{color:rgba(41,45,41,.45)}
           </div>
         </sc-for>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px">
-          <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+          <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:48px;padding:0 24px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+          <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:48px;padding:0 20px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:15px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
         </div>
       </div>
     </div>
@@ -318,8 +332,8 @@ input::placeholder{color:rgba(41,45,41,.45)}
           <span>{{ p.tipoUp }}</span><span>{{ p.finUp }}</span><span>{{ p.priceFmt }}{{ p.per }}</span>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;pointer-events:auto">
-          <button onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:56px;padding:0 28px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:16px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-          <a href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:16px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">Conversar pelo WhatsApp</a>
+          <button class="gl" onClick="{{ openVisita }}" style="display:flex;align-items:center;gap:16px;height:56px;padding:0 28px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:16px;font-weight:600;transition:background .2s" style-hover="background:#8F3F2D">Agendar visita <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+          <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="display:flex;align-items:center;height:56px;padding:0 24px;border-radius:10px;background:rgba(239,230,210,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(239,230,210,.35);color:#EFE6D2;font-size:16px;font-weight:500;transition:background .2s" style-hover="background:rgba(239,230,210,.24);color:#FFFFFF">Conversar pelo WhatsApp</a>
         </div>
         <p style="margin:16px 0 0;max-width:72ch;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;line-height:1.6;opacity:.8">MENSAGEM PRONTA: “{{ waMsg }}”</p>
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-top:48px;padding-top:16px;border-top:1px solid rgba(239,230,210,.3);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;pointer-events:auto">
@@ -375,8 +389,8 @@ input::placeholder{color:rgba(41,45,41,.45)}
         </button>
         <button onClick="{{ share }}" style="height:48px;padding:0 12px;border:0;border-radius:10px;background:transparent;cursor:pointer;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.07)">Compartilhar</button>
       </sc-if>
-      <a href="{{ waHref }}" target="_blank" rel="noopener" style="flex:none;display:flex;align-items:center;height:48px;padding:0 16px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
-      <button onClick="{{ openVisita }}" style="flex:none;display:flex;align-items:center;gap:12px;height:48px;padding:0 20px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap;transition:background .2s" style-hover="background:#8F3F2D">{{ dockCta }}</button>
+      <a class="gl" href="{{ waHref }}" target="_blank" rel="noopener" style="flex:none;display:flex;align-items:center;height:48px;padding:0 16px;border-radius:10px;background:rgba(41,45,41,.07);color:#292D29;font-size:14px;font-weight:500;transition:background .2s" style-hover="background:rgba(41,45,41,.13);color:#292D29">WhatsApp</a>
+      <button class="gl" onClick="{{ openVisita }}" style="flex:none;display:flex;align-items:center;gap:12px;height:48px;padding:0 20px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap;transition:background .2s" style-hover="background:#8F3F2D">{{ dockCta }}</button>
     </div>
   </div>
 
@@ -411,7 +425,7 @@ input::placeholder{color:rgba(41,45,41,.45)}
           <input value="{{ vName }}" onChange="{{ onVName }}" placeholder="Nome" autocomplete="name" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .2s,box-shadow .2s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
           <input value="{{ vPhone }}" onChange="{{ onVPhone }}" placeholder="Telefone com DDD" inputmode="tel" autocomplete="tel" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .2s,box-shadow .2s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
         </div>
-        <button onClick="{{ sendVisita }}" style="width:100%;height:52px;margin-top:16px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:{{ vCursor }};opacity:{{ vReadyOp }};font-size:15px;font-weight:600;transition:opacity .2s,background .2s" style-hover="background:#8F3F2D">Solicitar visita</button>
+        <button class="gl" onClick="{{ sendVisita }}" style="width:100%;height:52px;margin-top:16px;border:0;border-radius:10px;background:#A64B36;color:#F4EDE0;cursor:{{ vCursor }};opacity:{{ vReadyOp }};font-size:15px;font-weight:600;transition:opacity .2s,background .2s" style-hover="background:#8F3F2D">Solicitar visita</button>
         <a href="{{ vWaHref }}" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;height:44px;margin-top:8px;font-size:14px;font-weight:500;text-decoration:underline;text-underline-offset:4px">Prefiro combinar pelo WhatsApp</a>
       </sc-if>
       <sc-if value="{{ vSent }}" hint-placeholder-val="{{ false }}">
@@ -437,12 +451,12 @@ input::placeholder{color:rgba(41,45,41,.45)}
             </div>
           </sc-for>
         </div>
-        <button onClick="{{ lbPrev }}" aria-label="Foto anterior" style="position:absolute;left:clamp(8px,2vw,32px);top:50%;width:48px;height:48px;margin-top:-24px;border:0;border-radius:50%;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .2s" style-hover="background:rgba(239,230,210,.2)">←</button>
-        <button onClick="{{ lbNext }}" aria-label="Próxima foto" style="position:absolute;right:clamp(8px,2vw,32px);top:50%;width:48px;height:48px;margin-top:-24px;border:0;border-radius:50%;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .2s" style-hover="background:rgba(239,230,210,.2)">→</button>
+        <button class="gl" onClick="{{ lbPrev }}" aria-label="Foto anterior" style="position:absolute;left:clamp(8px,2vw,32px);top:50%;width:48px;height:48px;margin-top:-24px;border:0;border-radius:50%;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .2s" style-hover="background:rgba(239,230,210,.2)">←</button>
+        <button class="gl" onClick="{{ lbNext }}" aria-label="Próxima foto" style="position:absolute;right:clamp(8px,2vw,32px);top:50%;width:48px;height:48px;margin-top:-24px;border:0;border-radius:50%;background:rgba(239,230,210,.1);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .2s" style-hover="background:rgba(239,230,210,.2)">→</button>
       </div>
       <div style="flex:none;display:flex;justify-content:safe center;gap:8px;padding:16px clamp(24px,4vw,64px);overflow-x:auto;scrollbar-width:none">
         <sc-for list="{{ lbThumbs }}" as="t" hint-placeholder-count="0">
-          <button onClick="{{ t.onClick }}" aria-label="{{ t.aria }}" style="position:relative;flex:none;width:72px;height:52px;padding:0;border:0;overflow:hidden;background:#3A3D39;cursor:pointer;box-shadow:inset 0 0 0 2px {{ t.bd }};opacity:{{ t.op }};transition:opacity .2s,box-shadow .2s">
+          <button class="gl" onClick="{{ t.onClick }}" aria-label="{{ t.aria }}" style="position:relative;flex:none;width:72px;height:52px;padding:0;border:0;overflow:hidden;background:#3A3D39;cursor:pointer;box-shadow:inset 0 0 0 2px {{ t.bd }};opacity:{{ t.op }};transition:opacity .2s,box-shadow .2s">
             <span style="position:absolute;inset:0;pointer-events:none"><image-slot id="{{ t.id }}" shape="rect" placeholder=""></image-slot></span>
             <span style="position:absolute;left:0;bottom:0;padding:2px 6px;background:#1C1E1C;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;pointer-events:none">{{ t.n }}</span>
           </button>

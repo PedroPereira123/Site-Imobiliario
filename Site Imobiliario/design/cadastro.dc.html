@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
 <style>
 body{margin:0;background:#C9BEA8}
-.cad{container-type:inline-size;container-name:cad;position:relative;min-height:100vh;font-family:Inter,sans-serif;color:#292D29;background:#C9BEA8;-webkit-font-smoothing:antialiased}
+.cad{--ease-out:cubic-bezier(.23,1,.32,1);--ease-in-out:cubic-bezier(.77,0,.175,1);container-type:inline-size;container-name:cad;position:relative;min-height:100vh;font-family:Inter,sans-serif;color:#292D29;background:#C9BEA8;-webkit-font-smoothing:antialiased}
 .cad *{box-sizing:border-box}
 .cad button,.cad input,.cad select,.cad textarea{font-family:inherit;color:inherit;font-size:inherit}
 .cad a{color:#292D29}
-.cad a:hover{color:#A64B36}
+@media (hover:hover) and (pointer:fine){.cad a:hover{color:#A64B36}}
 .cad :focus-visible{outline:2px solid #292D29;outline-offset:3px}
 .cad .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .bsd{font-family:'Big Shoulders Display',sans-serif;text-transform:uppercase}
@@ -26,32 +26,32 @@ body{margin:0;background:#C9BEA8}
 .panel{position:relative;background:#F1E9D7;border-top:2px solid #292D29;border-radius:2px;padding:32px;display:flex;flex-direction:column;gap:24px}
 .g12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px 20px}
 .fld{display:flex;flex-direction:column;gap:8px;min-width:0}
-.inp{width:100%;min-height:52px;padding:12px 14px;border-radius:6px;background:#FBF8F1;font-size:16px;line-height:1.4;transition:border-color .2s,box-shadow .2s}
+.inp{width:100%;min-height:52px;padding:12px 14px;border-radius:6px;background:#FBF8F1;font-size:16px;line-height:1.4;transition:border-color 150ms ease,box-shadow 150ms ease}
 .inp:focus{outline:none;box-shadow:0 0 0 2px #292D29}
 .inp::placeholder{color:#6E6A60}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 24px;border-radius:8px;border:1px solid transparent;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .25s,color .25s,border-color .25s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 24px;border-radius:8px;border:1px solid transparent;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform 160ms var(--ease-out),background-color 150ms ease,color 150ms ease,border-color 150ms ease}
+.btn:active:not([disabled]),.tile:active,.segb:active{transform:scale(.97)}
+.tile:active{transform:scale(.985)}
 .bp{background:#C8102E;color:#FFFFFF !important}
-.bp:hover{background:#A80D26}
+.bp{will-change:auto}
 .bo{background:transparent;border-color:#292D29;color:#292D29}
-.bo:hover{background:#292D29;color:#EFE6D2 !important}
+@media (hover:hover) and (pointer:fine){.bp:hover{background:#A80D26}.bo:hover{background:#292D29;color:#EFE6D2 !important}.bl:hover{color:#A64B36}.tile:hover{background:#FFFFFF}.stepbtn:hover{background:rgba(41,45,41,.07)}}
 .bl{min-height:44px;padding:0 4px;background:none;border:0;font-weight:500;text-decoration:underline;text-underline-offset:4px}
-.bl:hover{color:#A64B36}
 .btn[disabled]{background:#B9AF9B;border-color:#B9AF9B;color:#33362F !important;cursor:not-allowed}
-.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:150px;padding:20px 22px;text-align:left;border-radius:4px;border:1px solid #292D29;background:#FBF8F1;cursor:pointer;transition:background .3s,color .3s}
-.tile:hover{background:#FFFFFF}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:150px;padding:20px 22px;text-align:left;border-radius:4px;border:1px solid #292D29;background:#FBF8F1;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 150ms ease,color 150ms ease}
 .tile .tdesc{font-size:14px;line-height:1.5;color:#45483F}
-.tile .tmark{position:absolute;top:-1px;right:-1px;width:16px;height:16px;background:transparent;transition:background .3s}
+.tile .tmark{position:absolute;top:-1px;right:-1px;width:16px;height:16px;background:#A64B36;opacity:0;transform:scale(.4);transform-origin:100% 0;transition:transform 200ms var(--ease-out),opacity 150ms ease}
 .tile[aria-pressed="true"]{background:#292D29;color:#EFE6D2}
 .tile[aria-pressed="true"] .tdesc{color:#DCD1BA}
-.tile[aria-pressed="true"] .tmark{background:#A64B36}
+.tile[aria-pressed="true"] .tmark{opacity:1;transform:scale(1)}
 .seg{display:inline-flex;gap:4px;padding:4px;border-radius:10px;background:rgba(41,45,41,.09)}
-.segb{min-height:40px;min-width:76px;padding:0 16px;border:0;border-radius:7px;background:transparent;font-size:14px;font-weight:600;cursor:pointer;transition:background .3s,color .3s}
+.segb{min-height:40px;min-width:76px;padding:0 16px;border:0;border-radius:7px;background:transparent;font-size:14px;font-weight:600;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 150ms ease,color 150ms ease}
 .segb[aria-pressed="true"]{background:#292D29;color:#EFE6D2}
 .chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
 .kv{display:grid;grid-template-columns:minmax(140px,1fr) 2fr;gap:4px 24px;padding:10px 0;border-top:1px solid rgba(41,45,41,.16);font-size:14px;line-height:1.45}
 .cad progress{appearance:none;-webkit-appearance:none;display:block;width:100%;height:4px;border:0;background:rgba(41,45,41,.18);accent-color:#292D29}
 .cad progress::-webkit-progress-bar{background:rgba(41,45,41,.18)}
-.cad progress::-webkit-progress-value{background:#292D29;transition:width .5s cubic-bezier(.2,.7,0,1)}
+.cad progress::-webkit-progress-value{background:#292D29;transition:width 300ms var(--ease-out)}
 .cad progress::-moz-progress-bar{background:#292D29}
 .filebtn:focus-within{outline:2px solid #292D29;outline-offset:3px}
 .cam{display:none !important}
@@ -60,9 +60,20 @@ body{margin:0;background:#C9BEA8}
 .paper{background:#FFFFFF;box-shadow:0 1px 2px rgba(41,45,41,.08),0 24px 48px -28px rgba(30,32,28,.5);padding:40px;max-width:760px;width:100%;margin:0 auto;font-size:12px;line-height:1.5}
 .paper .kv{font-size:12px;padding:5px 0;grid-template-columns:1fr 1.6fr}
 .dock{position:sticky;bottom:16px;z-index:6;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:8px;border-radius:12px;background:rgba(238,230,212,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,252,242,.7);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 44px -20px rgba(30,32,28,.45)}
-.rev{animation:rev .4s cubic-bezier(.2,.7,0,1)}
-@keyframes rev{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-.stepbtn{transition:background .3s,color .3s}
+.rev{animation:rev 260ms var(--ease-out) both}
+@keyframes rev{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pin{animation:pin 320ms var(--ease-out) both}
+@keyframes pin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pin:nth-child(2){animation-delay:40ms}.pin:nth-child(3){animation-delay:90ms}.pin:nth-child(4){animation-delay:130ms}.pin:nth-child(n+5){animation-delay:160ms}
+.fin{animation:fin 200ms var(--ease-out) both}
+@keyframes fin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.hh{animation:hh 520ms var(--ease-in-out) both}
+@keyframes hh{from{clip-path:inset(0 0 100% 0);transform:translateY(.08em)}to{clip-path:inset(0 0 0 0);transform:none}}
+.scrim{animation:fade 180ms ease-out both}
+.dlg{animation:dlg 220ms var(--ease-out) both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes dlg{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.stepbtn{transition:background-color 150ms ease,color 150ms ease}
 @container cad (max-width:980px){
 .shell{grid-template-columns:minmax(0,1fr) !important;padding:20px 20px 64px !important;gap:20px !important}
 .rail{position:static !important}
@@ -83,7 +94,21 @@ body{margin:0;background:#C9BEA8}
 .dock .nn{display:none}
 .dock .btn{flex:1 1 auto}
 }
-@media (prefers-reduced-motion:reduce){.rev{animation:none}.btn,.tile,.segb,.stepbtn{transition:none}}
+@media (prefers-reduced-motion:reduce){.rev,.pin,.fin,.hh,.dlg{animation:fade 160ms linear both !important;animation-delay:0ms !important}.btn:active:not([disabled]),.tile:active,.segb:active{transform:none}.tile .tmark{transform:none}.cad progress::-webkit-progress-value{transition:none}}
+/* Botões preenchidos (classe .gl): borda luminosa animada (glow-card) em hover/foco, tokens Capital SP */
+@property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
+@keyframes glspin{to{--gl:560deg}}
+.gl{position:relative}
+.gl::before,.gl::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.gl::before{inset:-2px;padding:4px;filter:blur(6px)}
+.gl:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
+@media (hover:hover) and (pointer:fine){
+.gl:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
+}
+.gl:disabled::before,.gl:disabled::after,.gl[disabled]::before,.gl[disabled]::after{display:none}
+@media (prefers-reduced-motion:reduce){.gl::before,.gl::after{animation:none!important}}
 </style>
 </helmet>
 <div class="cad">
@@ -123,7 +148,7 @@ body{margin:0;background:#C9BEA8}
     <sc-if value="{{ heroBig }}" hint-placeholder-val="{{ true }}">
       <div class="hpad" style="position:relative;max-width:1440px;margin:0 auto;padding:72px 48px 56px;display:flex;flex-direction:column;gap:28px">
         <div class="mono" style="display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>01 — Perfil e garantia</div>
-        <h1 class="bsd" style="margin:0;font-weight:900;font-size:clamp(64px,11.5cqi,172px);line-height:.8;letter-spacing:.005em;color:#292D29">Cadastro<br>de locação</h1>
+        <h1 class="bsd hh" style="margin:0;font-weight:900;font-size:clamp(64px,11.5cqi,172px);line-height:.8;letter-spacing:.005em;color:#292D29">Cadastro<br>de locação</h1>
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px">
           <div style="display:flex;align-items:center;gap:14px">
             <span style="display:block;width:30px;height:2px;background:#A64B36"></span>
@@ -137,7 +162,7 @@ body{margin:0;background:#C9BEA8}
       <div class="hpad" style="position:relative;max-width:1440px;margin:0 auto;padding:48px 48px 36px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 48px">
         <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
           <div class="mono" style="display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>{{ heroEyebrow }}</div>
-          <h1 class="bsd" style="margin:0;font-weight:900;font-size:clamp(48px,7.4cqi,112px);line-height:.84;letter-spacing:.005em;color:#292D29">{{ heroTitle }}</h1>
+          <h1 class="bsd hh" style="margin:0;font-weight:900;font-size:clamp(48px,7.4cqi,112px);line-height:.84;letter-spacing:.005em;color:#292D29">{{ heroTitle }}</h1>
         </div>
         <p style="margin:0 0 6px;max-width:46ch;font-size:15px;line-height:1.55">{{ heroDesc }}</p>
       </div>
@@ -199,7 +224,7 @@ body{margin:0;background:#C9BEA8}
         <!-- ETAPA 1 -->
         <sc-if value="{{ s0 }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex;flex-direction:column;gap:24px">
-            <section class="panel">
+            <section class="panel pin">
               <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.22)">
                 <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px">01.1</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">Quem vai se cadastrar?</h2></div>
               </div>
@@ -256,10 +281,10 @@ body{margin:0;background:#C9BEA8}
         <sc-if value="{{ sForm }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;flex-direction:column;gap:24px">
             <sc-if value="{{ showErrSum }}" hint-placeholder-val="{{ false }}">
-              <p role="alert" style="margin:0;padding:14px 18px;border-radius:6px;background:#FBE9ED;color:#9E1830;font-size:14px;font-weight:600">{{ errSum }}</p>
+              <p role="alert" class="fin" style="margin:0;padding:14px 18px;border-radius:6px;background:#FBE9ED;color:#9E1830;font-size:14px;font-weight:600">{{ errSum }}</p>
             </sc-if>
             <sc-for list="{{ panels }}" as="pn" hint-placeholder-count="2">
-              <section class="panel">
+              <section class="panel pin">
                 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.22)">
                   <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px">{{ pn.code }}</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">{{ pn.title }}</h2></div>
                   <sc-if value="{{ pn.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0;max-width:40ch;font-size:14px;line-height:1.5">{{ pn.desc }}</p></sc-if>
@@ -321,7 +346,7 @@ body{margin:0;background:#C9BEA8}
                                       <sc-for list="{{ fl.choices }}" as="c" hint-placeholder-count="2"><button class="segb" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for>
                                     </div>
                                   </sc-if>
-                                  <sc-if value="{{ fl.err }}" hint-placeholder-val="{{ false }}"><span id="{{ fl.eid }}" style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9E1830;font-weight:500"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>{{ fl.errMsg }}</span></sc-if>
+                                  <sc-if value="{{ fl.err }}" hint-placeholder-val="{{ false }}"><span id="{{ fl.eid }}" class="fin" style="display:flex;align-items:center;gap:6px;font-size:13px;color:#9E1830;font-weight:500"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>{{ fl.errMsg }}</span></sc-if>
                                 </div>
                               </sc-if>
                             </div>
@@ -346,10 +371,10 @@ body{margin:0;background:#C9BEA8}
         <sc-if value="{{ s3 }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;flex-direction:column;gap:24px">
             <sc-if value="{{ showDocSum }}" hint-placeholder-val="{{ false }}">
-              <p role="alert" style="margin:0;padding:14px 18px;border-radius:6px;background:#FFF2D6;color:#855400;font-size:14px;font-weight:600">{{ docSum }}</p>
+              <p role="alert" class="fin" style="margin:0;padding:14px 18px;border-radius:6px;background:#FFF2D6;color:#855400;font-size:14px;font-weight:600">{{ docSum }}</p>
             </sc-if>
             <sc-for list="{{ docGroups }}" as="g" hint-placeholder-count="2">
-              <section class="panel" style="gap:16px">
+              <section class="panel pin" style="gap:16px">
                 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding-bottom:16px">
                   <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px">{{ g.code }}</span><h2 class="bsd" style="margin:0;font-weight:800;font-size:36px;line-height:.9">{{ g.title }}</h2></div>
                   <sc-if value="{{ g.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0;max-width:44ch;font-size:14px;line-height:1.5">{{ g.desc }}</p></sc-if>
@@ -376,7 +401,7 @@ body{margin:0;background:#C9BEA8}
                         <sc-if value="{{ d.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;line-height:1.5;color:#45483F">{{ d.hint }}</span></sc-if>
                         <span class="mono" style="font-size:10px;letter-spacing:.12em;color:#45483F">PDF · JPG · PNG{{ d.multiNote }}</span>
                         <sc-for list="{{ d.files }}" as="f" hint-placeholder-count="0">
-                          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;padding:6px 6px 6px 14px;border-radius:6px;background:#FBF8F1;border:1px solid {{ f.bd }}">
+                          <div class="fin" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;padding:6px 6px 6px 14px;border-radius:6px;background:#FBF8F1;border:1px solid {{ f.bd }}">
                             <span style="min-width:0;display:flex;flex-direction:column;gap:2px;font-size:14px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span><sc-if value="{{ f.bad }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:#9E1830;font-weight:500">Formato não aceito. Use PDF, JPG ou PNG.</span></sc-if></span>
                             <button class="btn bl" style="min-height:40px" onClick="{{ f.onRemove }}" aria-label="Remover {{ f.name }}">Remover</button>
                           </div>
@@ -420,7 +445,7 @@ body{margin:0;background:#C9BEA8}
               <button class="btn bl" onClick="{{ goStep0 }}" aria-label="Editar perfil e garantia">Editar</button>
             </section>
             <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
-              <section class="panel" style="gap:12px">
+              <section class="panel pin" style="gap:12px">
                 <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
                   <h2 class="bsd" style="margin:0;font-weight:800;font-size:28px;line-height:.95">{{ g.title }}</h2>
                   <button class="btn bl" onClick="{{ g.onEdit }}" aria-label="Editar {{ g.title }}">Editar</button>
@@ -432,7 +457,7 @@ body{margin:0;background:#C9BEA8}
                 </div>
               </section>
             </sc-for>
-            <section class="panel" style="gap:12px">
+            <section class="panel pin" style="gap:12px">
               <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
                 <h2 class="bsd" style="margin:0;font-weight:800;font-size:28px;line-height:.95">Documentos</h2>
                 <button class="btn bl" onClick="{{ goStep3 }}" aria-label="Editar documentos">Editar</button>
@@ -450,7 +475,7 @@ body{margin:0;background:#C9BEA8}
         <sc-if value="{{ s5 }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;flex-direction:column;gap:24px">
             <sc-if value="{{ cannotGen }}" hint-placeholder-val="{{ false }}">
-              <p role="alert" style="margin:0;padding:14px 18px;border-radius:6px;background:#FBE9ED;color:#9E1830;font-size:14px;font-weight:600">{{ genBlock }}</p>
+              <p role="alert" class="fin" style="margin:0;padding:14px 18px;border-radius:6px;background:#FBE9ED;color:#9E1830;font-size:14px;font-weight:600">{{ genBlock }}</p>
             </sc-if>
             <div style="display:flex;flex-direction:column;gap:24px;padding:40px 24px;background:#C9BEA8;border-top:2px solid #292D29;border-radius:2px">
               <div class="paper" aria-label="Página 1 da ficha cadastral">
@@ -492,20 +517,20 @@ body{margin:0;background:#C9BEA8}
           <section class="panel" style="gap:32px;padding:48px 40px;background:#292D29;color:#EFE6D2;border-top-color:#A64B36">
             <div style="display:flex;align-items:center;gap:12px" class="mono"><span style="width:8px;height:8px;background:#A64B36"></span><span style="font-size:11px;letter-spacing:.3em">Cadastro concluído neste aparelho</span></div>
             <div style="display:flex;flex-direction:column;gap:16px">
-              <h2 class="bsd" style="margin:0;font-weight:900;font-size:clamp(48px,7cqi,104px);line-height:.84;color:#EFE6D2">Sua ficha cadastral está pronta.</h2>
+              <h2 class="bsd hh" style="margin:0;font-weight:900;font-size:clamp(48px,7cqi,104px);line-height:.84;color:#EFE6D2">Sua ficha cadastral está pronta.</h2>
               <p style="margin:0;font-size:17px;line-height:1.6;max-width:56ch;color:#E3D8C2">Baixe sua ficha e encaminhe o documento para nossa equipe pelo WhatsApp para dar continuidade ao processo cadastral.</p>
             </div>
             <div class="pair" style="display:flex;flex-wrap:wrap;gap:12px">
-              <button class="btn bp" onClick="{{ doDownload }}">Baixar ficha cadastral<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">↓</span></button>
+              <button class="btn bp gl" onClick="{{ doDownload }}">Baixar ficha cadastral<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">↓</span></button>
               <a class="btn" href="{{ waHref }}" target="_blank" rel="noopener" style="border-color:#EFE6D2;color:#EFE6D2">Abrir WhatsApp<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></a>
             </div>
             <sc-if value="{{ dl }}" hint-placeholder-val="{{ false }}">
               <p class="rev" role="status" style="margin:0;padding:14px 18px;border-radius:6px;background:#E6F0F7;color:#23567C;font-size:14px;line-height:1.5">Simulação: na versão final, o PDF é baixado neste aparelho e fica sob a sua guarda até você decidir enviá-lo.</p>
             </sc-if>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding-top:24px;border-top:1px solid rgba(239,230,210,.3)">
-              <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">01</span><span style="font-size:14px;line-height:1.55">Baixe a ficha.</span></div>
-              <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">02</span><span style="font-size:14px;line-height:1.55">Abra o WhatsApp. A conversa começa com: “Olá! Preenchi minha ficha cadastral e gostaria de encaminhá-la para análise.”</span></div>
-              <div style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">03</span><span style="font-size:14px;line-height:1.55">Anexe o PDF à conversa ou use o compartilhamento do seu aparelho.</span></div>
+              <div class="pin" style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">01</span><span style="font-size:14px;line-height:1.55">Baixe a ficha.</span></div>
+              <div class="pin" style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">02</span><span style="font-size:14px;line-height:1.55">Abra o WhatsApp. A conversa começa com: “Olá! Preenchi minha ficha cadastral e gostaria de encaminhá-la para análise.”</span></div>
+              <div class="pin" style="display:flex;flex-direction:column;gap:8px"><span class="mono" style="font-size:11px;color:#E3D8C2">03</span><span style="font-size:14px;line-height:1.55">Anexe o PDF à conversa ou use o compartilhamento do seu aparelho.</span></div>
             </div>
             <p style="margin:0;font-size:13px;line-height:1.55;color:#E3D8C2">O WhatsApp não recebe o arquivo automaticamente. A ficha só será considerada recebida depois que você a enviar e a equipe confirmar.</p>
             <div><button class="btn bl" onClick="{{ backToPreview }}" style="color:#EFE6D2">Voltar e editar a ficha</button></div>
@@ -518,7 +543,7 @@ body{margin:0;background:#C9BEA8}
             <sc-if value="{{ noBack }}" hint-placeholder-val="{{ false }}"><span class="mono nn" style="padding-left:12px;font-size:10.5px;letter-spacing:.16em">Etapa {{ stepNo }} / 06</span></sc-if>
             <span style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end;flex:1 1 auto">
               <sc-if value="{{ hasNextNote }}" hint-placeholder-val="{{ false }}"><span class="nn" style="font-size:13px;max-width:36ch;text-align:right">{{ nextNote }}</span></sc-if>
-              <button class="btn bp" disabled="{{ nextDisabled }}" onClick="{{ next }}">{{ nextLabel }}<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
+              <button class="btn bp gl" disabled="{{ nextDisabled }}" onClick="{{ next }}">{{ nextLabel }}<span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
             </span>
           </div>
         </sc-if>
@@ -527,14 +552,14 @@ body{margin:0;background:#C9BEA8}
   </div>
 
   <sc-if value="{{ hasConfirm }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(26,25,22,.55)">
-      <div class="rev" role="alertdialog" aria-modal="true" aria-labelledby="cf-t" aria-describedby="cf-d" style="width:min(480px,100%);display:flex;flex-direction:column;gap:16px;padding:28px;border-radius:12px;background:#F1E9D7;border-top:2px solid #855400;box-shadow:0 30px 60px -24px rgba(26,25,22,.6)">
+    <div class="scrim" style="position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(26,25,22,.55)">
+      <div class="dlg" role="alertdialog" aria-modal="true" aria-labelledby="cf-t" aria-describedby="cf-d" style="width:min(480px,100%);display:flex;flex-direction:column;gap:16px;padding:28px;border-radius:12px;background:#F1E9D7;border-top:2px solid #855400;box-shadow:0 30px 60px -24px rgba(26,25,22,.6)">
         <span class="chip" style="align-self:flex-start;background:#FFF2D6;color:#855400">Atenção</span>
         <strong id="cf-t" class="bsd" style="font-weight:800;font-size:30px;line-height:.95">Descartar informações?</strong>
         <span id="cf-d" style="font-size:15px;line-height:1.55">{{ confirmMsg }}</span>
         <span class="pair" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
           <button class="btn bo" onClick="{{ confirmNo }}">Manter</button>
-          <button class="btn bp" onClick="{{ confirmYes }}">Descartar</button>
+          <button class="btn bp gl" onClick="{{ confirmYes }}">Descartar</button>
         </span>
       </div>
     </div>

@@ -23,6 +23,40 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 @keyframes hbarIn{from{opacity:0;transform:scale(.55,.8)}to{opacity:1;transform:none}}
 .hbar{transform-origin:50% 50%;animation:hbarIn .55s cubic-bezier(.2,.7,0,1)}
 @media (prefers-reduced-motion:reduce){.hbar{animation:none}}
+.rbtn{transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease,color 150ms ease,border-color 150ms ease}
+.rbtn:active{transform:scale(.96)}
+.rstage:focus-visible{outline:2px solid #292D29;outline-offset:-4px}
+.rstage:active{cursor:grabbing}
+@media (prefers-reduced-motion:reduce){.rbtn:active{transform:none}}
+/* Botões preenchidos (classe .gl): borda luminosa animada (glow-card) em hover/foco, tokens Capital SP */
+@property --gl{syntax:'<angle>';inherits:false;initial-value:200deg}
+@keyframes glspin{to{--gl:560deg}}
+.gl{position:relative}
+.gl::before,.gl::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity 220ms cubic-bezier(.23,1,.32,1);background:conic-gradient(from var(--gl),transparent 0 52%,#A64B36 80%,#E7845F 94%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.gl::before{inset:-2px;padding:4px;filter:blur(6px)}
+.gl:focus-visible::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:focus-visible::before{opacity:.5;animation:glspin 2.8s linear infinite}
+@media (hover:hover) and (pointer:fine){
+.gl:hover::after{opacity:1;animation:glspin 2.8s linear infinite}
+.gl:hover::before{opacity:.5;animation:glspin 2.8s linear infinite}
+}
+.gl:disabled::before,.gl:disabled::after,.gl[disabled]::before,.gl[disabled]::after{display:none}
+@media (prefers-reduced-motion:reduce){.gl::before,.gl::after{animation:none!important}}
+/* Depoimentos: card com borda luminosa em movimento + fundo pontilhado (animated-glow-card), só transform/opacity */
+.gc{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;gap:24px;padding:28px;background:#292D29;color:#EFE6D2;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(239,230,210,.1),0 28px 44px -30px rgba(30,32,28,.55);transition:transform 220ms cubic-bezier(.23,1,.32,1)}
+.gc::before{content:'';position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(201,190,168,.26) 1px,transparent 1.3px);background-size:16px 16px;-webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000,transparent 80%);mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000,transparent 80%)}
+.gcl{position:absolute;pointer-events:none;will-change:transform}
+.gcl-t,.gcl-b{height:1.5px;width:42%;background:linear-gradient(90deg,transparent,#E7845F 60%,#F3C1A8,transparent)}
+.gcl-l,.gcl-r{width:1.5px;height:42%;background:linear-gradient(180deg,transparent,#E7845F 60%,#F3C1A8,transparent)}
+.gcl-t{top:0;left:0;animation:gcx 6s linear infinite}
+.gcl-r{top:0;right:0;animation:gcy 6s linear infinite 1.5s}
+.gcl-b{bottom:0;right:0;animation:gcx 6s linear infinite 3s reverse}
+.gcl-l{bottom:0;left:0;animation:gcy 6s linear infinite 4.5s reverse}
+@keyframes gcx{from{transform:translateX(-100%)}to{transform:translateX(240%)}}
+@keyframes gcy{from{transform:translateY(-100%)}to{transform:translateY(240%)}}
+@media (hover:hover) and (pointer:fine){.gc:hover{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.gcl{animation:none;opacity:.5}.gcl-t{transform:translateX(30%)}.gcl-b{transform:translateX(-30%)}.gcl-l{transform:translateY(-30%)}.gcl-r{transform:translateY(30%)}.gc:hover{transform:none}}
+.gstar{display:block;width:12px;height:12px;background:#E7845F;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 </style>
 </helmet>
 <div style="position:relative;font-family:Archivo,sans-serif;color:#292D29;background:#C9BEA8">
@@ -57,7 +91,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
       <div style="position:absolute;left:50%;top:0;height:100%;display:flex;align-items:center;transform:translateX(-50%);opacity:{{ hOp }};pointer-events:{{ hPE }};transition:opacity .45s" onKeyDown="{{ hKey }}">
         <sc-if value="{{ hPillOn }}" hint-placeholder-val="{{ true }}">
-          <button onClick="{{ hOpenBar }}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 20px;border:0;border-radius:20px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#3B403B">
+          <button class="gl" onClick="{{ hOpenBar }}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 20px;border:0;border-radius:20px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#3B403B">
             <span style="position:relative;display:block;flex:none;width:16px;height:15px">
               <span style="position:absolute;left:2.5px;top:1.5px;width:11px;height:11px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span>
               <span style="position:absolute;left:3px;top:7px;width:10px;height:8px;border:1.5px solid currentColor;border-top:0"></span>
@@ -95,7 +129,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
                 <sc-for list="{{ precoOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
               </select>
             </label>
-            <button onClick="{{ hBuscar }}" style="display:flex;align-items:center;gap:12px;margin-left:4px;padding:0 18px 0 20px;border:0;border-radius:8px;background:#C8102E;color:#FFFFFF;cursor:pointer;font-size:13.5px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#A80D26"><span>Buscar</span><span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+            <button class="gl" onClick="{{ hBuscar }}" style="display:flex;align-items:center;gap:12px;margin-left:4px;padding:0 18px 0 20px;border:0;border-radius:8px;background:#C8102E;color:#FFFFFF;cursor:pointer;font-size:13.5px;font-weight:500;white-space:nowrap;transition:background .3s" style-hover="background:#A80D26"><span>Buscar</span><span style="font-family:'IBM Plex Mono',monospace">→</span></button>
             <button onClick="{{ hClose }}" aria-label="Fechar busca" style="width:38px;margin-left:2px;border:0;border-radius:8px;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;transition:background .3s" style-hover="background:rgba(41,45,41,.07)">×</button>
           </div>
         </sc-if>
@@ -234,7 +268,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
                       <span>Filtros</span>
                       <sc-if value="{{ hasExtra }}" hint-placeholder-val="{{ false }}"><span style="min-width:18px;height:18px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:#A64B36;color:#F1E9D7;font-family:'IBM Plex Mono',monospace;font-size:10px">{{ extraCount }}</span></sc-if>
                     </button>
-                    <button onClick="{{ onBuscar }}" onMouseEnter="{{ btnIn }}" onMouseLeave="{{ btnOut }}" style="display:flex;align-items:center;gap:16px;padding:0 22px 0 26px;border:0;border-radius:11px;background:{{ btnBg }};color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;white-space:nowrap;transition:background .3s">
+                    <button class="gl" onClick="{{ onBuscar }}" onMouseEnter="{{ btnIn }}" onMouseLeave="{{ btnOut }}" style="display:flex;align-items:center;gap:16px;padding:0 22px 0 26px;border:0;border-radius:11px;background:{{ btnBg }};color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;white-space:nowrap;transition:background .3s">
                       <span>{{ buscarLabel }}</span>
                       <span style="font-family:'IBM Plex Mono',monospace;transform:translateX({{ btnArrowX }});transition:transform .4s cubic-bezier(.2,.7,0,1)">→</span>
                     </button>
@@ -258,7 +292,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
                         </span>
                         <sc-if value="{{ hasExtra }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:#A64B36;color:#F1E9D7;font-family:'IBM Plex Mono',monospace;font-size:10px">{{ extraCount }}</span></sc-if>
                       </button>
-                      <button onClick="{{ onBuscar }}" aria-label="Buscar" style="width:52px;height:44px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:16px">→</button>
+                      <button class="gl" onClick="{{ onBuscar }}" aria-label="Buscar" style="width:52px;height:44px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:16px">→</button>
                     </div>
                     <div style="height:1px;margin:8px 4px;background:rgba(41,45,41,.13)"></div>
                     <label style="display:flex;flex-direction:column;gap:4px;height:46px;padding:2px 8px 0">
@@ -363,53 +397,54 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 
       <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="2">
         <div style="margin-top:clamp(64px,9vh,96px)">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid rgba(41,45,41,.3)">
             <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 16px">
               <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em">{{ b.n }}</span>
               <h3 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(40px,5vw,76px);line-height:.85">{{ b.titleUp }}</h3>
               <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.62">{{ b.countLabel }}</span>
             </div>
-            <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
-              <div style="display:flex;gap:8px;flex:none">
-                <button onClick="{{ b.prev }}" aria-label="Anterior" style="width:40px;height:40px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s,color .3s,border-color .3s" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29">←</button>
-                <button onClick="{{ b.next }}" aria-label="Próximo" style="width:40px;height:40px;border:1px solid rgba(41,45,41,.5);border-radius:50%;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;transition:background .3s,color .3s,border-color .3s" style-hover="background:#292D29;color:#EFE6D2;border-color:#292D29">→</button>
-              </div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;opacity:.62">{{ b.hint }}</span>
+          </div>
+
+          <div ref="{{ b.stageRef }}" class="rstage" role="group" aria-roledescription="carrossel" aria-label="{{ b.aria }}" onPointerDown="{{ b.onDown }}" onPointerMove="{{ b.onMove }}" onPointerUp="{{ b.onUp }}" onPointerCancel="{{ b.onCancel }}" onMouseEnter="{{ b.onEnter }}" onMouseLeave="{{ b.onLeave }}" onFocus="{{ b.onEnter }}" onBlur="{{ b.onLeave }}" onKeyDown="{{ b.onKey }}" style="position:relative;height:{{ b.stageH }}px;margin:8px calc(-1 * clamp(24px,4vw,64px)) 0;perspective:1800px;overflow:clip;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none">
+            <div ref="{{ b.ringRef }}" style="position:absolute;left:50%;top:24px;width:0;height:{{ b.ch }}px;transform-style:preserve-3d;transform:{{ b.ringTf }};will-change:transform">
+              <sc-for list="{{ b.cards }}" as="p" hint-placeholder-count="4">
+                <div ref="{{ p.cardRef }}" onClick="{{ p.onCard }}" role="group" aria-label="{{ p.aria }}" style="position:absolute;left:-{{ b.hcw }}px;top:0;width:{{ b.cw }}px;height:{{ b.ch }}px;transform:{{ p.tf }};backface-visibility:hidden;-webkit-backface-visibility:hidden;cursor:pointer">
+                  <div style="position:absolute;inset:0;overflow:hidden;background:#CFC4AC;box-shadow:0 1px 2px rgba(41,45,41,.1),0 28px 44px -26px rgba(30,32,28,.55)">
+                    <image-slot id="{{ p.slotId }}" shape="rect" placeholder="{{ p.placeholder }}"></image-slot>
+                    <div style="position:absolute;left:0;top:0;display:flex;pointer-events:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#E3D8C2">
+                      <span style="padding:8px 12px;background:#292D29">{{ p.code }}</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ b.multi }}">
+              <button class="rbtn rnav gl" onClick="{{ b.prev }}" aria-label="Imóvel anterior" style="position:absolute;z-index:5;left:{{ b.navX }}px;top:{{ b.navTop }}px;width:{{ b.navS }}px;height:{{ b.navS }}px;margin-top:-{{ b.navH }}px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(41,45,41,.9);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:18px" style-hover="background:#292D29"><span aria-hidden="true">←</span></button>
+              <button class="rbtn rnav gl" onClick="{{ b.next }}" aria-label="Próximo imóvel" style="position:absolute;z-index:5;right:{{ b.navX }}px;top:{{ b.navTop }}px;width:{{ b.navS }}px;height:{{ b.navS }}px;margin-top:-{{ b.navH }}px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(41,45,41,.9);color:#EFE6D2;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:18px" style-hover="background:#292D29"><span aria-hidden="true">→</span></button>
             </sc-if>
           </div>
-          <div ref="{{ b.trackRef }}" onScroll="{{ b.onScroll }}" style="display:flex;align-items:flex-start;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * clamp(24px,4vw,64px));padding:24px clamp(24px,4vw,64px) 8px;scroll-padding-inline:clamp(24px,4vw,64px)">
-            <sc-for list="{{ b.cards }}" as="p" hint-placeholder-count="3">
-              <article style="flex:0 0 {{ p.w }};scroll-snap-align:start;display:flex;flex-direction:column">
-                <div onMouseEnter="{{ p.onEnter }}" onMouseLeave="{{ p.onLeave }}" onClick="{{ p.onTap }}" style="position:relative;height:clamp(320px,28vw,440px);overflow:hidden;background:#292D29;cursor:pointer">
-                  <div style="position:absolute;inset:{{ p.inset }};overflow:hidden;background:#CFC4AC;transition:inset .7s cubic-bezier(.2,.7,0,1)">
-                    <div style="position:absolute;inset:0;transform:scale({{ p.imgScale }});transition:transform 1.2s cubic-bezier(.2,.7,0,1)">
-                      <image-slot id="{{ p.slotId }}" shape="rect" placeholder="{{ p.placeholder }}"></image-slot>
-                    </div>
-                    <div style="position:absolute;left:0;top:0;display:flex;pointer-events:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#E3D8C2">
-                      <span style="padding:8px 12px;background:#292D29">{{ p.code }} · {{ p.modeLabel }}</span>
-                      
-                    </div>
-                    <button onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
-                        <span style="position:relative;display:block;width:12px;height:16px;background:{{ p.favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .3s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#3A3832;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ p.favInner }};transition:opacity .3s"></span></span>
-                      </button>
-                  </div>
-                  <div style="position:absolute;left:16px;right:16px;bottom:0;height:64px;display:flex;align-items:center;justify-content:space-between;gap:8px;opacity:{{ p.ctaOp }};transform:translateY({{ p.ctaY }});pointer-events:{{ p.ctaPE }};transition:opacity .4s {{ p.ctaDelay }},transform .6s cubic-bezier(.2,.7,0,1) {{ p.ctaDelay }}">
-                    <button onClick="{{ p.onContact }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0;border:0;background:none;color:#EFE6D2;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap" style-hover="color:#FFFFFF"><span style="flex:none;width:8px;height:8px;border-radius:50%;background:#A64B36"></span>{{ p.contactLabel }}</button>
-                    <button onClick="{{ p.onOpen }}" style="display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:0;border-radius:20px;background:#EFE6D2;color:#292D29;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;transition:background .3s" style-hover="background:#FFFFFF">Anúncio completo <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
-                  </div>
-                </div>
-                <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;padding-top:16px">
-                  <h4 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ p.bairroSize }};line-height:1;letter-spacing:.01em">{{ p.bairroUp }}</h4>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px 12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.72">
-                    <sc-for list="{{ p.specs }}" as="sp" hint-placeholder-count="4"><span style="white-space:nowrap">{{ sp }}</span></sc-for>
-                  </div>
-                </div>
-                <div style="margin-top:8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:{{ p.priceSize }};line-height:1;letter-spacing:.01em">{{ p.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:11px;letter-spacing:.06em">{{ p.per }}</span></div>
-                <p style="margin:8px 0 0;max-width:60ch;font-size:14px;line-height:1.5;opacity:.78;text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:{{ p.descLines }};-webkit-box-orient:vertical;overflow:hidden">{{ p.short }}</p>
-              </article>
-            </sc-for>
-          </div>
-          <div style="position:relative;height:2px;margin-top:24px;background:rgba(41,45,41,.12)">
-            <span ref="{{ b.progRef }}" style="position:absolute;left:0;top:0;bottom:0;width:100%;background:#292D29;transform-origin:left;transform:scaleX(.3);transition:transform .2s"></span>
+
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px 48px;margin-top:8px;padding-top:28px;border-top:1px solid rgba(41,45,41,.3)">
+            <div style="flex:1 1 340px;min-width:0;max-width:640px;display:flex;flex-direction:column;gap:12px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;opacity:.72">{{ b.f.code }} · {{ b.f.modeLabel }} · {{ b.f.tipoUp }}</span>
+              <h4 style="margin:0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(36px,4vw,56px);line-height:.9;letter-spacing:.01em">{{ b.f.bairroUp }}</h4>
+              <span style="font-size:15px;font-weight:500">{{ b.f.rua }}</span>
+              <p style="margin:0;max-width:56ch;font-size:15px;line-height:1.55;opacity:.86;text-wrap:pretty">{{ b.f.desc }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase">
+                <sc-for list="{{ b.f.specs }}" as="sp" hint-placeholder-count="4"><span style="white-space:nowrap">{{ sp }}</span></sc-for>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ b.f.feats }}" as="ft" hint-placeholder-count="0"><span style="padding:4px 10px;border:1px solid rgba(41,45,41,.45);border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase">{{ ft }}</span></sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:20px;flex:0 1 auto">
+              <div style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:clamp(44px,5vw,72px);line-height:.9;letter-spacing:.01em">{{ b.f.priceFmt }}<span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.06em">{{ b.f.per }}</span></div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px">
+                <button class="rbtn gl" onClick="{{ b.f.onOpen }}" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 22px;border:0;border-radius:24px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:600;white-space:nowrap" style-hover="background:#3B403B">Anúncio completo <span style="font-family:'IBM Plex Mono',monospace" aria-hidden="true">→</span></button>
+                <button class="rbtn" onClick="{{ b.f.onContact }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0;border:0;background:none;color:#292D29;cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap"><span style="flex:none;width:8px;height:8px;border-radius:50%;background:#A64B36" aria-hidden="true"></span>{{ b.f.contactLabel }}</button>
+              </div>
+            </div>
           </div>
         </div>
       </sc-for>
@@ -418,7 +453,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
         <div style="padding:64px 0;display:flex;flex-direction:column;align-items:flex-start;gap:16px;border-bottom:1px solid rgba(41,45,41,.28)">
           <span style="font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:44px;line-height:.9">NENHUM IMÓVEL COM ESSES FILTROS.</span>
           <span style="font-size:15px;opacity:.78">{{ emptyHint }}</span>
-          <button onClick="{{ clearFilters }}" style="height:48px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500">Limpar filtros</button>
+          <button class="gl" onClick="{{ clearFilters }}" style="height:48px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500">Limpar filtros</button>
         </div>
       </sc-if>
 
@@ -441,7 +476,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
                   <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;line-height:1"><span>{{ p.bairroUp }}</span><span style="white-space:nowrap">{{ p.priceFmt }}</span></div>
                   <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;opacity:.8">{{ p.specLine }}</span>
                 </div>
-                <button onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
+                <button class="gl" onClick="{{ p.onFav }}" aria-label="{{ p.favLabel }}" style="position:absolute;top:8px;right:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:rgba(26,25,22,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .3s" style-hover="background:rgba(26,25,22,.62)">
                         <span style="position:relative;display:block;width:12px;height:16px;background:{{ p.favFill }};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);transition:background .3s"><span style="position:absolute;left:1.5px;top:1.5px;right:1.5px;bottom:1.5px;background:#3A3832;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);opacity:{{ p.favInner }};transition:opacity .3s"></span></span>
                       </button>
               </article>
@@ -449,6 +484,37 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
           </div>
         </div>
       </sc-if>
+    </div>
+  </section>
+
+  <section data-screen-label="04 Depoimentos" style="position:relative;background:#C9BEA8;padding:clamp(72px,11vh,128px) 0 clamp(80px,12vh,144px)">
+    <div style="position:relative;max-width:1680px;margin:0 auto;padding:0 clamp(24px,4vw,64px)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px 48px;padding-bottom:24px;border-bottom:2px solid #292D29">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.3em"><span style="width:8px;height:8px;background:#292D29"></span>04 — DEPOIMENTOS</div>
+          <h2 style="margin:16px 0 0;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:900;font-size:clamp(48px,7.2vw,124px);line-height:.92;letter-spacing:.005em">QUEM JÁ FECHOU<br>COM A CAPITAL</h2>
+        </div>
+        <p style="margin:0;max-width:38ch;font-size:16px;line-height:1.55;opacity:.86;text-wrap:pretty">Compradores, locatários e proprietários contam como foi a busca, a visita e a assinatura.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;margin-top:clamp(32px,5vh,56px)">
+        <sc-for list="{{ tests }}" as="t" hint-placeholder-count="6">
+          <figure class="gc" style="margin:0">
+            <span class="gcl gcl-t"></span><span class="gcl gcl-r"></span><span class="gcl gcl-b"></span><span class="gcl gcl-l"></span>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+              <div style="display:flex;gap:3px" role="img" aria-label="Avaliação: 5 de 5 estrelas"><span class="gstar"></span><span class="gstar"></span><span class="gstar"></span><span class="gstar"></span><span class="gstar"></span></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#C9BEA8">{{ t.deal }}</span>
+            </div>
+            <blockquote style="margin:0;flex:1;font-size:17px;line-height:1.6;text-wrap:pretty">“{{ t.quote }}”</blockquote>
+            <figcaption style="display:flex;align-items:center;gap:14px;padding-top:20px;border-top:1px solid rgba(239,230,210,.16)">
+              <span aria-hidden="true" style="flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#A64B36;color:#EFE6D2;font-family:'Big Shoulders Display','Big Shoulders',sans-serif;font-weight:800;font-size:20px;letter-spacing:.04em">{{ t.ini }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                <span style="font-weight:600;font-size:15px">{{ t.name }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#C9BEA8">{{ t.where }}</span>
+              </span>
+            </figcaption>
+          </figure>
+        </sc-for>
+      </div>
     </div>
   </section>
 
@@ -516,7 +582,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
               <input value="{{ cName }}" onChange="{{ onCName }}" placeholder="Nome" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
               <input value="{{ cInfo }}" onChange="{{ onCInfo }}" placeholder="Telefone ou e-mail" style="height:48px;padding:0 16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;font-size:15px;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29">
               <textarea value="{{ cMsg }}" onChange="{{ onCMsg }}" rows="3" style="padding:16px;border:0;border-radius:10px;background:rgba(41,45,41,.07);outline:none;resize:vertical;font-size:15px;line-height:1.5;color:#292D29;transition:background .3s,box-shadow .3s" style-focus="background:rgba(255,252,242,.6);box-shadow:inset 0 0 0 1.5px #292D29"></textarea>
-              <button onClick="{{ sendContact }}" style="align-self:flex-start;display:flex;align-items:center;gap:16px;height:48px;margin-top:8px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;transition:background .3s" style-hover="background:#3B403B">Enviar mensagem <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+              <button class="gl" onClick="{{ sendContact }}" style="align-self:flex-start;display:flex;align-items:center;gap:16px;height:48px;margin-top:8px;padding:0 24px;border:0;border-radius:10px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:15px;font-weight:500;transition:background .3s" style-hover="background:#3B403B">Enviar mensagem <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
             </sc-if>
             <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
               <div style="display:flex;align-items:flex-start;gap:16px;padding:16px;border-radius:10px;background:rgba(41,45,41,.07);font-size:15px;line-height:1.5">
@@ -532,7 +598,7 @@ input::placeholder,textarea::placeholder{color:rgba(41,45,41,.45)}
 
   <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
     <div ref="{{ R.mnav }}" style="position:fixed;left:50%;bottom:16px;z-index:60;display:flex;gap:4px;padding:4px;border-radius:16px;background:rgba(236,228,210,.76);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,252,242,.6);box-shadow:0 1px 2px rgba(41,45,41,.06),0 20px 48px -20px rgba(30,32,28,.45);transform:translate(-50%,120px);opacity:0;pointer-events:none;transition:transform .6s cubic-bezier(.2,.7,0,1),opacity .4s">
-      <button onClick="{{ mnavSearch }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500"><span style="position:relative;display:block;flex:none;width:18px;height:17px"><span style="position:absolute;left:3px;top:2px;width:12px;height:12px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span><span style="position:absolute;left:3.5px;top:8px;width:11px;height:9px;border:1.5px solid currentColor;border-top:0"></span><span style="position:absolute;left:7.5px;top:12px;width:3px;height:5px;background:currentColor"></span></span>Buscar</button>
+      <button class="gl" onClick="{{ mnavSearch }}" style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:#292D29;color:#EFE6D2;cursor:pointer;font-size:14px;font-weight:500"><span style="position:relative;display:block;flex:none;width:18px;height:17px"><span style="position:absolute;left:3px;top:2px;width:12px;height:12px;border-left:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg)"></span><span style="position:absolute;left:3.5px;top:8px;width:11px;height:9px;border:1.5px solid currentColor;border-top:0"></span><span style="position:absolute;left:7.5px;top:12px;width:3px;height:5px;background:currentColor"></span></span>Buscar</button>
       <button onClick="{{ mnavFilters }}" style="position:relative;display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;border:0;border-radius:12px;background:transparent;cursor:pointer;font-size:14px;font-weight:500">
         <span style="display:flex;flex-direction:column;gap:5px;width:17px">
           <span style="position:relative;height:1.5px;background:#292D29"><span style="position:absolute;top:-2.5px;left:1px;width:6px;height:6px;background:#E9E1CD;border:1.5px solid #292D29"></span></span>
@@ -617,14 +683,19 @@ class Component extends DCLogic {
   _feat = (() => { const seen = {}; this.D.data.forEach(d => { const k = d.tipo + d.mode; if (!seen[k]) { seen[k] = 1; d.featured = true; } }); })();
   el = {};
   letterEls = [];
-  trackEls = {};
-  progEls = {};
+  rings = {};
+  ringEls = {};
+  cardRefs = {};
   R = Object.fromEntries(['header', 'headerLine', 'stage', 'photo', 'scrim', 'concrete', 'titleWrap', 'title', 'sub', 'subRule', 'subText', 'heroMeta', 'searchCopy', 'searchFoot', 'endFade', 'dock', 'dockIn', 'glass', 'bar', 'panel', 'catalog', 'noiseA', 'noiseB', 'drawer', 'contact', 'saved', 'mnav'].map(k => [k, el => { this.el[k] = el; }]));
   letterRefs = Array.from({ length: 10 }, (_, i) => el => { this.letterEls[i] = el; });
-  catRefs = Object.fromEntries(['Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'].map(c => [c, {
-    track: el => { this.trackEls[c] = el; },
-    prog: el => { this.progEls[c] = el; },
-    onScroll: () => this.updProg(c),
+  ringRefs = Object.fromEntries(['Casa térrea', 'Sobrado', 'Apartamento', 'Comercial'].map(c => [c, {
+    stage: el => this.ringStageRef(c, el),
+    ring: el => { (this.ringEls[c] = this.ringEls[c] || {}).ring = el; },
+    onDown: e => this.ringDown(c, e), onMove: e => this.ringMove(c, e),
+    onUp: e => this.ringUp(c, e, true), onCancel: e => this.ringUp(c, e, false),
+    onEnter: () => { const r = this.rings[c]; if (r) r.hover = true; },
+    onLeave: () => { const r = this.rings[c]; if (r) r.hover = false; },
+    onKey: e => { if (e.key === 'ArrowLeft') { e.preventDefault(); this.slide(c, -1, true); } else if (e.key === 'ArrowRight') { e.preventDefault(); this.slide(c, 1, true); } },
     prev: () => this.slide(c, -1),
     next: () => this.slide(c, 1)
   }]));
@@ -633,14 +704,14 @@ class Component extends DCLogic {
     areaMin: '', areaMax: '', dorms: null, vagas: null, condo: null, feats: [], sort: 0,
     isMobile: typeof window !== 'undefined' && window.innerWidth < 760,
     narrow: typeof window !== 'undefined' && window.innerWidth < 1100,
-    hoverNav: null, hoverCard: null, hoverBtn: false, hoverPill: false, mobileMenu: false,
+    hoverNav: null, hoverCard: null, ringFocus: {}, hoverBtn: false, hoverPill: false, mobileMenu: false,
     drawer: null, drawerOpen: false, photo: 0,
     favs: (() => { try { return JSON.parse(localStorage.getItem('csp-favs')) || []; } catch (e) { return []; } })(), cName: '', cInfo: '', cMsg: '', sent: false
   };
 
   applyFotos() {
     document.querySelectorAll('image-slot').forEach(el => {
-      const f = this.FOTOS[el.id];
+      const f = this.FOTOS[el.id.replace(/~\d+$/, '')];
       if (f) {
         if (el.getAttribute('src') !== f.s) {
           el.setAttribute('src', f.s); el.dataset.auto = '1';
@@ -666,6 +737,9 @@ class Component extends DCLogic {
     this.onDown = e => { if (this.state.menu && this.el.glass && !this.el.glass.contains(e.target)) this.setState({ menu: null }); };
     this.onKey = e => { if (e.key === 'Escape') this.setState({ drawerOpen: false, menu: null }); };
     addEventListener('scroll', this.onScroll, { passive: true });
+    this._rloop = t => this.ringLoop(t);
+    this._rraf = requestAnimationFrame(this._rloop);
+    this.ringApplyAll(false);
     ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, () => { this.userScrolled = true; }, { passive: true, once: true }));
     addEventListener('resize', this.onResize);
     addEventListener('keydown', this.onKey);
@@ -680,6 +754,8 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     removeEventListener('scroll', this.onScroll);
+    cancelAnimationFrame(this._rraf);
+    if (this.io) this.io.disconnect();
     removeEventListener('resize', this.onResize);
     removeEventListener('keydown', this.onKey);
     document.removeEventListener('pointerdown', this.onDown);
@@ -700,13 +776,10 @@ class Component extends DCLogic {
     const st = this.state;
     const sig = [st.mode, st.tipo, st.local, st.preco, st.areaMin, st.areaMax, st.dorms, st.vagas, st.condo, st.feats.join(), st.sort].join('|');
     if (this._sig && sig !== this._sig && !this.reduce) {
-      Object.values(this.trackEls).forEach(t => t && t.isConnected && [...t.children].forEach((el, i) => el.animate && el.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 560, delay: Math.min(i, 6) * 45, easing: 'cubic-bezier(.2,.7,0,1)', fill: 'backwards' })));
+      Object.values(this.ringEls).forEach(o => o && o.stage && o.stage.isConnected && o.stage.animate && o.stage.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.23,1,.32,1)' }));
     }
     this._sig = sig;
     this.tick();
-    if (ps.mode !== this.state.mode || ps.sort !== this.state.sort || ps.tipo !== this.state.tipo) {
-      Object.values(this.trackEls).forEach(t => t && t.isConnected && (t.scrollLeft = 0));
-    }
     this.allProg();
   }
 
@@ -745,17 +818,109 @@ class Component extends DCLogic {
     t.style.fontSize = fs + 'px';
   }
 
-  updProg(c) {
-    const t = this.trackEls[c], pg = this.progEls[c];
-    if (!t || !pg || !t.isConnected) return;
-    const r = t.scrollWidth <= t.clientWidth + 2 ? 1 : (t.scrollLeft + t.clientWidth) / t.scrollWidth;
-    pg.style.transform = `scaleX(${r})`;
+  // ---- Carrossel 3D circular (um por tipo de imóvel) ----
+  ringStageRef(c, el) {
+    const o = (this.ringEls[c] = this.ringEls[c] || {});
+    if (o.stage === el) return;
+    if (this.io && o.stage) this.io.unobserve(o.stage);
+    o.stage = el;
+    if (!el) return;
+    el.dataset.ring = c; el.tabIndex = 0;
+    if (!this.io && typeof IntersectionObserver !== 'undefined') this.io = new IntersectionObserver(es => es.forEach(en => { const r = this.rings[en.target.dataset.ring]; if (r) r.visible = en.isIntersecting; }), { rootMargin: '120px' });
+    if (this.io) this.io.observe(el); else { const r = this.rings[c]; if (r) r.visible = true; }
   }
-  allProg() { Object.keys(this.trackEls).forEach(c => this.updProg(c)); }
-  slide(c, dir) {
-    const t = this.trackEls[c]; if (!t) return;
-    const card = t.firstElementChild;
-    t.scrollBy({ left: dir * ((card ? card.offsetWidth : 360) + 28), behavior: this.reduce ? 'auto' : 'smooth' });
+  cardRef(c, i) {
+    const m = (this.cardRefs[c] = this.cardRefs[c] || []);
+    return m[i] || (m[i] = el => { const o = (this.ringEls[c] = this.ringEls[c] || {}); (o.cards = o.cards || [])[i] = el; });
+  }
+  ringState(c, m, n) {
+    let r = this.rings[c];
+    if (!r) r = this.rings[c] = { rot: 0, target: null, drag: null, hover: false, visible: false, nextAt: 0, suppress: false, n: -1, items: 0, focus: 0, rate: 8, v: 0, R: 500 };
+    r.step = 360 / m;
+    if (r.n !== m || r.items !== n) { r.n = m; r.items = n; r.rot = 0; r.target = null; r.focus = 0; r.v = 0; r.nextAt = performance.now() + 1200; }
+    return r;
+  }
+  snapTo(r, v) { return Math.round(v / r.step) * r.step; }
+  ringAng(r, i) { let a = (i * r.step + r.rot) % 360; if (a > 180) a -= 360; if (a < -180) a += 360; return a; }
+  ringApply(c, detect) {
+    const r = this.rings[c], o = this.ringEls[c];
+    if (!r || !o || !o.ring || !o.cards) return;
+    o.ring.style.transform = `translateZ(${-r.R}px) rotateY(${r.rot}deg)`;
+    let best = 0, bd = 1e9;
+    for (let i = 0; i < r.n; i++) {
+      const el = o.cards[i]; if (!el) continue;
+      const ab = Math.abs(this.ringAng(r, i));
+      el.style.opacity = String(Math.max(0.3, 1 - ab / 100));
+      el.style.pointerEvents = ab < 80 ? 'auto' : 'none';
+      if (ab < bd) { bd = ab; best = i; }
+    }
+    const fi = best % r.items;
+    if (detect && fi !== r.focus) { r.focus = fi; this.setState(st => ({ ringFocus: Object.assign({}, st.ringFocus, { [c]: fi }) })); }
+  }
+  ringApplyAll(detect) { Object.keys(this.rings).forEach(c => this.ringApply(c, detect)); }
+  ringStep(c, now, dt) {
+    const r = this.rings[c], o = this.ringEls[c];
+    if (!r || !o || !o.stage || !o.stage.isConnected) return;
+    if (r.n > 1 && !r.drag) {
+      if (r.target != null) {
+        r.v = 0;
+        r.rot += (r.target - r.rot) * (1 - Math.exp(-dt * r.rate));
+        if (Math.abs(r.target - r.rot) < 0.04) { r.rot = r.target; r.target = null; }
+      } else {
+        const want = r.visible && !this.reduce && !r.hover && now > r.nextAt ? -r.step / 7 : 0;
+        r.v += (want - r.v) * (1 - Math.exp(-dt * 2.2));
+        r.rot += r.v * dt;
+        if (Math.abs(r.rot) > 720) r.rot %= 360;
+      }
+    }
+    if (r.visible || r.dirty) { this.ringApply(c, true); r.dirty = false; }
+  }
+  ringLoop(now) {
+    const dt = Math.min(0.05, (now - (this._rl || now)) / 1000); this._rl = now;
+    Object.keys(this.rings).forEach(c => this.ringStep(c, now, dt));
+    this._rraf = requestAnimationFrame(this._rloop);
+  }
+  ringGo(r, t, rate) {
+    r.rate = rate || 8; r.nextAt = performance.now() + 3500;
+    if (this.reduce) { r.rot = t; r.target = null; r.dirty = true; } else r.target = t;
+  }
+  allProg() { this.ringApplyAll(false); }
+  slide(c, dir, key) {
+    const r = this.rings[c]; if (!r || r.n < 2) return;
+    const base = r.target != null ? r.target : this.snapTo(r, r.rot);
+    this.ringGo(r, base - dir * r.step, key ? 14 : 7);
+  }
+  ringCard(c, i, d) {
+    const r = this.rings[c]; if (!r || r.suppress) return;
+    if (Math.abs(this.ringAng(r, i)) < r.step / 2 + 1) { location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; return; }
+    let t = -i * r.step;
+    t += 360 * Math.round((r.rot - t) / 360);
+    this.ringGo(r, t, 7);
+  }
+  ringDown(c, e) {
+    const r = this.rings[c]; if (!r || r.n < 2) return;
+    if (e.target && e.target.closest && e.target.closest('.rnav')) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    r.drag = { x: e.clientX, rot: r.rot, lx: e.clientX, lt: e.timeStamp, v: 0, moved: false, id: e.pointerId };
+    r.target = null; r.v = 0;
+  }
+  ringMove(c, e) {
+    const r = this.rings[c], d = r && r.drag; if (!d || e.pointerId !== d.id) return;
+    const dx = e.clientX - d.x;
+    if (!d.moved) { if (Math.abs(dx) < 6) return; d.moved = true; try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {} }
+    r.rot = d.rot + dx * 0.22;
+    const dt = (e.timeStamp - d.lt) / 1000;
+    if (dt > 0) d.v = d.v * 0.6 + (((e.clientX - d.lx) * 0.22) / dt) * 0.4;
+    d.lx = e.clientX; d.lt = e.timeStamp;
+    r.nextAt = performance.now() + 3500;
+  }
+  ringUp(c, e, inertia) {
+    const r = this.rings[c], d = r && r.drag; if (!d || e.pointerId !== d.id) return;
+    r.drag = null;
+    if (!d.moved) return;
+    r.suppress = true; setTimeout(() => { r.suppress = false; }, 60);
+    const v = e.timeStamp - d.lt > 80 ? 0 : d.v;
+    this.ringGo(r, this.snapTo(r, r.rot + (inertia ? v * 0.2 : 0)), 6);
   }
 
   targets() {
@@ -985,29 +1150,41 @@ class Component extends DCLogic {
       };
     };
     const rel = s.sort === 0;
+    // DEPOIMENTOS FICTÍCIOS — texto de exemplo para o protótipo; substituir por avaliações reais (com autorização) antes de publicar.
+    const tests = [
+      { name: 'Marina T.', deal: 'COMPRA', where: 'Casa térrea · Alto de Pinheiros', quote: 'Eu já tinha desistido de achar casa com quintal de verdade. A Capital filtrou o que não servia e, na segunda visita, eu já sabia que era aquela. Entendi cada etapa da documentação.' },
+      { name: 'Rafael & Júlia M.', deal: 'COMPRA', where: 'Sobrado · Vila Mariana', quote: 'Fomos atendidos sem pressão. O corretor falou dos pontos fracos do imóvel antes de a gente perguntar, e foi isso que nos fez confiar.' },
+      { name: 'Carlos E.', deal: 'LOCAÇÃO', where: 'Apartamento · Pinheiros', quote: 'Alugar no meu prazo e sem fiador complicado parecia impossível. Em uma semana eu estava com as chaves, com o contrato explicado item por item.' },
+      { name: 'Beatriz L.', deal: 'VENDA', where: 'Apartamento · Butantã', quote: 'Vendi meu apartamento em menos tempo do que eu esperava e pelo valor que combinamos no início. Recebi retorno de cada visita, sem eu precisar cobrar.' },
+      { name: 'Eduardo S.', deal: 'LOCAÇÃO COMERCIAL', where: 'Sala comercial · Centro', quote: 'Precisava de uma sala para o escritório e de alguém que entendesse de vaga, condomínio e prazo. Resolveram tudo com uma única conversa.' },
+      { name: 'Helena P.', deal: 'ADMINISTRAÇÃO', where: 'Proprietária · Planalto Paulista', quote: 'Entrego meu imóvel para eles administrarem há dois anos. Repasse em dia, relatório claro e uma pessoa de verdade para atender quando preciso.' }
+    ].map(t => Object.assign(t, { ini: t.name.split(/[ &]+/).filter(w => /^[A-ZÁÉÍÓÚ]/.test(w)).slice(0, 2).map(w => w[0]).join('') }));
     const blocks = D.cats.map((cat, ci) => {
       const items = list.filter(d => d.tipo === cat);
-      const r = this.catRefs[cat];
+      const n = items.length, rf = this.ringRefs[cat];
+      const m = n > 1 ? n * Math.ceil(8 / n) : n, r = this.ringState(cat, m, n);
+      const vw = typeof window !== 'undefined' ? window.innerWidth : 1440;
+      const cw = mob ? Math.max(240, vw - 80) : Math.round(Math.max(300, Math.min(420, vw * 0.26))), ch = mob ? 320 : Math.round(Math.max(320, Math.min(440, vw * 0.28)));
+      const R = m > 1 ? Math.max(360, Math.round(m * (cw + 36) / (2 * Math.PI))) : 500;
+      r.R = R;
+      const fi = Math.min(r.focus, Math.max(n - 1, 0)), fd = items[fi];
+      const f = fd ? Object.assign(base(fd), {
+        tipoUp: fd.tipo.toUpperCase(), desc: fd.desc, feats: fd.feats,
+        contactLabel: 'Falar com corretor', onContact: () => this.openDrawer(fd.code, true)
+      }) : {};
+      const navS = mob ? 44 : 52;
       return {
-        n: '0' + (ci + 1), titleUp: cat.toUpperCase(), countLabel: `${items.length} ${items.length === 1 ? 'IMÓVEL' : 'IMÓVEIS'}`,
-        trackRef: r.track, progRef: r.prog, onScroll: r.onScroll, prev: r.prev, next: r.next,
-        cards: items.map(d => {
-          const hov = s.hoverCard === d.code, big = true;
-          return Object.assign(base(d), {
-            isFeatured: big,
-            w: mob ? 'calc(100vw - 80px)' : big ? 'clamp(480px,44vw,760px)' : 'clamp(300px,26vw,420px)',
-            bairroSize: big && !mob ? '28px' : '22px', priceSize: big && !mob ? '44px' : '32px',
-            descLines: big ? 3 : 2, short: cut(d.desc, big && !mob ? 230 : 118),
-            contactLabel: 'Falar com corretor',
-            inset: hov ? '16px 16px 64px 16px' : '0px 0px 0px 0px', imgScale: hov ? 1.06 : 1,
-            ctaOp: hov ? 1 : 0, ctaY: hov ? '0px' : '16px', ctaPE: hov ? 'auto' : 'none', ctaDelay: hov ? '.18s' : '0s',
-            onEnter: () => { if (!mob) this.setState({ hoverCard: d.code }); },
-            onLeave: () => { if (!mob) this.setState({ hoverCard: null }); },
-            onTap: () => { if (mob) this.setState(st => ({ hoverCard: st.hoverCard === d.code ? null : d.code })); else location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; },
-            onContact: e => { e.stopPropagation(); this.openDrawer(d.code, true); },
-            onOpen: e => { e.stopPropagation(); location.href = 'Capital%20SP%20Imovel.dc.html?id=' + d.code; }
-          });
-        })
+        n: '0' + (ci + 1), titleUp: cat.toUpperCase(), countLabel: `${n} ${n === 1 ? 'IMÓVEL' : 'IMÓVEIS'}`,
+        hint: n > 1 ? (mob ? 'ARRASTE PARA GIRAR' : 'ARRASTE OU USE AS SETAS') : '', aria: `Carrossel de imóveis: ${cat}`,
+        stageRef: rf.stage, ringRef: rf.ring, onDown: rf.onDown, onMove: rf.onMove, onUp: rf.onUp, onCancel: rf.onCancel, onEnter: rf.onEnter, onLeave: rf.onLeave, onKey: rf.onKey,
+        prev: rf.prev, next: rf.next, multi: n > 1, navS, navH: navS / 2, navX: mob ? 8 : 40, navTop: 24 + ch / 2,
+        stageH: ch + 48, cw, hcw: cw / 2, ch, ringTf: `translateZ(-${R}px)`, f,
+        cards: Array.from({ length: m }, (_, i) => { const d = items[i % n]; return Object.assign(base(d), {
+          slotId: base(d).slotId + (i >= n ? '~' + i : ''),
+          cardRef: this.cardRef(cat, i), tf: `rotateY(${(i * r.step).toFixed(3)}deg) translateZ(${R}px)`,
+          aria: `${d.tipo} em ${d.bairro}, R$ ${fmt(d.price)}${d.mode === 'alugar' ? ' por mês' : ''}`,
+          onCard: () => this.ringCard(cat, i, d)
+        }); })
       };
     }).filter(b => b.cards.length);
     const saved = s.favs.map(c => D.data.find(d => d.code === c)).filter(Boolean).map(base);
@@ -1086,7 +1263,7 @@ class Component extends DCLogic {
       sortOptions: ['Relevância', 'Menor preço', 'Maior área'].map((l, i) => seg(l, s.sort === i, () => this.setState({ sort: i }))),
       countLabel: `${n} ${n === 1 ? 'IMÓVEL' : 'IMÓVEIS'} PARA ${s.mode === 'comprar' ? 'COMPRAR' : 'ALUGAR'}`,
       summary: summaryParts.length ? summaryParts.join(' · ').toUpperCase() : 'SEM FILTROS ADICIONAIS',
-      blocks, isEmpty: n === 0,
+      blocks, tests, isEmpty: n === 0,
       emptyHint: summaryParts.length ? `Filtros ativos: ${summaryParts.join(', ')}. Remova algum deles ou limpe todos.` : 'Nenhum imóvel cadastrado para esta pretensão.',
       saved, hasSaved: saved.length > 0, savedCount: String(saved.length),
       savedLabel: `${saved.length} ${saved.length === 1 ? 'IMÓVEL' : 'IMÓVEIS'} — SALVOS NESTE NAVEGADOR`,
